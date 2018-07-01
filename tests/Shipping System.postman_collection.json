@@ -6,20 +6,75 @@
 	},
 	"item": [
 		{
-			"name": "/api/orders/place",
+			"name": "/api/orders/place - Valid",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "78414bc6-3e6e-43bc-917b-7fb32672d96f",
+						"id": "1b961e2d-7abc-4d4f-a5d5-be07384218ed",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status Code should be 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Body should have Order Id\", function () { ",
-							"    pm.response.to.have.jsonBody(\"orderId\"); ",
+							"const schema = {",
+							"  \"required\": [\"id\", \"source\", \"destination\", \"dimensions\", \"weight\", \"density\"],",
+							"  \"properties\": {",
+							"    \"id\": {",
+							"      \"type\": \"string\",",
+							"      \"minLength\": 36,",
+							"      \"maxLength\": 36",
+							"    },",
+							"    \"source\": {",
+							"        \"type\": \"object\",",
+							"        \"properties\": {",
+							"            \"id\": {",
+							"                \"type\": \"number\"",
+							"            },",
+							"            \"name\": {",
+							"                \"type\": \"string\"",
+							"            }",
+							"        }",
+							"    },",
+							"    \"destination\": {",
+							"        \"type\": \"object\",",
+							"        \"properties\": {",
+							"            \"id\": {",
+							"                \"type\": \"number\"",
+							"            },",
+							"            \"name\": {",
+							"                \"type\": \"string\"",
+							"            }",
+							"        }",
+							"    },",
+							"    \"dimensions\": {",
+							"        \"type\": \"object\",",
+							"        \"properties\": {",
+							"            \"length\": {",
+							"              \"type\": \"number\"",
+							"            },",
+							"            \"width\": {",
+							"              \"type\": \"number\"",
+							"            },",
+							"            \"height\": {",
+							"              \"type\": \"number\"",
+							"            }",
+							"        }",
+							"    },",
+							"    \"weight\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"density\": {",
+							"        \"type\": \"number\"",
+							"    }",
+							"  }",
+							"};",
+							"",
+							"pm.test(\"Body should have correct schema\", function () { ",
+							"    const result = tv4.validateResult(JSON.parse(responseBody), schema);",
+							" ",
+							"    pm.expect(result.valid).to.be.true;",
 							"});",
 							""
 						]
@@ -34,25 +89,25 @@
 					"formdata": [
 						{
 							"key": "sourceId",
-							"value": "1",
+							"value": "{{validSourceId}}",
 							"description": "Source Id ",
 							"type": "text"
 						},
 						{
 							"key": "destinationId",
-							"value": "1",
+							"value": "{{validDestinationId}}",
 							"description": "Destination Id",
 							"type": "text"
 						},
 						{
 							"key": "weight",
-							"value": "20",
+							"value": "{{validWeight}}",
 							"description": "Weight in Kilograms",
 							"type": "text"
 						},
 						{
 							"key": "dimensions",
-							"value": "10,20,30",
+							"value": "{{validDimensions}}",
 							"description": "Dimensions comma-separated (length, width, height)",
 							"type": "text"
 						}
@@ -97,9 +152,37 @@
 	],
 	"variable": [
 		{
-			"id": "e6141bdc-1394-49f2-999f-4472a95685fd",
+			"id": "51be9beb-e30a-418b-a79a-abc5e808db12",
 			"key": "url",
 			"value": "http://localhost:3000",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "b9b52aa5-3bc7-4e14-99de-55fb6cce35eb",
+			"key": "validDestinationId",
+			"value": "2",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "7d5242ce-de9c-45c9-8d86-84e70f92901f",
+			"key": "vallidSourceId",
+			"value": "1",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "d798aa3f-3b8d-44b4-ae20-75d2fe0c3080",
+			"key": "validWeight",
+			"value": "20",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "9e909dbb-1cbd-4d9f-8430-9c402224cb14",
+			"key": "validDimensions",
+			"value": "10,20,30",
 			"type": "string",
 			"description": ""
 		}
