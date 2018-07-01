@@ -35,3 +35,55 @@ To place an order, the following will be required from the client:
 * Destination
 * Weight
 * Dimensions
+
+## Red, Green, Refacor
+
+"Red Green Refactor is the Agile engineering pattern which underpins Test Driven Development. Characterized by a “test-first” approach to design and implementation, it utilizes very short development cycles to minimize leap-of-faith assumptions." ~ [DZone](https://dzone.com/articles/pattern-of-the-month-red-green-refactor)
+
+To demonstrate the "Red, Green, Refactor pattern" we'll write postman test which calls our endpoint and there after we'll write the minimum required code to get the tests passing. Once the tests are passing, we'll go back and refactor to keep the code clean.
+
+**Two Failing Tests**
+
+```javascript
+pm.test("Status Code should be 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Body should have correct schema", function () { 
+    const result = tv4.validateResult(JSON.parse(responseBody), schema);
+ 
+    pm.expect(result.valid).to.be.true;
+});
+```
+
+**Minimum Required Code**
+
+```typescript
+app.route('/api/orders/place').post((request: express.Request, response: express.Response) => {
+    response.json({
+        density: 40,
+        destination: {
+            id: 2,
+            name: 'London, United Kingdom',
+        },
+        dimensions: {
+            height: 30,
+            length: 10,
+            width: 20,
+        },
+        id: uuid.v4(),
+        source: {
+            id: 1,
+            name: 'Cape Town, South Africa',
+        },
+        weight: 50,
+    });
+});
+```
+
+**Passing Tests**
+
+![postman-1](https://github.com/barend-erasmus/shipping-system/raw/master/images/postman-1.png)
+
+**Refactored Code**
+
