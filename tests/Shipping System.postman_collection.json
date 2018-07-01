@@ -152,35 +152,35 @@
 	],
 	"variable": [
 		{
-			"id": "51be9beb-e30a-418b-a79a-abc5e808db12",
+			"id": "d096035d-ec13-4d29-bf42-2b5aecba3109",
 			"key": "url",
 			"value": "http://localhost:3000",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "b9b52aa5-3bc7-4e14-99de-55fb6cce35eb",
+			"id": "24368454-e7d0-4033-8f18-160b69a2f95b",
 			"key": "validDestinationId",
 			"value": "2",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "7d5242ce-de9c-45c9-8d86-84e70f92901f",
+			"id": "316de688-ed60-4a5f-8297-6738d97fe194",
 			"key": "vallidSourceId",
 			"value": "1",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "d798aa3f-3b8d-44b4-ae20-75d2fe0c3080",
+			"id": "d2208a60-5636-488c-8e66-f3e4417cc560",
 			"key": "validWeight",
 			"value": "20",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "9e909dbb-1cbd-4d9f-8430-9c402224cb14",
+			"id": "4589b7b4-df97-4603-bbee-b79fef475968",
 			"key": "validDimensions",
 			"value": "10,20,30",
 			"type": "string",
