@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "66b7c826-b9e8-4222-a76e-eec0a53b36fd",
+		"name": "Shipping System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/orders/place",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "78414bc6-3e6e-43bc-917b-7fb32672d96f",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status Code should be 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body should have Order Id\", function () { ",
+							"    pm.response.to.have.jsonBody(\"orderId\"); ",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "sourceId",
+							"value": "1",
+							"description": "Source Id ",
+							"type": "text"
+						},
+						{
+							"key": "destinationId",
+							"value": "1",
+							"description": "Destination Id",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "20",
+							"description": "Weight in Kilograms",
+							"type": "text"
+						},
+						{
+							"key": "dimensions",
+							"value": "10,20,30",
+							"description": "Dimensions comma-separated (length, width, height)",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/orders/place",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"orders",
+						"place"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "aab8fcc5-58a9-4928-951a-98f4e91d1f01",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "068ed777-e815-4501-943c-3d3a60b1c3fa",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "e6141bdc-1394-49f2-999f-4472a95685fd",
+			"key": "url",
+			"value": "http://localhost:3000",
+			"type": "string",
+			"description": ""
+		}
+	]
+}

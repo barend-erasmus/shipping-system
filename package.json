@@ -1,0 +1,30 @@
+{
+  "name": "shipping-system",
+  "version": "1.0.0",
+  "description": "Shipping System written in Node.JS using CQRS",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "gulp build & tsc & node ./dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barend-erasmus/shipping-system.git"
+  },
+  "author": "Barend Erasmus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/barend-erasmus/shipping-system/issues"
+  },
+  "homepage": "https://github.com/barend-erasmus/shipping-system#readme",
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "run-sequence": "^2.2.1"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
