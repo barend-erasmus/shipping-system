@@ -83,7 +83,22 @@ app.route('/api/orders/place').post((request: express.Request, response: express
 
 **Passing Tests**
 
-![postman-1](https://github.com/barend-erasmus/shipping-system/raw/master/images/postman-1.png)
+![postman-2](https://github.com/barend-erasmus/shipping-system/raw/master/images/postman-2.png)
 
 **Refactored Code**
 
+```typescript
+export class OrdersRouter {
+
+    public static place(request: express.Request, response: express.Response): void {
+        const orderDTO: OrderDTO = OrderDTO.fromRequestBody(request.body);
+
+        orderDTO.id = uuid.v4();
+
+        response.json(orderDTO);
+    }
+
+}
+
+app.route('/api/orders/place').post(OrdersRouter.place);
+```

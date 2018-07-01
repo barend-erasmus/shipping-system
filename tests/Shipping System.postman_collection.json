@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1b961e2d-7abc-4d4f-a5d5-be07384218ed",
+						"id": "c03175a8-95b4-472b-801b-9592e2c7ccd4",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status Code should be 200\", function () {",
@@ -83,10 +83,15 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
+					"mode": "urlencoded",
+					"urlencoded": [
 						{
 							"key": "sourceId",
 							"value": "{{validSourceId}}",
@@ -152,35 +157,35 @@
 	],
 	"variable": [
 		{
-			"id": "983dd5c7-4abf-4035-bbff-c2cdff9532e1",
+			"id": "9a9daf5a-83ed-4732-9def-33b70aabc9ba",
 			"key": "url",
 			"value": "http://localhost:3000",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "9e99f8e0-57c9-466d-8500-15142efdf76b",
+			"id": "558f0bad-81e9-4972-a8d0-781124ae0460",
 			"key": "validDestinationId",
 			"value": "2",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "c2604a9a-d53c-4e11-96d9-3f5132872a22",
-			"key": "vallidSourceId",
+			"id": "f75963af-516a-4980-a344-28c02cd88752",
+			"key": "validSourceId",
 			"value": "1",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "ea4e6990-045d-488c-b350-0a128008b61b",
+			"id": "1fff6ef4-1f65-4c4d-8110-cc4b9c531e14",
 			"key": "validWeight",
 			"value": "20",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "0dc8fd9b-1406-400d-90ee-de51be2a7187",
+			"id": "42273dd3-27d2-488d-9eee-53471c24ccf5",
 			"key": "validDimensions",
 			"value": "10,20,30",
 			"type": "string",

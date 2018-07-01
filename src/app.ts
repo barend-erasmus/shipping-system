@@ -4,7 +4,7 @@ import { OrdersRouter } from './routes/orders';
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.route('/api/orders/place').post(OrdersRouter.place);

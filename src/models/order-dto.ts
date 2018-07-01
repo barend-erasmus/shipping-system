@@ -4,6 +4,8 @@ import { SourceDTO } from './source-dto';
 
 export class OrderDTO {
 
+    public density: number = null;
+
     constructor(
         public id: string,
         public destination: DestinationDTO,
@@ -11,7 +13,7 @@ export class OrderDTO {
         public source: SourceDTO,
         public weight: number,
     ) {
-
+        this.density = this.weight / this.dimensions.volume;
     }
 
     public static fromRequestBody(body: any): OrderDTO {
@@ -23,10 +25,10 @@ export class OrderDTO {
 
         return new OrderDTO(
             body.id,
-            new DestinationDTO(body.destinationId, null),
+            new DestinationDTO(parseInt(body.destinationId, 10), null),
             new DimensionsDTO(parseFloat(splittedDimensions[2]), parseFloat(splittedDimensions[0]), parseFloat(splittedDimensions[1])),
-            new SourceDTO(body.destinationId, null),
-            body.weight,
+            new SourceDTO(parseInt(body.sourceId, 10), null),
+            parseFloat(body.weight),
         );
     }
 
