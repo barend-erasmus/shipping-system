@@ -42,7 +42,7 @@ To place an order, the following will be required from the client:
 
 To demonstrate the "Red, Green, Refactor pattern" we'll write postman test which calls our endpoint and there after we'll write the minimum required code to get the tests passing. Once the tests are passing, we'll go back and refactor to keep the code clean.
 
-**Two Failing Tests**
+**Failing Tests**
 
 ```javascript
 pm.test("Status Code should be 200", function () {
@@ -64,7 +64,7 @@ app.route('/api/orders/place').post((request: express.Request, response: express
         density: 40,
         destination: {
             id: 2,
-            name: 'London, United Kingdom',
+            name: null,
         },
         dimensions: {
             height: 30,
@@ -74,7 +74,7 @@ app.route('/api/orders/place').post((request: express.Request, response: express
         id: uuid.v4(),
         source: {
             id: 1,
-            name: 'Cape Town, South Africa',
+            name: null,
         },
         weight: 50,
     });
@@ -102,3 +102,13 @@ export class OrdersRouter {
 
 app.route('/api/orders/place').post(OrdersRouter.place);
 ```
+
+## Entities, Value Objects, Aggregates and Roots.
+
+
+
+## Resources
+
+[Pattern of the Month: Red Green Refactor](https://dzone.com/articles/pattern-of-the-month-red-green-refactor)
+
+[Entities, Value Objects, Aggregates and Roots](https://lostechies.com/jimmybogard/2008/05/21/entities-value-objects-aggregates-and-roots/)

@@ -1,13 +1,26 @@
-export class DimensionsDTO {
+import { Dimensions } from '../value-objects/dimensions';
 
-    public volume: number = null;
+export class DimensionsDTO {
 
     constructor(
         public height: number,
         public length: number,
+        public volume: number,
         public width: number,
     ) {
-        this.volume = this.height * this.length * this.width;
+
+    }
+
+    public static fromValueObject(dimensions: Dimensions): DimensionsDTO {
+        if (!dimensions) {
+            return null;
+        }
+
+        return new DimensionsDTO(dimensions.height, dimensions.length, dimensions.getVolume(), dimensions.width);
+    }
+
+    public toValueObject(): Dimensions {
+        return new Dimensions(this.height, this.length, this.width);
     }
 
 }

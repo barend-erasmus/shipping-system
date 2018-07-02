@@ -1,3 +1,5 @@
+import { Location } from '../value-objects/location';
+
 export class DestinationDTO {
 
     constructor(
@@ -5,6 +7,18 @@ export class DestinationDTO {
         public name: string,
     ) {
 
+    }
+
+    public static fromValueObject(location: Location): DestinationDTO {
+        if (!location) {
+            return null;
+        }
+
+        return new DestinationDTO(location.id, location.name);
+    }
+
+    public toValueObject(): Location {
+        return new Location(this.id, this.name);
     }
 
 }
