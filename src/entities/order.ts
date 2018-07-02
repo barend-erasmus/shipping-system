@@ -5,6 +5,8 @@ import { Location } from '../value-objects/location';
 
 export class Order implements IEntity<string> {
 
+    // TODO: Add properties: collectionTimestamp, devliveryTimestamp, cost, approvedByAgent, declinedByAgent, confirmedByClient, cancelledByClient
+
     constructor(
         public id: string,
         public destination: Location,
