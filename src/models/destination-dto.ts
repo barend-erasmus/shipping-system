@@ -18,7 +18,7 @@ export class DestinationDTO {
     }
 
     public toValueObject(): Location {
-        return new Location(this.id, this.name);
+        return new Location(this.id, null, null, this.name);
     }
 
 }

@@ -173,6 +173,43 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "{{url}}/api/locations - Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fbdb6a0a-3415-4ff8-9958-46e333fcf4d1",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status Code should be 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body should have 7322 locations\", function () {",
+							"    pm.expect(JSON.parse(responseBody).length).to.be.eq(7322);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{url}}/api/locations",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"locations"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -199,35 +236,35 @@
 	],
 	"variable": [
 		{
-			"id": "13dcb437-7c9e-4b07-8198-240220cee630",
+			"id": "ab155a28-cf19-4236-bf7f-dae6b5af6b4f",
 			"key": "url",
 			"value": "http://localhost:3000",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "f1bb823e-a54d-44c3-ad77-39a0da8a2ce5",
+			"id": "8b8ab37c-795b-4575-8bb0-40fd5c5404c0",
 			"key": "validDestinationId",
 			"value": "2",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "e3e789a4-fcb0-48cb-b6b8-b95ec2221347",
+			"id": "dad6f0ef-3bb7-4e6a-9bbf-04435d7f30fe",
 			"key": "validSourceId",
 			"value": "1",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "b714fcfa-c809-412b-9dca-c279a482b138",
+			"id": "5e9a633f-dea3-46fb-95ed-0be6740ecb61",
 			"key": "validWeight",
 			"value": "20",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "c1191e03-0af5-43d7-b40a-29ce1a971075",
+			"id": "111b7bc1-7e54-4800-827a-3f9b4df9511b",
 			"key": "validDimensions",
 			"value": "10,20,30",
 			"type": "string",
