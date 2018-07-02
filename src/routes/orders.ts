@@ -12,7 +12,7 @@ import { Location } from '../value-objects/location';
 export class OrdersRouter {
 
     public static async place(request: express.Request, response: express.Response): Promise<void> {
-        const commandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('IPlaceOrderCommandBusClient');
+        const placeOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('IPlaceOrderCommandBusClient');
 
         const locationRepository: IRepository<Location, number> = getContainer().get<IRepository<Location, number>>('ILocationRepository');
 
@@ -25,7 +25,7 @@ export class OrdersRouter {
 
         const placeOrderCommand: ICommand = new PlaceOrderCommand(uuid.v4(), order);
 
-        await commandBusClient.execute(placeOrderCommand);
+        await placeOrderCommandBusClient.execute(placeOrderCommand);
 
         const orderDTO: OrderDTO = OrderDTO.fromEntity(order);
 

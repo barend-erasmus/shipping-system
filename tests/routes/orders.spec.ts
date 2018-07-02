@@ -5,9 +5,9 @@ import { app } from '../../src/app';
 import { PlaceOrderCommand } from '../../src/commands/place-order';
 import { ICommand } from '../../src/interfaces/command';
 import { ICommandHandler } from '../../src/interfaces/command-handler';
-import { getContainer, resetContainer } from './../../src/ioc';
 import { IRepository } from '../../src/interfaces/repository';
 import { Location } from '../../src/value-objects/location';
+import { getContainer, resetContainer } from './../../src/ioc';
 
 describe('OrdersRouter', () => {
 
