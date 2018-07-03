@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "53a5fc39-4581-4945-b5ca-cfaa2797a00f",
+						"id": "eb5eb798-bd88-4384-803f-ad0a63bdc167",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status Code should be 200\", function () {",
@@ -25,6 +25,27 @@
 							"      \"type\": \"string\",",
 							"      \"minLength\": 36,",
 							"      \"maxLength\": 36",
+							"    },",
+							"    \"approved\": {",
+							"        \"type\": \"boolean\"",
+							"    },",
+							"    \"cancelled\": {",
+							"        \"type\": \"boolean\"",
+							"    },",
+							"    \"collectionTimestamp\": {",
+							"        \"type\": ['null', 'string']",
+							"    },",
+							"    \"confirmed\": {",
+							"        \"type\": \"boolean\"",
+							"    },",
+							"     \"cost\": {",
+							"        \"type\": ['null', 'number']",
+							"    },",
+							"    \"declined\": {",
+							"        \"type\": \"boolean\"",
+							"    },",
+							"    \"deliveryTimestamp\": {",
+							"        \"type\": ['null', 'string']",
 							"    },",
 							"    \"density\": {",
 							"        \"type\": \"number\"",
@@ -85,7 +106,7 @@
 							"});",
 							"",
 							"pm.test(\"Body should have correct destination name\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).destination.name).to.be.eq(null);",
+							"    pm.expect(JSON.parse(responseBody).destination.name).to.be.eq('Chaghcharan, Afghanistan');",
 							"});",
 							"",
 							"pm.test(\"Body should have correct dimensions height\", function () { ",
@@ -109,7 +130,7 @@
 							"});",
 							"",
 							"pm.test(\"Body should have correct source name\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).source.name).to.be.eq(null);",
+							"    pm.expect(JSON.parse(responseBody).source.name).to.be.eq('Qal eh-ye Now, Afghanistan');",
 							"});",
 							"",
 							"pm.test(\"Body should have correct weight\", function () { ",
@@ -180,7 +201,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "fbdb6a0a-3415-4ff8-9958-46e333fcf4d1",
+						"id": "b0121ebb-fbf5-4a00-b82f-57aa144d479d",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status Code should be 200\", function () {",
@@ -236,35 +257,35 @@
 	],
 	"variable": [
 		{
-			"id": "ab155a28-cf19-4236-bf7f-dae6b5af6b4f",
+			"id": "4a5bc779-b496-46dd-ae86-adca83190540",
 			"key": "url",
 			"value": "http://localhost:3000",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "8b8ab37c-795b-4575-8bb0-40fd5c5404c0",
+			"id": "7443da70-7862-4a1d-93ee-e9ab024c2d8b",
 			"key": "validDestinationId",
 			"value": "2",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "dad6f0ef-3bb7-4e6a-9bbf-04435d7f30fe",
+			"id": "38a5ee4a-0ba1-42b9-abad-198234ebfb59",
 			"key": "validSourceId",
 			"value": "1",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "5e9a633f-dea3-46fb-95ed-0be6740ecb61",
+			"id": "b5fbd959-fc2f-4d12-9dd8-d4c217a47fb1",
 			"key": "validWeight",
 			"value": "20",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "111b7bc1-7e54-4800-827a-3f9b4df9511b",
+			"id": "d166b073-d9a9-4e94-85c9-bd80b287462e",
 			"key": "validDimensions",
 			"value": "10,20,30",
 			"type": "string",
