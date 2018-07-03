@@ -7,6 +7,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -22,8 +27,61 @@ describe('OrderDTO', () => {
             expect(result).to.be.null;
         });
 
+        it('Should return OrderDTO with correct account account number', () => {
+            const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
+                destinationId: 2,
+                dimensions: '10,20,30',
+                sourceId: 1,
+                weight: 20,
+            });
+
+            expect(result.account.accountNumber).to.be.eq('accountNumber');
+        });
+
+        it('Should return OrderDTO with correct account email address', () => {
+            const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
+                destinationId: 2,
+                dimensions: '10,20,30',
+                sourceId: 1,
+                weight: 20,
+            });
+
+            expect(result.account.emailAddress).to.be.eq('emailAddress');
+        });
+
+        it('Should return OrderDTO with correct account name', () => {
+            const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
+                destinationId: 2,
+                dimensions: '10,20,30',
+                sourceId: 1,
+                weight: 20,
+            });
+
+            expect(result.account.name).to.be.eq('name');
+        });
+
         it('Should return OrderDTO with correct destination id', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -35,6 +93,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct destination name', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -46,6 +109,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct dimensions height', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -57,6 +125,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct dimensions length', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -68,6 +141,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct dimensions width', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -79,6 +157,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct dimensions volume', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -90,6 +173,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct source id', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -101,6 +189,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct source name', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -112,6 +205,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct density', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -123,6 +221,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO with correct weight', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -134,6 +237,11 @@ describe('OrderDTO', () => {
 
         it('Should return OrderDTO given string destination id', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: '2',
                 dimensions: '10,20,30',
                 sourceId: 1,
@@ -145,6 +253,11 @@ describe('OrderDTO', () => {
 
         it('Should return null given incorrect dimensions format', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10|20|30',
                 sourceId: 1,
@@ -156,6 +269,11 @@ describe('OrderDTO', () => {
 
         it('Should return null given incorrect dimensions format', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
                 destinationId: 2,
                 dimensions: '10 cm,20 cm,30 cm',
                 sourceId: 1,

@@ -43,6 +43,11 @@ describe('OrdersRouter', () => {
             supertest(app)
                 .post('/api/orders/place')
                 .send({
+                    account: {
+                        accountNumber: 'accountNumber',
+                        emailAddress: 'emailAddress',
+                        name: 'name',
+                    },
                     destinationId: 2,
                     dimensions: '10,20,30',
                     sourceId: 1,
@@ -85,6 +90,11 @@ describe('OrdersRouter', () => {
             supertest(app)
                 .post('/api/orders/place')
                 .send({
+                    account: {
+                        accountNumber: 'accountNumber',
+                        emailAddress: 'emailAddress',
+                        name: 'name',
+                    },
                     destinationId: 2,
                     dimensions: '10,20,30',
                     sourceId: 1,
@@ -102,6 +112,19 @@ describe('OrdersRouter', () => {
                     expect(placeOrderCommand.id).to.be.not.null;
                     expect(placeOrderCommand.order).to.be.not.null;
                     expect(placeOrderCommand.order.id).to.be.not.null;
+                    expect(placeOrderCommand.order.approved).to.be.eq(false);
+                    expect(placeOrderCommand.order.cancelled).to.be.eq(false);
+                    expect(placeOrderCommand.order.collectionTimestamp).to.be.eq(null);
+                    expect(placeOrderCommand.order.confirmed).to.be.eq(false);
+                    expect(placeOrderCommand.order.cost).to.be.eq(null);
+                    expect(placeOrderCommand.order.declined).to.be.eq(false);
+                    expect(placeOrderCommand.order.deliveryTimestamp).to.be.eq(null);
+                    expect(placeOrderCommand.order.weight).to.be.eq(20);
+
+                    expect(placeOrderCommand.order.account).to.be.not.null;
+                    expect(placeOrderCommand.order.account.accountNumber).to.be.eq('accountNumber');
+                    expect(placeOrderCommand.order.account.emailAddress).to.be.eq('emailAddress');
+                    expect(placeOrderCommand.order.account.name).to.be.eq('name');
 
                     expect(placeOrderCommand.order.destination).to.be.not.null;
                     expect(placeOrderCommand.order.destination.id).to.be.eq(2);
@@ -115,8 +138,6 @@ describe('OrdersRouter', () => {
                     expect(placeOrderCommand.order.source).to.be.not.null;
                     expect(placeOrderCommand.order.source.id).to.be.eq(1);
                     expect(placeOrderCommand.order.source.name).to.be.eq('Location 1');
-
-                    expect(placeOrderCommand.order.weight).to.be.eq(20);
                 });
         });
 

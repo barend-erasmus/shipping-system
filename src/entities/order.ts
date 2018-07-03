@@ -1,5 +1,6 @@
 import { NumericHelper } from '../helpers/numeric';
 import { IEntity } from '../interfaces/entity';
+import { Account } from '../value-objects/account';
 import { Dimensions } from '../value-objects/dimensions';
 import { Location } from '../value-objects/location';
 
@@ -7,6 +8,7 @@ export class Order implements IEntity<string> {
 
     constructor(
         public id: string,
+        public account: Account,
         public approved: boolean,
         public cancelled: boolean,
         public collectionTimestamp: Date,

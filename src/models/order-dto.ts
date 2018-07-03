@@ -2,11 +2,13 @@ import { Order } from '../entities/order';
 import { DestinationDTO } from './destination-dto';
 import { DimensionsDTO } from './dimensions-dto';
 import { SourceDTO } from './source-dto';
+import { AccountDTO } from './account-dto';
 
 export class OrderDTO {
 
     constructor(
         public id: string,
+        public account: AccountDTO,
         public approved: boolean,
         public cancelled: boolean,
         public collectionTimestamp: Date,
@@ -29,6 +31,7 @@ export class OrderDTO {
 
         return new OrderDTO(
             order.id,
+            AccountDTO.fromValueObject(order.account),
             order.approved,
             order.cancelled,
             order.collectionTimestamp,
@@ -57,6 +60,7 @@ export class OrderDTO {
 
         const orderDto: OrderDTO = new OrderDTO(
             body.id,
+            new AccountDTO(body.account.accountNumber, body.account.emailAddress, body.account.name),
             false,
             false,
             null,
@@ -111,6 +115,7 @@ export class OrderDTO {
     public toEntity(): Order {
         return new Order(
             this.id,
+            this.account.toValueObject(),
             this.approved,
             this.cancelled,
             this.collectionTimestamp,

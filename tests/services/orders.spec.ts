@@ -25,7 +25,7 @@ describe('OrdersService', () => {
 
             const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository);
 
-            const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null));
+            const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null));
 
             expect(result).to.be.not.null;
         });
@@ -47,7 +47,7 @@ describe('OrdersService', () => {
 
             const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository);
 
-            const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null));
+            const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null));
 
             expect(orderRepositoryInsertSpy.calledOnce).to.be.true;
         });
@@ -69,7 +69,7 @@ describe('OrdersService', () => {
 
             const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository);
 
-            const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null));
+            const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null));
 
             expect(orderPlacedCommandBusClientExecuteSpy.calledOnce).to.be.true;
         });
