@@ -7,7 +7,7 @@ describe('Order', () => {
     describe('#getDensity', () => {
 
         it('Should return correct density', () => {
-            const order: Order = new Order(null, null, new Dimensions(10, 20, 30), null, 20);
+            const order: Order = new Order(null, null, null, null, null, null, null, null, null, new Dimensions(10, 20, 30), null, 20);
 
             const result: number = order.getDensity();
 

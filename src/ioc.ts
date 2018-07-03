@@ -1,12 +1,21 @@
 import { Container, interfaces } from 'inversify';
 import 'reflect-metadata';
 import { InMemoryCommandBusClient } from './clients/in-memory-command-bus';
+import { Order } from './entities/order';
+import { SendGridEmailGateway } from './gateways/send-grid-email';
+import { OrderPlacedCommandHandler } from './handlers/order-placed-command';
 import { PlaceOrderCommandHandler } from './handlers/place-order-command';
 import { ICommandBusClient } from './interfaces/command-bus-client';
 import { ICommandHandler } from './interfaces/command-handler';
+import { IEmailGateway } from './interfaces/email-gateway';
+import { IOrdersService } from './interfaces/orders-service';
 import { IRepository } from './interfaces/repository';
+import { IWritableRepository } from './interfaces/writable-repository';
 import { LocationRepository } from './repositories/locations';
+import { OrderRepository } from './repositories/orders';
+import { OrdersService } from './services/orders';
 import { Location } from './value-objects/location';
+import { AES256CTRCipher } from './ciphers/aes-256-ctr';
 
 let container: Container = null;
 
@@ -18,10 +27,21 @@ export function getContainer(): Container {
     container = new Container();
 
     // Command Handlers
+    container.bind<ICommandHandler>('OrderPlacedCommandHandler').to(OrderPlacedCommandHandler);
     container.bind<ICommandHandler>('PlaceOrderCommandHandler').to(PlaceOrderCommandHandler);
 
     // Clients
-    container.bind<ICommandBusClient>('IPlaceOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    container.bind<ICommandBusClient>('OrderPlacedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const orderPlacedCommandHandler: ICommandHandler = context.container.get<OrderPlacedCommandHandler>('OrderPlacedCommandHandler');
+
+        commandBusClient.register(orderPlacedCommandHandler);
+
+        return commandBusClient;
+    });
+
+    container.bind<ICommandBusClient>('PlaceOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
         const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
         const placeOrderCommandHandler: ICommandHandler = context.container.get<PlaceOrderCommandHandler>('PlaceOrderCommandHandler');
@@ -33,6 +53,13 @@ export function getContainer(): Container {
 
     // Repositories
     container.bind<IRepository<Location, number>>('ILocationRepository').to(LocationRepository);
+    container.bind<IWritableRepository<Order, string>>('IOrderRepository').to(OrderRepository);
+
+    // Gateways
+    container.bind<IEmailGateway>('IEmailGateway').toConstantValue(new SendGridEmailGateway(new AES256CTRCipher('MidericK96').decrypt('dbd090268bf21567a3e2d898ba4cdcf0e49e09b66bf5b85070f559fd1c9bd8f173e7c7cfdff3f172c74319e23ea2be2a067a131b26329cd6f75d4b09a7309c877e719d2579')));
+
+    // Services
+    container.bind<IOrdersService>('IOrdersService').to(OrdersService);
 
     return container;
 }

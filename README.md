@@ -4,13 +4,24 @@ Shipping System written in Node.JS using CQRS
 
 ## Introduction
 
-The goal of this project help others with commonly misundestood basics of software architecture.
+The goal of this project is to demonstrate software development processes and principles.
 
-## Where to start ?
+## What will be covered in this project?
 
-The first step of the software development process is to write down a few user stories that are essential to your MVP (Minimum Viable Product).
+* User Stories
+* Flow Diagrams
+* Acceptance Tests
+* Test-Driven Development
+* Domain-Driven Development (Domain Modeling)
+* Design Patterns
+* SOLID Principles
+* DRY Principle
+* Data Structures
+* Algorithms
 
-For this project, the following is required:
+### User Stories
+
+"Each user story is expected to yield, once implemented, a contribution to the value of the overall product, irrespective of the order of implementation; these and other assumptions as to the nature of user stories are captured by the INVEST formula." ~ Agile Alliance
 
 * As a client, I want to be able to place an order.
 * As a shippping agent, I want to be able to recieve a shipping order.
@@ -19,65 +30,41 @@ For this project, the following is required:
 * As a client, I want to be able to receive a notification when a order has been approved.
 * As a client, I want to be able to receive a notification when a order has been declined.
 
-Next, draw a flow diagram to help visualize your idea better.
+### Flow Diagram
 
 ![flow-diagram](https://github.com/barend-erasmus/shipping-system/raw/master/images/flow-diagram.png)
 
-## Let's start coding
+### Acceptance Tests
 
-With the user stories and flow diagram in place, we can start writing the acceptance criteria/tests. This project is more for developers than for the business team and therefor we'll jump straight to acceptance tests.
+"An acceptance test is a formal description of the behavior of a software product, generally expressed as an example or a usage scenario." ~ Agile Alliance
 
-![postman-1](https://github.com/barend-erasmus/shipping-system/raw/master/images/postman-1.png)
+In this project, we'have used Postman Tests for our acceptance tests.
 
-To place an order, the following will be required from the client:
+Learn more about Postman Tests, [here](https://www.getpostman.com/docs/v6/postman/scripts/test_scripts).
 
-* Source
-* Destination
-* Weight
-* Dimensions
+### Test-Driven Development
 
-## Red, Green, Refacor
+**Red, Green, Refacor**
 
 "Red Green Refactor is the Agile engineering pattern which underpins Test Driven Development. Characterized by a “test-first” approach to design and implementation, it utilizes very short development cycles to minimize leap-of-faith assumptions." ~ [DZone](https://dzone.com/articles/pattern-of-the-month-red-green-refactor)
 
-To demonstrate the "Red, Green, Refactor pattern" we'll write postman test which calls our endpoint and there after we'll write the minimum required code to get the tests passing. Once the tests are passing, we'll go back and refactor to keep the code clean.
-
 **Failing Tests**
+
+Writing a failing test is the first step in TDD.
 
 ```javascript
 pm.test("Status Code should be 200", function () {
     pm.response.to.have.status(200);
 });
-
-pm.test("Body should have correct schema", function () { 
-    const result = tv4.validateResult(JSON.parse(responseBody), schema);
- 
-    pm.expect(result.valid).to.be.true;
-});
 ```
 
 **Minimum Required Code**
 
+Once you have a failing test, you can write the minimum code required to get the test passing.
+
 ```typescript
 app.route('/api/orders/place').post((request: express.Request, response: express.Response) => {
-    response.json({
-        density: 40,
-        destination: {
-            id: 2,
-            name: null,
-        },
-        dimensions: {
-            height: 30,
-            length: 10,
-            width: 20,
-        },
-        id: uuid.v4(),
-        source: {
-            id: 1,
-            name: null,
-        },
-        weight: 50,
-    });
+    response.status(200).end();
 });
 ```
 
@@ -87,15 +74,14 @@ app.route('/api/orders/place').post((request: express.Request, response: express
 
 **Refactored Code**
 
+
 ```typescript
 export class OrdersRouter {
 
     public static place(request: express.Request, response: express.Response): void {
-        const orderDTO: OrderDTO = OrderDTO.fromRequestBody(request.body);
+        // TODO: ...
 
-        orderDTO.id = uuid.v4();
-
-        response.json(orderDTO);
+        response.status(200).end();
     }
 
 }
@@ -103,11 +89,14 @@ export class OrdersRouter {
 app.route('/api/orders/place').post(OrdersRouter.place);
 ```
 
-## Entities, Value Objects, Aggregates and Roots.
-
-
 
 ## Resources
+
+[Agile Alliance - User Stories](https://www.agilealliance.org/glossary/user-stories/#q=~(filters~(postType~(~'page~'post~'aa_book~'aa_event_session~'aa_experience_report~'aa_glossary~'aa_research_paper~'aa_video)~tags~(~'user*20stories))~searchTerm~'~sort~false~sortDirection~'asc~page~1))
+
+[Agile Alliance - Acceptance Testing](https://www.agilealliance.org/glossary/acceptance/#q=~(filters~(postType~(~'page~'post~'aa_book~'aa_event_session~'aa_experience_report~'aa_glossary~'aa_research_paper~'aa_video)~tags~(~'acceptance*20test))~searchTerm~'~sort~false~sortDirection~'asc~page~1))
+
+[Postman - Test Scripts](https://www.getpostman.com/docs/v6/postman/scripts/test_scripts)
 
 [Pattern of the Month: Red Green Refactor](https://dzone.com/articles/pattern-of-the-month-red-green-refactor)
 

@@ -110,17 +110,6 @@ describe('OrderDTO', () => {
             expect(result.source.name).to.be.eq(null);
         });
 
-        it('Should return OrderDTO with correct weight', () => {
-            const result: OrderDTO = OrderDTO.fromRequestBody({
-                destinationId: 2,
-                dimensions: '10,20,30',
-                sourceId: 1,
-                weight: 20,
-            });
-
-            expect(result.weight).to.be.eq(20);
-        });
-
         it('Should return OrderDTO with correct density', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
                 destinationId: 2,
@@ -130,6 +119,17 @@ describe('OrderDTO', () => {
             });
 
             expect(result.density).to.be.eq(0.003);
+        });
+
+        it('Should return OrderDTO with correct weight', () => {
+            const result: OrderDTO = OrderDTO.fromRequestBody({
+                destinationId: 2,
+                dimensions: '10,20,30',
+                sourceId: 1,
+                weight: 20,
+            });
+
+            expect(result.weight).to.be.eq(20);
         });
 
         it('Should return OrderDTO given string destination id', () => {

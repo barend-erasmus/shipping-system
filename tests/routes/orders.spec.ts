@@ -4,7 +4,7 @@ import * as supertest from 'supertest';
 import { app } from '../../src/app';
 import { PlaceOrderCommand } from '../../src/commands/place-order';
 import { ICommand } from '../../src/interfaces/command';
-import { ICommandHandler } from '../../src/interfaces/command-handler';
+import { ICommandBusClient } from '../../src/interfaces/command-bus-client';
 import { IRepository } from '../../src/interfaces/repository';
 import { Location } from '../../src/value-objects/location';
 import { getContainer, resetContainer } from './../../src/ioc';
@@ -17,16 +17,16 @@ describe('OrdersRouter', () => {
             resetContainer();
         });
 
-        it('Should call registered command handler', async () => {
-            getContainer().unbind('PlaceOrderCommandHandler');
+        it('Should call command bus', async () => {
+            getContainer().unbind('PlaceOrderCommandBusClient');
 
-            const commandHandler: ICommandHandler = {
-                handle: async (command: ICommand) => {
+            const placeOrderCommandBusClient: ICommandBusClient = {
+                execute: (command: ICommand) => {
 
                 },
-            } as ICommandHandler;
+            } as ICommandBusClient;
 
-            getContainer().bind<ICommandHandler>('PlaceOrderCommandHandler').toConstantValue(commandHandler);
+            getContainer().bind<ICommandBusClient>('PlaceOrderCommandBusClient').toConstantValue(placeOrderCommandBusClient);
 
             getContainer().unbind('ILocationRepository');
 
@@ -38,7 +38,7 @@ describe('OrdersRouter', () => {
 
             getContainer().bind<IRepository<Location, number>>('ILocationRepository').toConstantValue(locationRepository);
 
-            const commandHandlerHandleSpy: sinon.SinonSpy = sinon.spy(commandHandler, 'handle');
+            const placeOrderCommandBusClientExecuteSpy: sinon.SinonSpy = sinon.spy(placeOrderCommandBusClient, 'execute');
 
             supertest(app)
                 .post('/api/orders/place')
@@ -55,20 +55,20 @@ describe('OrdersRouter', () => {
                         throw error;
                     }
 
-                    expect(commandHandlerHandleSpy.calledOnce).to.be.true;
+                    expect(placeOrderCommandBusClientExecuteSpy.calledOnce).to.be.true;
                 });
         });
 
-        it('Should call registered command handler with correct parameters', async () => {
-            getContainer().unbind('PlaceOrderCommandHandler');
+        it('Should call registered command bus with correct parameters', async () => {
+            getContainer().unbind('PlaceOrderCommandBusClient');
 
-            const commandHandler: ICommandHandler = {
-                handle: async (command: ICommand) => {
+            const placeOrderCommandBusClient: ICommandBusClient = {
+                execute: (command: ICommand) => {
 
                 },
-            } as ICommandHandler;
+            } as ICommandBusClient;
 
-            getContainer().bind<ICommandHandler>('PlaceOrderCommandHandler').toConstantValue(commandHandler);
+            getContainer().bind<ICommandBusClient>('PlaceOrderCommandBusClient').toConstantValue(placeOrderCommandBusClient);
 
             getContainer().unbind('ILocationRepository');
 
@@ -80,7 +80,7 @@ describe('OrdersRouter', () => {
 
             getContainer().bind<IRepository<Location, number>>('ILocationRepository').toConstantValue(locationRepository);
 
-            const commandHandlerHandleSpy: sinon.SinonSpy = sinon.spy(commandHandler, 'handle');
+            const placeOrderCommandBusClientExecuteSpy: sinon.SinonSpy = sinon.spy(placeOrderCommandBusClient, 'execute');
 
             supertest(app)
                 .post('/api/orders/place')
@@ -97,7 +97,7 @@ describe('OrdersRouter', () => {
                         throw error;
                     }
 
-                    const placeOrderCommand: PlaceOrderCommand = commandHandlerHandleSpy.args[0][0];
+                    const placeOrderCommand: PlaceOrderCommand = placeOrderCommandBusClientExecuteSpy.args[0][0];
 
                     expect(placeOrderCommand.id).to.be.not.null;
                     expect(placeOrderCommand.order).to.be.not.null;

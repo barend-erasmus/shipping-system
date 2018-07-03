@@ -7,6 +7,13 @@ export class OrderDTO {
 
     constructor(
         public id: string,
+        public approved: boolean,
+        public cancelled: boolean,
+        public collectionTimestamp: Date,
+        public confirmed: boolean,
+        public cost: number,
+        public declined: boolean,
+        public deliveryTimestamp: Date,
         public density: number,
         public destination: DestinationDTO,
         public dimensions: DimensionsDTO,
@@ -22,6 +29,13 @@ export class OrderDTO {
 
         return new OrderDTO(
             order.id,
+            order.approved,
+            order.cancelled,
+            order.collectionTimestamp,
+            order.confirmed,
+            order.cost,
+            order.declined,
+            order.deliveryTimestamp,
             order.getDensity(),
             DestinationDTO.fromValueObject(order.destination),
             DimensionsDTO.fromValueObject(order.dimensions),
@@ -43,6 +57,13 @@ export class OrderDTO {
 
         const orderDto: OrderDTO = new OrderDTO(
             body.id,
+            false,
+            false,
+            null,
+            false,
+            null,
+            false,
+            null,
             null,
             new DestinationDTO(parseInt(body.destinationId, 10), null),
             dimensionsDto,
@@ -90,6 +111,13 @@ export class OrderDTO {
     public toEntity(): Order {
         return new Order(
             this.id,
+            this.approved,
+            this.cancelled,
+            this.collectionTimestamp,
+            this.confirmed,
+            this.cost,
+            this.declined,
+            this.deliveryTimestamp,
             this.destination.toValueObject(),
             this.dimensions.toValueObject(),
             this.source.toValueObject(),

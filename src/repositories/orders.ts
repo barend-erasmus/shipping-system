@@ -1,6 +1,8 @@
+import { injectable } from 'inversify';
 import { Order } from '../entities/order';
 import { IWritableRepository } from '../interfaces/writable-repository';
 
+@injectable()
 export class OrderRepository implements IWritableRepository<Order, string> {
 
     public async find(id: string): Promise<Order> {
@@ -12,7 +14,9 @@ export class OrderRepository implements IWritableRepository<Order, string> {
     }
 
     public async insert(entity: Order): Promise<Order> {
-        throw new Error('Method not implemented.');
+        // TODO
+
+        return entity;
     }
 
 }

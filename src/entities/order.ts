@@ -5,10 +5,15 @@ import { Location } from '../value-objects/location';
 
 export class Order implements IEntity<string> {
 
-    // TODO: Add properties: collectionTimestamp, devliveryTimestamp, cost, approvedByAgent, declinedByAgent, confirmedByClient, cancelledByClient
-
     constructor(
         public id: string,
+        public approved: boolean,
+        public cancelled: boolean,
+        public collectionTimestamp: Date,
+        public confirmed: boolean,
+        public cost: number,
+        public declined: boolean,
+        public deliveryTimestamp: Date,
         public destination: Location,
         public dimensions: Dimensions,
         public source: Location,
