@@ -14,6 +14,7 @@ import { IEmailGateway } from './interfaces/email-gateway';
 import { IOrdersService } from './interfaces/orders-service';
 import { IRepository } from './interfaces/repository';
 import { IWritableRepository } from './interfaces/writable-repository';
+import { BaseRepository } from './repositories/base';
 import { LocationRepository } from './repositories/locations';
 import { OrderRepository } from './repositories/orders';
 import { OrdersService } from './services/orders';
@@ -57,6 +58,7 @@ export function getContainer(): Container {
     });
 
     // Repositories
+    container.bind<BaseRepository>('BaseRepository').toConstantValue(new BaseRepository());
     container.bind<IRepository<Location, number>>('ILocationRepository').to(LocationRepository);
     container.bind<IWritableRepository<Order, string>>('IOrderRepository').to(OrderRepository);
 
