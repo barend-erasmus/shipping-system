@@ -145,41 +145,19 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded"
+						"value": "application/json"
 					}
 				],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "sourceId",
-							"value": "{{validSourceId}}",
-							"description": "Source Id ",
-							"type": "text"
-						},
-						{
-							"key": "destinationId",
-							"value": "{{validDestinationId}}",
-							"description": "Destination Id",
-							"type": "text"
-						},
-						{
-							"key": "weight",
-							"value": "{{validWeight}}",
-							"description": "Weight in Kilograms",
-							"type": "text"
-						},
-						{
-							"key": "dimensions",
-							"value": "{{validDimensions}}",
-							"description": "Dimensions comma-separated (length, width, height)",
-							"type": "text"
-						}
-					]
+					"mode": "raw",
+					"raw": "{\r\n    \"account\": {\r\n        \"accountNumber\": \"accountNumber\",\r\n        \"emailAddress\": \"foo.bar@example.com\",\r\n        \"name\": \"name\"\r\n    },\r\n    \"destinationId\": 2,\r\n    \"dimensions\": \"10,20,30\",\r\n    \"sourceId\": 1,\r\n    \"weight\": 20\r\n}"
 				},
 				"url": {
 					"raw": "{{url}}/api/orders/place",
@@ -196,7 +174,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/locations - Valid",
+			"name": "/api/locations - Valid",
 			"event": [
 				{
 					"listen": "test",
@@ -257,35 +235,35 @@
 	],
 	"variable": [
 		{
-			"id": "4a5bc779-b496-46dd-ae86-adca83190540",
+			"id": "b22845e7-6a73-4e38-846a-73d0cce3330a",
 			"key": "url",
 			"value": "http://localhost:3000",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "7443da70-7862-4a1d-93ee-e9ab024c2d8b",
+			"id": "b17c14cb-d318-4c49-b4c4-158b6f3a586f",
 			"key": "validDestinationId",
 			"value": "2",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "38a5ee4a-0ba1-42b9-abad-198234ebfb59",
+			"id": "42b513e0-ef30-4d91-9f51-1c885407813d",
 			"key": "validSourceId",
 			"value": "1",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "b5fbd959-fc2f-4d12-9dd8-d4c217a47fb1",
+			"id": "b49c54bf-340a-4e48-89ce-9545dd98a93e",
 			"key": "validWeight",
 			"value": "20",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "d166b073-d9a9-4e94-85c9-bd80b287462e",
+			"id": "e4d76eea-2049-4f16-94ed-12c9f72d3843",
 			"key": "validDimensions",
 			"value": "10,20,30",
 			"type": "string",

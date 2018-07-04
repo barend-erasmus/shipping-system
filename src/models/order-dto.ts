@@ -1,8 +1,8 @@
 import { Order } from '../entities/order';
+import { AccountDTO } from './account-dto';
 import { DestinationDTO } from './destination-dto';
 import { DimensionsDTO } from './dimensions-dto';
 import { SourceDTO } from './source-dto';
-import { AccountDTO } from './account-dto';
 
 export class OrderDTO {
 
