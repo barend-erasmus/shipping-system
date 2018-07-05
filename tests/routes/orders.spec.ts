@@ -28,15 +28,15 @@ describe('OrdersRouter', () => {
 
             getContainer().bind<ICommandBusClient>('PlaceOrderCommandBusClient').toConstantValue(placeOrderCommandBusClient);
 
-            getContainer().unbind('ILocationRepository');
+            getContainer().unbind('ILocationsRepository');
 
-            const locationRepository: IRepository<Location, number> = {
+            const locationsRepository: IRepository<Location, number> = {
                 find: async (id: number) => {
                     return new Location(id, 0, 0, `Location ${id}`);
                 },
             } as IRepository<Location, number>;
 
-            getContainer().bind<IRepository<Location, number>>('ILocationRepository').toConstantValue(locationRepository);
+            getContainer().bind<IRepository<Location, number>>('ILocationsRepository').toConstantValue(locationsRepository);
 
             const placeOrderCommandBusClientExecuteSpy: sinon.SinonSpy = sinon.spy(placeOrderCommandBusClient, 'execute');
 
@@ -75,15 +75,15 @@ describe('OrdersRouter', () => {
 
             getContainer().bind<ICommandBusClient>('PlaceOrderCommandBusClient').toConstantValue(placeOrderCommandBusClient);
 
-            getContainer().unbind('ILocationRepository');
+            getContainer().unbind('ILocationsRepository');
 
-            const locationRepository: IRepository<Location, number> = {
+            const locationsRepository: IRepository<Location, number> = {
                 find: async (id: number) => {
                     return new Location(id, 0, 0, `Location ${id}`);
                 },
             } as IRepository<Location, number>;
 
-            getContainer().bind<IRepository<Location, number>>('ILocationRepository').toConstantValue(locationRepository);
+            getContainer().bind<IRepository<Location, number>>('ILocationsRepository').toConstantValue(locationsRepository);
 
             const placeOrderCommandBusClientExecuteSpy: sinon.SinonSpy = sinon.spy(placeOrderCommandBusClient, 'execute');
 

@@ -2,10 +2,12 @@ import { inject, injectable } from 'inversify';
 import { Order } from '../entities/order';
 import { IWritableRepository } from '../interfaces/writable-repository';
 import { Account } from '../value-objects/account';
+import { Dimensions } from '../value-objects/dimensions';
+import { Location } from '../value-objects/location';
 import { BaseRepository } from './base';
 
 @injectable()
-export class OrderRepository implements IWritableRepository<Order, string> {
+export class OrdersRepository implements IWritableRepository<Order, string> {
 
     constructor(
         @inject('BaseRepository')
@@ -15,8 +17,8 @@ export class OrderRepository implements IWritableRepository<Order, string> {
     }
 
     public async find(id: string): Promise<Order> {
-        const rows: any[] = await this.baseRepository.query(`SELECT * FROM ORDERS WHERE ID = @id`, {
-            id,
+        const rows: any[] = await this.baseRepository.query(`SELECT * FROM ORDERS WHERE ID = $id`, {
+            $id: id,
         });
 
         if (!rows.length) {
@@ -34,20 +36,40 @@ export class OrderRepository implements IWritableRepository<Order, string> {
             ),
             row.APPROVED,
             row.CANCELLED,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            row.COLLECTION_TIMESTAMP ? new Date(row.COLLECTION_TIMESTAMP) : null,
+            row.CONFIRMED,
+            row.COST,
+            row.DECLINED,
+            row.DELIVERY_TIMESTAMP ? new Date(row.DELIVERY_TIMESTAMP) : null,
+            new Location(row.DESTINATION_ID, null, null, null),
+            new Dimensions(row.HEIGHT, row.LENGTH, row.WIDTH),
+            new Location(row.SOURCE_ID, null, null, null),
+            row.WEIGHT,
         );
     }
 
     public async findAll(): Promise<Order[]> {
-        throw new Error('Method not implemented.');
+        const rows: any[] = await this.baseRepository.query(`SELECT * FROM ORDERS`, undefined);
+
+        return rows.map((row: any) => new Order(
+            row.ID,
+            new Account(
+                row.ACCOUNT_NUMBER,
+                row.ACCOUNT_EMAIL_ADDRESS,
+                row.ACCOUNT_NAME,
+            ),
+            row.APPROVED,
+            row.CANCELLED,
+            row.COLLECTION_TIMESTAMP ? new Date(row.COLLECTION_TIMESTAMP) : null,
+            row.CONFIRMED,
+            row.COST,
+            row.DECLINED,
+            row.DELIVERY_TIMESTAMP ? new Date(row.DELIVERY_TIMESTAMP) : null,
+            new Location(row.DESTINATION_ID, null, null, null),
+            new Dimensions(row.HEIGHT, row.LENGTH, row.WIDTH),
+            new Location(row.SOURCE_ID, null, null, null),
+            row.WEIGHT,
+        ));
     }
 
     public async insert(entity: Order): Promise<Order> {

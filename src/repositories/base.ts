@@ -16,17 +16,10 @@ export class BaseRepository {
         await this._execute(sql);
     }
 
-    public query(sql: string, parameters: any): Promise<any[]> {
-        return new Promise<any[]>((resolve: (rows: any[]) => void, reject: (error: Error) => void) => {
-            this.database.all(sql, parameters, (error: Error, rows: any[]) => {
-                if (error) {
-                    reject(error);
-                    return;
-                }
+    public async query(sql: string, parameters: any): Promise<any[]> {
+        await this.initialize();
 
-                resolve(rows);
-            });
-        });
+        return this._query(sql, parameters);
     }
 
     protected async _execute(sql: string): Promise<void> {
@@ -38,6 +31,19 @@ export class BaseRepository {
                 }
 
                 resolve();
+            });
+        });
+    }
+
+    public _query(sql: string, parameters: any): Promise<any[]> {
+        return new Promise<any[]>((resolve: (rows: any[]) => void, reject: (error: Error) => void) => {
+            this.database.all(sql, parameters, (error: Error, rows: any[]) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(rows);
             });
         });
     }
@@ -80,7 +86,7 @@ export class BaseRepository {
     }
 
     protected async getVersion(): Promise<number> {
-        const rows: any[] = await this.query('SELECT * FROM VERSION ORDER BY TIMESTAMP DESC', undefined);
+        const rows: any[] = await this._query('SELECT * FROM VERSION ORDER BY TIMESTAMP DESC', undefined);
 
         if (!rows.length) {
             return 0;

@@ -14,14 +14,14 @@ export class OrdersRouter {
     public static async place(request: express.Request, response: express.Response): Promise<void> {
         const placeOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('PlaceOrderCommandBusClient');
 
-        const locationRepository: IRepository<Location, number> = getContainer().get<IRepository<Location, number>>('ILocationRepository');
+        const locationsRepository: IRepository<Location, number> = getContainer().get<IRepository<Location, number>>('ILocationsRepository');
 
         const order: Order = OrderDTO.fromRequestBody(request.body).toEntity();
 
         order.id = uuid.v4();
 
-        order.destination = await locationRepository.find(order.destination.id);
-        order.source = await locationRepository.find(order.source.id);
+        order.destination = await locationsRepository.find(order.destination.id);
+        order.source = await locationsRepository.find(order.source.id);
 
         const placeOrderCommand: ICommand = new PlaceOrderCommand(uuid.v4(), order);
 

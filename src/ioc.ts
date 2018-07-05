@@ -15,8 +15,8 @@ import { IOrdersService } from './interfaces/orders-service';
 import { IRepository } from './interfaces/repository';
 import { IWritableRepository } from './interfaces/writable-repository';
 import { BaseRepository } from './repositories/base';
-import { LocationRepository } from './repositories/locations';
-import { OrderRepository } from './repositories/orders';
+import { LocationsRepository } from './repositories/locations';
+import { OrdersRepository } from './repositories/orders';
 import { OrdersService } from './services/orders';
 import { Location } from './value-objects/location';
 
@@ -59,8 +59,8 @@ export function getContainer(): Container {
 
     // Repositories
     container.bind<BaseRepository>('BaseRepository').toConstantValue(new BaseRepository());
-    container.bind<IRepository<Location, number>>('ILocationRepository').to(LocationRepository);
-    container.bind<IWritableRepository<Order, string>>('IOrderRepository').to(OrderRepository);
+    container.bind<IRepository<Location, number>>('ILocationsRepository').to(LocationsRepository);
+    container.bind<IWritableRepository<Order, string>>('IOrdersRepository').to(OrdersRepository);
 
     // Gateways
     container.bind<IEmailGateway>('IEmailGateway').toConstantValue(new SendGridEmailGateway(new AES256CTRCipher('password').decrypt('dbd090268bf21567a3e2d898ba4cdcf0e49e09b66bf5b85070f559fd1c9bd8f173e7c7cfdff3f172c74319e23ea2be2a067a131b26329cd6f75d4b09a7309c877e719d2579')));

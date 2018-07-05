@@ -15,17 +15,17 @@ describe('LocationsRouter', () => {
         });
 
         it('Should call Locations Repository', async () => {
-            getContainer().unbind('ILocationRepository');
+            getContainer().unbind('ILocationsRepository');
 
-            const locationRepository: IRepository<Location, number> = {
+            const locationsRepository: IRepository<Location, number> = {
                 findAll: async () => {
                     return null;
                 },
             } as IRepository<Location, number>;
 
-            getContainer().bind<IRepository<Location, number>>('ILocationRepository').toConstantValue(locationRepository);
+            getContainer().bind<IRepository<Location, number>>('ILocationsRepository').toConstantValue(locationsRepository);
 
-            const locationRepositoryFindAllSpy: sinon.SinonSpy = sinon.spy(locationRepository, 'findAll');
+            const locationsRepositoryFindAllSpy: sinon.SinonSpy = sinon.spy(locationsRepository, 'findAll');
 
             supertest(app)
                 .get('/api/locations')
@@ -36,7 +36,7 @@ describe('LocationsRouter', () => {
                         throw error;
                     }
 
-                    expect(locationRepositoryFindAllSpy.calledOnce).to.be.true;
+                    expect(locationsRepositoryFindAllSpy.calledOnce).to.be.true;
                 });
         });
 

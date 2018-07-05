@@ -12,7 +12,7 @@ export class OrdersService implements IOrdersService {
     constructor(
         @inject('OrderPlacedCommandBusClient')
         protected orderPlacedCommandBusClient: ICommandBusClient,
-        @inject('IOrderRepository')
+        @inject('IOrdersRepository')
         protected orderRepository: IWritableRepository<Order, string>,
     ) {
 

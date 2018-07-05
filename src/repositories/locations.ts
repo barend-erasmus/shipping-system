@@ -4,7 +4,7 @@ import { IRepository } from '../interfaces/repository';
 import { Location } from '../value-objects/location';
 
 @injectable()
-export class LocationRepository implements IRepository<Location, number> {
+export class LocationsRepository implements IRepository<Location, number> {
 
     public async find(id: number): Promise<Location> {
         return this.getLocations().find((location: Location) => location.id === id);
