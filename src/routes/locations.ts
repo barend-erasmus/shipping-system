@@ -5,7 +5,7 @@ import { getContainer } from '../ioc';
 export class LocationsRouter {
 
     public static async get(request: express.Request, response: express.Response): Promise<void> {
-        const locationsRepository: IRepository<Location, number> = getContainer().get<IRepository<Location, number>>('ILocationsRepository');
+        const locationsRepository: IRepository<Location, number> = getContainer().get<IRepository<Location, number>>('LocationsRepository');
 
         const locations: Location[] = await locationsRepository.findAll();
 

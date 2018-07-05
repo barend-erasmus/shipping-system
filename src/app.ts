@@ -1,11 +1,13 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import { ContentTypeMiddleware } from './middleware/content-type';
 import { LocationsRouter } from './routes/locations';
 import { OrdersRouter } from './routes/orders';
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(ContentTypeMiddleware.build(['application/json']));
+
 app.use(bodyParser.json());
 
 app.route('/api/locations').get(LocationsRouter.get);

@@ -14,7 +14,7 @@ export class OrdersRouter {
     public static async place(request: express.Request, response: express.Response): Promise<void> {
         const placeOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('PlaceOrderCommandBusClient');
 
-        const locationsRepository: IRepository<Location, number> = getContainer().get<IRepository<Location, number>>('ILocationsRepository');
+        const locationsRepository: IRepository<Location, number> = getContainer().get<IRepository<Location, number>>('LocationsRepository');
 
         const order: Order = OrderDTO.fromRequestBody(request.body).toEntity();
 

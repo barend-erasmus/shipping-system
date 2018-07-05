@@ -4,6 +4,7 @@ import { OrderPlacedCommand } from '../commands/order-placed';
 import { Order } from '../entities/order';
 import { ICommandBusClient } from '../interfaces/command-bus-client';
 import { IOrdersService } from '../interfaces/orders-service';
+import { IValidator } from '../interfaces/validator';
 import { IWritableRepository } from '../interfaces/writable-repository';
 
 @injectable()
@@ -14,6 +15,7 @@ export class OrdersService implements IOrdersService {
         protected orderPlacedCommandBusClient: ICommandBusClient,
         @inject('IOrdersRepository')
         protected orderRepository: IWritableRepository<Order, string>,
+        protected orderValidator: IValidator<Order>,
     ) {
 
     }
@@ -31,7 +33,8 @@ export class OrdersService implements IOrdersService {
     }
 
     public async create(order: Order): Promise<Order> {
-        // TODO: Validation
+        this.validateOrder(order);
+
         order = await this.orderRepository.insert(order);
 
         await this.orderPlacedCommandBusClient.execute(new OrderPlacedCommand(uuid.v4(), order));
@@ -41,6 +44,14 @@ export class OrdersService implements IOrdersService {
 
     public async decline(order: Order): Promise<Order> {
         throw new Error('Method not implemented.');
+    }
+
+    protected validateOrder(order: Order): void {
+        const messages: string[] = this.orderValidator.getMessages(order);
+
+        if (messages.length) {
+            throw new Error(messages.join('\r\n'));
+        }
     }
 
 }

@@ -3,8 +3,10 @@ import * as sinon from 'sinon';
 import { Order } from '../../src/entities/order';
 import { ICommand } from '../../src/interfaces/command';
 import { ICommandBusClient } from '../../src/interfaces/command-bus-client';
+import { IValidator } from '../../src/interfaces/validator';
 import { IWritableRepository } from '../../src/interfaces/writable-repository';
 import { OrdersService } from './../../src/services/orders';
+import { OrderValidator } from './../../src/validators/order';
 
 describe('OrdersService', () => {
 
@@ -23,7 +25,13 @@ describe('OrdersService', () => {
                 },
             } as IWritableRepository<Order, string>;
 
-            const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository);
+            const orderValidator: IValidator<Order> = {
+                getMessages: (obj: Order) => {
+                    return [];
+                },
+            } as IValidator<Order>;
+
+            const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository, orderValidator);
 
             const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null));
 
@@ -43,9 +51,15 @@ describe('OrdersService', () => {
                 },
             } as IWritableRepository<Order, string>;
 
+            const orderValidator: IValidator<Order> = {
+                getMessages: (obj: Order) => {
+                    return [];
+                },
+            } as IValidator<Order>;
+
             const orderRepositoryInsertSpy: sinon.SinonSpy = sinon.spy(orderRepository, 'insert');
 
-            const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository);
+            const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository, orderValidator);
 
             const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null));
 
@@ -65,9 +79,15 @@ describe('OrdersService', () => {
                 },
             } as IWritableRepository<Order, string>;
 
+            const orderValidator: IValidator<Order> = {
+                getMessages: (obj: Order) => {
+                    return [];
+                },
+            } as IValidator<Order>;
+
             const orderPlacedCommandBusClientExecuteSpy: sinon.SinonSpy = sinon.spy(orderPlacedCommandBusClient, 'execute');
 
-            const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository);
+            const ordersService: OrdersService = new OrdersService(orderPlacedCommandBusClient, orderRepository, orderValidator);
 
             const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null));
 

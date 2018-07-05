@@ -15,7 +15,7 @@ describe('LocationsRouter', () => {
         });
 
         it('Should call Locations Repository', async () => {
-            getContainer().unbind('ILocationsRepository');
+            getContainer().unbind('LocationsRepository');
 
             const locationsRepository: IRepository<Location, number> = {
                 findAll: async () => {
@@ -23,7 +23,7 @@ describe('LocationsRouter', () => {
                 },
             } as IRepository<Location, number>;
 
-            getContainer().bind<IRepository<Location, number>>('ILocationsRepository').toConstantValue(locationsRepository);
+            getContainer().bind<IRepository<Location, number>>('LocationsRepository').toConstantValue(locationsRepository);
 
             const locationsRepositoryFindAllSpy: sinon.SinonSpy = sinon.spy(locationsRepository, 'findAll');
 
