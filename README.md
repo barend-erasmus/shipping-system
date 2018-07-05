@@ -60,7 +60,7 @@ pm.test("Status Code should be 200", function () {
 
 **Minimum Required Code**
 
-Once you have a failing test, you can write the minimum code required to get the test passing.
+Once you have a failing test, you can write the minimum code required to get it passing.
 
 ```typescript
 app.route('/api/orders/place').post((request: express.Request, response: express.Response) => {
@@ -74,6 +74,7 @@ app.route('/api/orders/place').post((request: express.Request, response: express
 
 **Refactored Code**
 
+Now that you have a passing test, you can refactor and use the test to validate.
 
 ```typescript
 export class OrdersRouter {
@@ -89,6 +90,9 @@ export class OrdersRouter {
 app.route('/api/orders/place').post(OrdersRouter.place);
 ```
 
+### Domain-Driven Development (Domain Modeling)
+
+Coming Soon...
 
 ## Resources
 
