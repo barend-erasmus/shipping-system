@@ -92,7 +92,8 @@ app.route('/api/orders/place').post(OrdersRouter.place);
 
 ### Domain-Driven Development (Domain Modeling)
 
-Coming Soon...
+"Domain Driven Design’s strategic design is a conscientious effort to create common understanding between business visionaries, domain experts and developers." ~ Rebecca
+
 
 ## Resources
 
@@ -103,5 +104,7 @@ Coming Soon...
 [Postman - Test Scripts](https://www.getpostman.com/docs/v6/postman/scripts/test_scripts)
 
 [Pattern of the Month: Red Green Refactor](https://dzone.com/articles/pattern-of-the-month-red-green-refactor)
+
+[Why Domain Modeling?](http://wirfs-brock.com/blog/2013/02/27/why-domain-modeling/)
 
 [Entities, Value Objects, Aggregates and Roots](https://lostechies.com/jimmybogard/2008/05/21/entities-value-objects-aggregates-and-roots/)
