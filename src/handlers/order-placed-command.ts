@@ -2,15 +2,18 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { OrderPlacedEmailBuilder } from '../builders/order-placed-email-builder';
 import { OrderPlacedCommand } from '../commands/order-placed';
+import { Agent } from '../entities/agent';
 import { Order } from '../entities/order';
 import { ICommand } from '../interfaces/command';
 import { ICommandHandler } from '../interfaces/command-handler';
 import { IEmailGateway } from '../interfaces/email-gateway';
+import { IRepository } from '../interfaces/repository';
 
 @injectable()
 export class OrderPlacedCommandHandler implements ICommandHandler {
 
     constructor(
+        protected agentsRepository: IRepository<Agent, string>,
         @inject('IEmailGateway')
         protected emailGateway: IEmailGateway,
         @inject('OrderPlacedEmailBuilder')
@@ -24,7 +27,21 @@ export class OrderPlacedCommandHandler implements ICommandHandler {
 
         await this.sendEmailToClient(orderPlacedCommand.order);
 
-        // TODO: Send emails to agents.
+        await this.sendEmailToAgents(orderPlacedCommand.order);
+    }
+
+    protected async sendEmailToAgents(order: Order): Promise<void> {
+        const bodyForClient: string = this.orderPlacedEmailBuilder
+            .reset()
+            .setOrder(order)
+            .setToAgent()
+            .build();
+
+        const agents: Agent[] = await this.agentsRepository.findAll();
+
+        for (const agent of (agents as any)) {
+            await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Placed at Shipping System', agent.emailAddress);
+        }
     }
 
     protected async sendEmailToClient(order: Order): Promise<void> {
