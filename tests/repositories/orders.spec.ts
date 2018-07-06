@@ -83,7 +83,7 @@ describe('OrdersRepository', () => {
 
             const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository);
 
-            const insertedOrder: Order = new Order(
+            const order: Order = new Order(
                 uuid.v4(),
                 new Account('accountNumber', 'emailAddress', 'name'),
                 null,
@@ -100,7 +100,42 @@ describe('OrdersRepository', () => {
                 20,
             );
 
-            await ordersRepository.insert(insertedOrder);
+            await ordersRepository.insert(order);
+        });
+
+    });
+
+    describe('#update', () => {
+
+        it('Should update Order', async () => {
+            const baseRepository: BaseRepository = new BaseRepository();
+
+            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository);
+
+            const order: Order = new Order(
+                uuid.v4(),
+                new Account('accountNumber', 'emailAddress', 'name'),
+                null,
+                false,
+                false,
+                null,
+                false,
+                null,
+                false,
+                null,
+                new Location(1, null, null, null),
+                new Dimensions(10, 20, 30),
+                new Location(1, null, null, null),
+                20,
+            );
+
+            await ordersRepository.insert(order);
+
+            order.account.accountNumber = 'accountNumber-updated';
+            order.account.emailAddress = 'emailAddress-updated';
+            order.account.name = 'name-updated';
+
+            await ordersRepository.update(order);
         });
 
     });

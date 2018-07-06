@@ -30,4 +30,9 @@ export class Order implements IEntity<string> {
         return NumericHelper.round(this.weight / this.dimensions.getVolume(), 3);
     }
 
+    public setToApproved(agent: Agent): void {
+        this.approved = true;
+        this.agent = agent;
+    }
+
 }

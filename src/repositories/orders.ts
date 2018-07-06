@@ -120,4 +120,29 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
         return entity;
     }
 
+    public async update(entity: Order): Promise<Order> {
+        await this.baseRepository.execute(`UPDATE ORDERS SET
+            ACCOUNT_NUMBER = ${this.baseRepository.valueToString(entity.account.accountNumber)},
+            ACCOUNT_EMAIL_ADDRESS = ${this.baseRepository.valueToString(entity.account.emailAddress)},
+            ACCOUNT_NAME = ${this.baseRepository.valueToString(entity.account.name)},
+            AGENT_ID = ${this.baseRepository.valueToString(entity.agent ? `'${entity.agent.id}'` : null)},
+            APPROVED = ${this.baseRepository.valueToString(entity.approved)},
+            CANCELLED = ${this.baseRepository.valueToString(entity.cancelled)},
+            COLLECTION_TIMESTAMP = ${this.baseRepository.valueToString(entity.collectionTimestamp ? entity.collectionTimestamp.getTime() : null)},
+            CONFIRMED =  ${this.baseRepository.valueToString(entity.confirmed)},
+            COST = ${this.baseRepository.valueToString(entity.cost)},
+            DECLINED = ${this.baseRepository.valueToString(entity.declined)},
+            DELIVERY_TIMESTAMP = ${this.baseRepository.valueToString(entity.deliveryTimestamp ? entity.deliveryTimestamp.getTime() : null)},
+            DESTINATION_ID = ${this.baseRepository.valueToString(entity.destination.id)},
+            HEIGHT = ${this.baseRepository.valueToString(entity.dimensions.height)},
+            LENGTH = ${this.baseRepository.valueToString(entity.dimensions.length)},
+            WIDTH = ${this.baseRepository.valueToString(entity.dimensions.width)},
+            SOURCE_ID = ${this.baseRepository.valueToString(entity.source.id)},
+            WEIGHT = ${this.baseRepository.valueToString(entity.weight)}
+            WHERE ID = ${this.baseRepository.valueToString(entity.id)}
+        `);
+
+        return entity;
+    }
+
 }

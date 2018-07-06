@@ -14,6 +14,7 @@ export class PlaceOrderCommandHandler implements ICommandHandler {
 
     }
 
+    // TODO: Unit Tests
     public async handle(command: ICommand): Promise<void> {
         const placeOrderCommnad: PlaceOrderCommand = command as PlaceOrderCommand;
 

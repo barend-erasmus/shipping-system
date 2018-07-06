@@ -2,14 +2,14 @@ import { Order } from '../entities/order';
 
 export interface IOrdersService {
 
-    approve(order: Order): Promise<Order>;
+    approve(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order>;
 
-    cancel(order: Order): Promise<Order>;
+    cancel(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order>;
 
-    confrim(order: Order): Promise<Order>;
+    confrim(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order>;
 
     create(order: Order): Promise<Order>;
 
-    decline(order: Order): Promise<Order>;
+    decline(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order>;
 
 }
