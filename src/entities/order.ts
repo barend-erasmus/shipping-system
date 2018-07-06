@@ -30,9 +30,77 @@ export class Order implements IEntity<string> {
         return NumericHelper.round(this.weight / this.dimensions.getVolume(), 3);
     }
 
+    // TODO: Unit Tests
     public setToApproved(agent: Agent): void {
+        if (this.cancelled) {
+            throw new Error('Order has cancelled');
+        }
+
+        if (this.confirmed) {
+            throw new Error('Order has been confirmed');
+        }
+
+        if (this.approved) {
+            throw new Error('Order has been approved');
+        }
+
+        if (this.declined) {
+            throw new Error('Order has been declined');
+        }
+
         this.approved = true;
         this.agent = agent;
+    }
+
+    // TODO: Unit Tests
+    public setToCancelled(): void {
+        if (this.cancelled) {
+            throw new Error('Order has been cancelled');
+        }
+
+        this.cancelled = true;
+    }
+
+    // TODO: Unit Tests
+    public setToConfirmed(): void {
+        if (this.cancelled) {
+            throw new Error('Order has been cancelled');
+        }
+
+        if (this.confirmed) {
+            throw new Error('Order has been confirmed');
+        }
+
+        if (!this.approved) {
+            throw new Error('Order has not been approved');
+        }
+
+        if (this.declined) {
+            throw new Error('Order has been declined');
+        }
+
+        this.confirmed = true;
+    }
+
+    // TODO: Unit Tests
+    public setToDeclined(): void {
+        if (this.cancelled) {
+            throw new Error('Order has been cancelled');
+        }
+
+        if (this.confirmed) {
+            throw new Error('Order has been confirmed');
+        }
+
+        if (this.approved) {
+            throw new Error('Order has been approved');
+        }
+
+        if (this.declined) {
+            throw new Error('Order has been declined');
+        }
+
+        this.declined = false;
     }
 
 }

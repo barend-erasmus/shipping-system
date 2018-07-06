@@ -18,6 +18,12 @@ export class OrdersService implements IOrdersService {
         protected agentsRepository: IRepository<Agent, string>,
         @inject('OrderApprovedCommandBusClient')
         protected orderApprovedCommandBusClient: ICommandBusClient,
+        @inject('OrderCancelledCommandBusClient')
+        protected orderCancelledCommandBusClient: ICommandBusClient,
+        @inject('OrderConfirmedCommandBusClient')
+        protected orderConfirmedCommandBusClient: ICommandBusClient,
+        @inject('OrderDeclinedCommandBusClient')
+        protected orderDeclinedCommandBusClient: ICommandBusClient,
         @inject('OrderPlacedCommandBusClient')
         protected orderPlacedCommandBusClient: ICommandBusClient,
         @inject('OrdersRepository')
@@ -29,19 +35,11 @@ export class OrdersService implements IOrdersService {
     }
 
     // TODO: Unit Tests
-    public async approve(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order> {
+    public async approve(agentEmailAddress: string, orderId: string): Promise<Order> {
         let order: Order = await this.orderRepository.find(orderId);
 
         if (!order) {
             return null;
-        }
-
-        if (order.account.emailAddress !== accountEmailAddress) {
-            return null;
-        }
-
-        if (order.approved) {
-            throw new Error('Order is already approved');
         }
 
         const agent: Agent = await this.agentsRepository.find(agentEmailAddress);
@@ -55,12 +53,38 @@ export class OrdersService implements IOrdersService {
         return order;
     }
 
-    public async cancel(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order> {
-        throw new Error('Method not implemented.');
+    // TODO: Unit Tests
+    public async cancel(orderId: string): Promise<Order> {
+        let order: Order = await this.orderRepository.find(orderId);
+
+        if (!order) {
+            return null;
+        }
+
+        order.setToCancelled();
+
+        order = await this.orderRepository.update(order);
+
+        await this.orderCancelledCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
+
+        return order;
     }
 
-    public async confrim(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order> {
-        throw new Error('Method not implemented.');
+    // TODO: Unit Tests
+    public async confrim(orderId: string): Promise<Order> {
+        let order: Order = await this.orderRepository.find(orderId);
+
+        if (!order) {
+            return null;
+        }
+
+        order.setToConfirmed();
+
+        order = await this.orderRepository.update(order);
+
+        await this.orderConfirmedCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
+
+        return order;
     }
 
     public async create(order: Order): Promise<Order> {
@@ -73,8 +97,21 @@ export class OrdersService implements IOrdersService {
         return order;
     }
 
-    public async decline(accountEmailAddress: string, agentEmailAddress: string, orderId: string): Promise<Order> {
-        throw new Error('Method not implemented.');
+    // TODO: Unit Tests
+    public async decline(orderId: string): Promise<Order> {
+        let order: Order = await this.orderRepository.find(orderId);
+
+        if (!order) {
+            return null;
+        }
+
+        order.setToDeclined();
+
+        order = await this.orderRepository.update(order);
+
+        await this.orderDeclinedCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
+
+        return order;
     }
 
     protected validateOrder(order: Order): void {
