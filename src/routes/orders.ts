@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as uuid from 'uuid';
+import { ApproveOrderCommand } from '../commands/approve-order';
 import { PlaceOrderCommand } from '../commands/place-order';
 import { Order } from '../entities/order';
 import { ICommand } from '../interfaces/command';
@@ -11,8 +12,17 @@ import { Location } from '../value-objects/location';
 
 export class OrdersRouter {
 
+    // TODO: Unit Tests
     public static async approve(request: express.Request, response: express.Response): Promise<void> {
-        response.end();
+        const approveOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('ApproveOrderCommandBusClient');
+
+        const approveOrderCommand: ICommand = new ApproveOrderCommand(uuid.v4(), request.body.emailAddress, request.body.orderId);
+
+        await approveOrderCommandBusClient.execute(approveOrderCommand);
+
+        response.json({
+            message: 'success',
+        });
     }
 
     public static async place(request: express.Request, response: express.Response): Promise<void> {

@@ -31,7 +31,7 @@ describe('OrdersService', () => {
                 },
             } as IValidator<Order>;
 
-            const ordersService: OrdersService = new OrdersService(null, null, orderPlacedCommandBusClient, orderRepository, orderValidator);
+            const ordersService: OrdersService = new OrdersService(null, null, null, null, null, orderPlacedCommandBusClient, orderRepository, orderValidator);
 
             const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 
@@ -59,7 +59,7 @@ describe('OrdersService', () => {
 
             const orderRepositoryInsertSpy: sinon.SinonSpy = sinon.spy(orderRepository, 'insert');
 
-            const ordersService: OrdersService = new OrdersService(null, null, orderPlacedCommandBusClient, orderRepository, orderValidator);
+            const ordersService: OrdersService = new OrdersService(null, null, null, null, null, orderPlacedCommandBusClient, orderRepository, orderValidator);
 
             const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 
@@ -87,7 +87,7 @@ describe('OrdersService', () => {
 
             const orderPlacedCommandBusClientExecuteSpy: sinon.SinonSpy = sinon.spy(orderPlacedCommandBusClient, 'execute');
 
-            const ordersService: OrdersService = new OrdersService(null, null, orderPlacedCommandBusClient, orderRepository, orderValidator);
+            const ordersService: OrdersService = new OrdersService(null, null, null, null, null, orderPlacedCommandBusClient, orderRepository, orderValidator);
 
             const result: Order = await ordersService.create(new Order(null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 

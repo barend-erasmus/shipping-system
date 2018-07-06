@@ -69,12 +69,12 @@ export class OrderPlacedEmailBuilder implements IBuilder<string> {
     protected buildForAgent(): string {
         const signatureApprove: string = RequestHelper.signature('GET', '/api/orders/approve', {}, {
             emailAddress: this.emailAddress,
-            id: this.order.id,
+            orderId: this.order.id,
         }, configuration.signatureKey);
 
         const signatureDecline: string = RequestHelper.signature('GET', '/api/orders/decline', {}, {
             emailAddress: this.emailAddress,
-            id: this.order.id,
+            orderId: this.order.id,
         }, configuration.signatureKey);
 
         return `
@@ -88,14 +88,14 @@ export class OrderPlacedEmailBuilder implements IBuilder<string> {
             <br />
             <label>Weight: </label>${this.order.weight} kg (${this.order.getDensity()} kg/cm&sup3;)
             <br />
-            You can <a href="${this.url}/api/orders/approve?emailAddress=${this.emailAddress}&id=${this.order.id}&signature=${signatureApprove}">Approve</a> or <a href="${this.url}/api/orders/decline?emailAddress=${this.emailAddress}&id=${this.order.id}&signature=${signatureDecline}">Decline</a> this order.
+            You can <a href="${this.url}/api/orders/approve?emailAddress=${this.emailAddress}&orderId=${this.order.id}&signature=${signatureApprove}">Approve</a> or <a href="${this.url}/api/orders/decline?emailAddress=${this.emailAddress}&orderId=${this.order.id}&signature=${signatureDecline}">Decline</a> this order.
         `;
     }
 
     protected buildForClient(): string {
         const signatureCancel: string = RequestHelper.signature('GET', '/api/orders/cancel', {}, {
             emailAddress: this.emailAddress,
-            id: this.order.id,
+            orderId: this.order.id,
         }, configuration.signatureKey);
 
         return `
@@ -109,7 +109,7 @@ export class OrderPlacedEmailBuilder implements IBuilder<string> {
             <br />
             <label>Weight: </label>${this.order.weight} kg (${this.order.getDensity()} kg/cm&sup3;)
             <br />
-            You can <a href="${this.url}/api/orders/cancel?id=emailAddress=${this.emailAddress}&${this.order.id}&signature=${signatureCancel}">cancel</a> your order at anytime.
+            You can <a href="${this.url}/api/orders/cancel?orderId=emailAddress=${this.emailAddress}&${this.order.id}&signature=${signatureCancel}">cancel</a> your order at anytime.
         `;
     }
 

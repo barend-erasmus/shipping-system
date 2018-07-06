@@ -71,7 +71,7 @@ export class OrdersService implements IOrdersService {
     }
 
     // TODO: Unit Tests
-    public async confrim(orderId: string): Promise<Order> {
+    public async confirm(orderId: string): Promise<Order> {
         let order: Order = await this.orderRepository.find(orderId);
 
         if (!order) {

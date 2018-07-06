@@ -7,6 +7,11 @@ import { configuration } from './configuration';
 import { Agent } from './entities/agent';
 import { Order } from './entities/order';
 import { SendGridEmailGateway } from './gateways/send-grid-email';
+import { ApproveOrderCommandHandler } from './handlers/approve-order-command';
+import { OrderApprovedCommandHandler } from './handlers/order-approved-command';
+import { OrderCancelledCommandHandler } from './handlers/order-cancelled-command';
+import { OrderConfirmedCommandHandler } from './handlers/order-confirmed-command';
+import { OrderDeclinedCommandHandler } from './handlers/order-declined-command';
 import { OrderPlacedCommandHandler } from './handlers/order-placed-command';
 import { PlaceOrderCommandHandler } from './handlers/place-order-command';
 import { IBuilder } from './interfaces/builder';
@@ -38,10 +43,65 @@ export function getContainer(): Container {
     container.bind<IBuilder<string>>('OrderPlacedEmailBuilder').to(OrderPlacedEmailBuilder);
 
     // Command Handlers
+    container.bind<ICommandHandler>('ApproveOrderCommandHandler').to(ApproveOrderCommandHandler);
+    container.bind<ICommandHandler>('OrderApprovedCommandHandler').to(OrderApprovedCommandHandler);
+    container.bind<ICommandHandler>('OrderCancelledCommandHandler').to(OrderCancelledCommandHandler);
+    container.bind<ICommandHandler>('OrderConfirmedCommandHandler').to(OrderConfirmedCommandHandler);
+    container.bind<ICommandHandler>('OrderDeclinedCommandHandler').to(OrderDeclinedCommandHandler);
     container.bind<ICommandHandler>('OrderPlacedCommandHandler').to(OrderPlacedCommandHandler);
     container.bind<ICommandHandler>('PlaceOrderCommandHandler').to(PlaceOrderCommandHandler);
 
     // Clients
+    container.bind<ICommandBusClient>('ApproveOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const approveOrderCommandBusClient: ICommandHandler = context.container.get<ApproveOrderCommandHandler>('ApproveOrderCommandHandler');
+
+        commandBusClient.register(approveOrderCommandBusClient);
+
+        return commandBusClient;
+    });
+
+    container.bind<ICommandBusClient>('OrderApprovedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const orderApprovedCommandHandler: ICommandHandler = context.container.get<OrderApprovedCommandHandler>('OrderApprovedCommandHandler');
+
+        commandBusClient.register(orderApprovedCommandHandler);
+
+        return commandBusClient;
+    });
+
+    container.bind<ICommandBusClient>('OrderCancelledCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const orderCancelledCommandHandler: ICommandHandler = context.container.get<OrderCancelledCommandHandler>('OrderCancelledCommandHandler');
+
+        commandBusClient.register(orderCancelledCommandHandler);
+
+        return commandBusClient;
+    });
+
+    container.bind<ICommandBusClient>('OrderConfirmedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const orderConfirmedCommandHandler: ICommandHandler = context.container.get<OrderConfirmedCommandHandler>('OrderConfirmedCommandHandler');
+
+        commandBusClient.register(orderConfirmedCommandHandler);
+
+        return commandBusClient;
+    });
+
+    container.bind<ICommandBusClient>('OrderDeclinedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const orderDeclinedCommandHandler: ICommandHandler = context.container.get<OrderDeclinedCommandHandler>('OrderDeclinedCommandHandler');
+
+        commandBusClient.register(orderDeclinedCommandHandler);
+
+        return commandBusClient;
+    });
+
     container.bind<ICommandBusClient>('OrderPlacedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
         const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
