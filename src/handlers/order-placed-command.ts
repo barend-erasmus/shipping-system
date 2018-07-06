@@ -33,16 +33,19 @@ export class OrderPlacedCommandHandler implements ICommandHandler {
     }
 
     protected async sendEmailToAgents(order: Order): Promise<void> {
-        const bodyForAgent: string = this.orderPlacedEmailBuilder
+        const agents: Agent[] = await this.agentsRepository.findAll();
+
+        this.orderPlacedEmailBuilder = this.orderPlacedEmailBuilder
             .reset()
             .setOrder(order)
             .setToAgent()
-            .setURL(configuration.url)
-            .build();
-
-        const agents: Agent[] = await this.agentsRepository.findAll();
+            .setURL(configuration.url);
 
         for (const agent of (agents as any)) {
+            const bodyForAgent: string = this.orderPlacedEmailBuilder
+                .setEmailAddress(agent.emailAddress)
+                .build();
+
             await this.emailGateway.send(bodyForAgent, 'shipping-system@example.com', 'Order Placed at Shipping System', agent.emailAddress);
         }
     }
@@ -50,6 +53,7 @@ export class OrderPlacedCommandHandler implements ICommandHandler {
     protected async sendEmailToClient(order: Order): Promise<void> {
         const bodyForClient: string = this.orderPlacedEmailBuilder
             .reset()
+            .setEmailAddress(order.account.emailAddress)
             .setOrder(order)
             .setToClient()
             .setURL(configuration.url)

@@ -8,6 +8,8 @@ import { IBuilder } from '../interfaces/builder';
 @injectable()
 export class OrderPlacedEmailBuilder implements IBuilder<string> {
 
+    protected emailAddress: string = null;
+
     protected order: Order = null;
 
     protected type: string = null;
@@ -26,6 +28,17 @@ export class OrderPlacedEmailBuilder implements IBuilder<string> {
     }
 
     public reset(): OrderPlacedEmailBuilder {
+        this.emailAddress = null;
+        this.order = null;
+        this.type = null;
+        this.url = null;
+
+        return this;
+    }
+
+    public setEmailAddress(emailAddress: string): OrderPlacedEmailBuilder {
+        this.emailAddress = emailAddress;
+
         return this;
     }
 
@@ -55,10 +68,12 @@ export class OrderPlacedEmailBuilder implements IBuilder<string> {
 
     protected buildForAgent(): string {
         const signatureApprove: string = RequestHelper.signature('GET', '/api/orders/approve', {}, {
+            emailAddress: this.emailAddress,
             id: this.order.id,
         }, configuration.signatureKey);
 
-        const signatureDecline: string = RequestHelper.signature('GET', '/api/orders/approve', {}, {
+        const signatureDecline: string = RequestHelper.signature('GET', '/api/orders/decline', {}, {
+            emailAddress: this.emailAddress,
             id: this.order.id,
         }, configuration.signatureKey);
 
@@ -69,16 +84,17 @@ export class OrderPlacedEmailBuilder implements IBuilder<string> {
             <br />
             <label>Destination: </label>${this.order.destination.name}
             <br />
-            <label>Dimensions: </label>${this.order.dimensions.height}, ${this.order.dimensions.length}, ${this.order.dimensions.width}
+            <label>Dimensions: </label>${this.order.dimensions.height} cm (Height), ${this.order.dimensions.length} cm (Length), ${this.order.dimensions.width} cm (Width)
             <br />
             <label>Weight: </label>${this.order.weight} kg (${this.order.getDensity()} kg/cm&sup3;)
             <br />
-            You can <a href="${this.url}/api/orders/approve?id=${this.order.id}&signature=${signatureApprove}">Approve</a> or <a href="${this.url}/api/orders/decline?id=${this.order.id}&signature=${signatureDecline}">Decline</a> this order.
+            You can <a href="${this.url}/api/orders/approve?emailAddress=${this.emailAddress}&id=${this.order.id}&signature=${signatureApprove}">Approve</a> or <a href="${this.url}/api/orders/decline?emailAddress=${this.emailAddress}&id=${this.order.id}&signature=${signatureDecline}">Decline</a> this order.
         `;
     }
 
     protected buildForClient(): string {
         const signatureCancel: string = RequestHelper.signature('GET', '/api/orders/cancel', {}, {
+            emailAddress: this.emailAddress,
             id: this.order.id,
         }, configuration.signatureKey);
 
@@ -89,11 +105,11 @@ export class OrderPlacedEmailBuilder implements IBuilder<string> {
             <br />
             <label>Destination: </label>${this.order.destination.name}
             <br />
-            <label>Dimensions: </label>${this.order.dimensions.height}, ${this.order.dimensions.length}, ${this.order.dimensions.width}
+            <label>Dimensions: </label>${this.order.dimensions.height} cm (Height), ${this.order.dimensions.length} cm (Length), ${this.order.dimensions.width} cm (Width)
             <br />
             <label>Weight: </label>${this.order.weight} kg (${this.order.getDensity()} kg/cm&sup3;)
             <br />
-            You can <a href="${this.url}/api/orders/cancel?id=${this.order.id}&signature=${signatureCancel}">cancel</a> your order at anytime.
+            You can <a href="${this.url}/api/orders/cancel?id=emailAddress=${this.emailAddress}&${this.order.id}&signature=${signatureCancel}">cancel</a> your order at anytime.
         `;
     }
 
