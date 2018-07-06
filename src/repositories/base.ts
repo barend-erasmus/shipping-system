@@ -63,7 +63,7 @@ export class BaseRepository {
             while (true) {
                 version += 1;
 
-                const scriptPath: string = path.join(__dirname, '..', '..', 'database', 'migration-scripts', `version-${version}.up.sql`);
+                const scriptPath: string = path.join('database', 'migration-scripts', `version-${version}.up.sql`);
 
                 if (!fs.existsSync(scriptPath)) {
                     break;

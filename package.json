@@ -6,8 +6,9 @@
     "doc": "docs"
   },
   "scripts": {
+    "coverage": "gulp build & tsc & istanbul cover node_modules/mocha/bin/_mocha --root ./dist ./dist/**/*.spec.js",
     "lint": "tslint ./src/**/*.ts --fix --exclude ./src/**/*.d.ts",
-    "start": "gulp build & tsc & node ./dist/app.js",
+    "start": "gulp build & tsc & node ./dist/src/app.js",
     "test": "./node_modules/.bin/mocha --require ts-node/register ./tests/**/*.spec.ts"
   },
   "repository": {
