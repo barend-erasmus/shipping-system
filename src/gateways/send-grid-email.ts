@@ -9,6 +9,9 @@ export class SendGridEmailGateway implements IEmailGateway {
     }
 
     public async send(body: string, from: string, subject: string, to: string): Promise<void> {
+        // TODO: Remove this!!
+        to = 'developersworkspace@gmail.com';
+
         const result: any = await axios({
             data: {
                 content: [

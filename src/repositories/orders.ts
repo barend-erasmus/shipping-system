@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { Agent } from '../entities/agent';
 import { Order } from '../entities/order';
 import { IWritableRepository } from '../interfaces/writable-repository';
 import { Account } from '../value-objects/account';
@@ -34,6 +35,7 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
                 row.ACCOUNT_EMAIL_ADDRESS,
                 row.ACCOUNT_NAME,
             ),
+            new Agent(row.AGENT_ID, null, null),
             row.APPROVED,
             row.CANCELLED,
             row.COLLECTION_TIMESTAMP ? new Date(row.COLLECTION_TIMESTAMP) : null,
@@ -58,6 +60,7 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
                 row.ACCOUNT_EMAIL_ADDRESS,
                 row.ACCOUNT_NAME,
             ),
+            new Agent(row.AGENT_ID, null, null),
             row.APPROVED,
             row.CANCELLED,
             row.COLLECTION_TIMESTAMP ? new Date(row.COLLECTION_TIMESTAMP) : null,
@@ -78,6 +81,7 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
             ACCOUNT_NUMBER,
             ACCOUNT_EMAIL_ADDRESS,
             ACCOUNT_NAME,
+            AGENT_ID,
             APPROVED,
             CANCELLED,
             COLLECTION_TIMESTAMP,
@@ -92,23 +96,24 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
             SOURCE_ID,
             WEIGHT
         ) VALUES (
-            '${entity.id}',
-            '${entity.account.accountNumber}',
-            '${entity.account.emailAddress}',
-            '${entity.account.name}',
-            ${entity.approved},
-            ${entity.cancelled},
-            ${entity.collectionTimestamp ? entity.collectionTimestamp.getTime() : null},
-            ${entity.confirmed},
-            ${entity.cost},
-            ${entity.declined},
-            ${entity.deliveryTimestamp ? entity.deliveryTimestamp.getTime() : null},
-            ${entity.destination.id},
-            ${entity.dimensions.height},
-            ${entity.dimensions.length},
-            ${entity.dimensions.width},
-            ${entity.source.id},
-            ${entity.weight}
+            ${this.baseRepository.valueToString(entity.id)},
+            ${this.baseRepository.valueToString(entity.account.accountNumber)},
+            ${this.baseRepository.valueToString(entity.account.emailAddress)},
+            ${this.baseRepository.valueToString(entity.account.name)},
+            ${this.baseRepository.valueToString(entity.agent ? `'${entity.agent.id}'` : null)},
+            ${this.baseRepository.valueToString(entity.approved)},
+            ${this.baseRepository.valueToString(entity.cancelled)},
+            ${this.baseRepository.valueToString(entity.collectionTimestamp ? entity.collectionTimestamp.getTime() : null)},
+            ${this.baseRepository.valueToString(entity.confirmed)},
+            ${this.baseRepository.valueToString(entity.cost)},
+            ${this.baseRepository.valueToString(entity.declined)},
+            ${this.baseRepository.valueToString(entity.deliveryTimestamp ? entity.deliveryTimestamp.getTime() : null)},
+            ${this.baseRepository.valueToString(entity.destination.id)},
+            ${this.baseRepository.valueToString(entity.dimensions.height)},
+            ${this.baseRepository.valueToString(entity.dimensions.length)},
+            ${this.baseRepository.valueToString(entity.dimensions.width)},
+            ${this.baseRepository.valueToString(entity.source.id)},
+            ${this.baseRepository.valueToString(entity.weight)}
         );
         `);
 

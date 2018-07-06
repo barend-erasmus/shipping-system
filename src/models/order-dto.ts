@@ -1,5 +1,6 @@
 import { Order } from '../entities/order';
 import { AccountDTO } from './account-dto';
+import { AgentDTO } from './agent-dto';
 import { DestinationDTO } from './destination-dto';
 import { DimensionsDTO } from './dimensions-dto';
 import { SourceDTO } from './source-dto';
@@ -9,6 +10,7 @@ export class OrderDTO {
     constructor(
         public id: string,
         public account: AccountDTO,
+        public agent: AgentDTO,
         public approved: boolean,
         public cancelled: boolean,
         public collectionTimestamp: Date,
@@ -32,6 +34,7 @@ export class OrderDTO {
         return new OrderDTO(
             order.id,
             AccountDTO.fromValueObject(order.account),
+            AgentDTO.fromValueObject(order.agent),
             order.approved,
             order.cancelled,
             order.collectionTimestamp,
@@ -61,6 +64,7 @@ export class OrderDTO {
         const orderDto: OrderDTO = new OrderDTO(
             body.id,
             new AccountDTO(body.account.accountNumber, body.account.emailAddress, body.account.name),
+            null,
             false,
             false,
             null,
@@ -116,6 +120,7 @@ export class OrderDTO {
         return new Order(
             this.id,
             this.account.toValueObject(),
+            this.agent ? this.agent.toEntity() : null,
             this.approved,
             this.cancelled,
             this.collectionTimestamp,

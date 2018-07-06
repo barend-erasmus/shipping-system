@@ -1,8 +1,6 @@
 import { expect } from 'chai';
 import * as uuid from 'uuid';
-import { Agent } from '../../src/entities/agent';
 import { Order } from '../../src/entities/order';
-import { IRepository } from '../../src/interfaces/repository';
 import { IWritableRepository } from '../../src/interfaces/writable-repository';
 import { BaseRepository } from '../../src/repositories/base';
 import { OrdersRepository } from '../../src/repositories/orders';
@@ -22,6 +20,7 @@ describe('OrdersRepository', () => {
             const insertedOrder: Order = new Order(
                 uuid.v4(),
                 new Account('accountNumber', 'emailAddress', 'name'),
+                null,
                 false,
                 false,
                 null,
@@ -54,6 +53,7 @@ describe('OrdersRepository', () => {
             const insertedOrder: Order = new Order(
                 uuid.v4(),
                 new Account('accountNumber', 'emailAddress', 'name'),
+                null,
                 false,
                 false,
                 null,
@@ -86,6 +86,7 @@ describe('OrdersRepository', () => {
             const insertedOrder: Order = new Order(
                 uuid.v4(),
                 new Account('accountNumber', 'emailAddress', 'name'),
+                null,
                 false,
                 false,
                 null,

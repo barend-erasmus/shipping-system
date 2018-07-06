@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { OrderPlacedEmailBuilder } from '../builders/order-placed-email-builder';
 import { OrderPlacedCommand } from '../commands/order-placed';
+import { configuration } from '../configuration';
 import { Agent } from '../entities/agent';
 import { Order } from '../entities/order';
 import { ICommand } from '../interfaces/command';
@@ -13,6 +14,7 @@ import { IRepository } from '../interfaces/repository';
 export class OrderPlacedCommandHandler implements ICommandHandler {
 
     constructor(
+        @inject('AgentsRepository')
         protected agentsRepository: IRepository<Agent, string>,
         @inject('IEmailGateway')
         protected emailGateway: IEmailGateway,
@@ -31,16 +33,17 @@ export class OrderPlacedCommandHandler implements ICommandHandler {
     }
 
     protected async sendEmailToAgents(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderPlacedEmailBuilder
+        const bodyForAgent: string = this.orderPlacedEmailBuilder
             .reset()
             .setOrder(order)
             .setToAgent()
+            .setURL(configuration.url)
             .build();
 
         const agents: Agent[] = await this.agentsRepository.findAll();
 
         for (const agent of (agents as any)) {
-            await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Placed at Shipping System', agent.emailAddress);
+            await this.emailGateway.send(bodyForAgent, 'shipping-system@example.com', 'Order Placed at Shipping System', agent.emailAddress);
         }
     }
 
@@ -49,6 +52,7 @@ export class OrderPlacedCommandHandler implements ICommandHandler {
             .reset()
             .setOrder(order)
             .setToClient()
+            .setURL(configuration.url)
             .build();
 
         await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Placed at Shipping System', order.account.emailAddress);

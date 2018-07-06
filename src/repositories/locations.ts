@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { injectable } from 'inversify';
+import { BinarySearchAlgorithm } from '../algorithms/binary-search';
 import { IRepository } from '../interfaces/repository';
 import { Location } from '../value-objects/location';
 
@@ -7,7 +8,17 @@ import { Location } from '../value-objects/location';
 export class LocationsRepository implements IRepository<Location, number> {
 
     public async find(id: number): Promise<Location> {
-        return this.getLocations().find((location: Location) => location.id === id);
+        const locations: Location[] = this.getLocations();
+
+        const result: { index: number, obj: Location } = BinarySearchAlgorithm
+            .search<Location>(
+                locations,
+                new Location(id, null, null, null),
+                (a: Location, b: Location) => {
+                    return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+                });
+
+        return result.obj;
     }
 
     public async findAll(): Promise<Location[]> {
@@ -21,7 +32,7 @@ export class LocationsRepository implements IRepository<Location, number> {
 
         const locations: Location[] = [];
 
-        for (let index = 0; index < lines.length; index ++) {
+        for (let index = 0; index < lines.length; index++) {
             if (index === 0) {
                 continue;
             }

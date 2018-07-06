@@ -22,6 +22,14 @@ export class BaseRepository {
         return this._query(sql, parameters);
     }
 
+    public valueToString(value: any): string {
+        if (typeof(value) === 'string') {
+            return `'${value}'`;
+        }
+
+        return value;
+    }
+
     protected async _execute(sql: string): Promise<void> {
         return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
             this.database.exec(sql, (error: Error) => {

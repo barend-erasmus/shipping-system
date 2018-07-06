@@ -11,6 +11,10 @@ import { Location } from '../value-objects/location';
 
 export class OrdersRouter {
 
+    public static async approve(request: express.Request, response: express.Response): Promise<void> {
+        response.end();
+    }
+
     public static async place(request: express.Request, response: express.Response): Promise<void> {
         const placeOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('PlaceOrderCommandBusClient');
 

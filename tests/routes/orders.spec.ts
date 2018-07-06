@@ -126,6 +126,8 @@ describe('OrdersRouter', () => {
                     expect(placeOrderCommand.order.account.emailAddress).to.be.eq('emailAddress');
                     expect(placeOrderCommand.order.account.name).to.be.eq('name');
 
+                    expect(placeOrderCommand.order.agent).to.be.null;
+
                     expect(placeOrderCommand.order.destination).to.be.not.null;
                     expect(placeOrderCommand.order.destination.id).to.be.eq(2);
                     expect(placeOrderCommand.order.destination.name).to.be.eq('Location 2');

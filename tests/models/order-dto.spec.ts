@@ -75,6 +75,22 @@ describe('OrderDTO', () => {
             expect(result.account.name).to.be.eq('name');
         });
 
+        it('Should return OrderDTO with null agent', () => {
+            const result: OrderDTO = OrderDTO.fromRequestBody({
+                account: {
+                    accountNumber: 'accountNumber',
+                    emailAddress: 'emailAddress',
+                    name: 'name',
+                },
+                destinationId: 2,
+                dimensions: '10,20,30',
+                sourceId: 1,
+                weight: 20,
+            });
+
+            expect(result.agent).to.be.null;
+        });
+
         it('Should return OrderDTO with correct destination id', () => {
             const result: OrderDTO = OrderDTO.fromRequestBody({
                 account: {

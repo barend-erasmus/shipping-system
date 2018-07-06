@@ -13,8 +13,9 @@ export class OrdersService implements IOrdersService {
     constructor(
         @inject('OrderPlacedCommandBusClient')
         protected orderPlacedCommandBusClient: ICommandBusClient,
-        @inject('IOrdersRepository')
+        @inject('OrdersRepository')
         protected orderRepository: IWritableRepository<Order, string>,
+        @inject('OrderValidator')
         protected orderValidator: IValidator<Order>,
     ) {
 

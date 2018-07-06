@@ -1,6 +1,8 @@
+import { injectable } from 'inversify';
 import { Order } from '../entities/order';
 import { IValidator } from '../interfaces/validator';
 
+@injectable()
 export class OrderValidator implements IValidator<Order> {
 
     public getMessages(obj: Order): string[] {
@@ -34,15 +36,15 @@ export class OrderValidator implements IValidator<Order> {
             messages.push(`Dimensions is a required field`);
         }
 
-        if (obj.dimensions && obj.dimensions.height) {
+        if (obj.dimensions && !obj.dimensions.height) {
             messages.push(`Height is a required field for Dimensions`);
         }
 
-        if (obj.dimensions && obj.dimensions.length) {
+        if (obj.dimensions && !obj.dimensions.length) {
             messages.push(`Length is a required field for Dimensions`);
         }
 
-        if (obj.dimensions && obj.dimensions.width) {
+        if (obj.dimensions && !obj.dimensions.width) {
             messages.push(`Width is a required field for Dimensions`);
         }
 
