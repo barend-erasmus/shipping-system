@@ -1,6 +1,6 @@
 import { expect } from 'chai';
+import { SourceDTO } from '../../src/models/source-dto';
 import { Location } from '../../src/value-objects/location';
-import { SourceDTO } from './../../src/models/source-dto';
 
 describe('SourceDTO', () => {
 

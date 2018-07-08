@@ -1,6 +1,7 @@
 import { Container, interfaces } from 'inversify';
 import 'reflect-metadata';
-import { OrderPlacedEmailBuilder } from './builders/order-placed-email-builder';
+import { OrderApprovedEmailBuilder } from './builders/order-approved-email';
+import { OrderPlacedEmailBuilder } from './builders/order-placed-email';
 import { AES256CTRCipher } from './ciphers/aes-256-ctr';
 import { InMemoryCommandBusClient } from './clients/in-memory-command-bus';
 import { configuration } from './configuration';
@@ -40,6 +41,7 @@ export function getContainer(): Container {
     container = new Container();
 
     // Builders
+    container.bind<IBuilder<string>>('OrderApprovedEmailBuilder').to(OrderApprovedEmailBuilder);
     container.bind<IBuilder<string>>('OrderPlacedEmailBuilder').to(OrderPlacedEmailBuilder);
 
     // Command Handlers

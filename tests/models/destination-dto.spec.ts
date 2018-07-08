@@ -1,6 +1,6 @@
 import { expect } from 'chai';
+import { DestinationDTO } from '../../src/models/destination-dto';
 import { Location } from '../../src/value-objects/location';
-import { DestinationDTO } from './../../src/models/destination-dto';
 
 describe('DestinationDTO', () => {
 

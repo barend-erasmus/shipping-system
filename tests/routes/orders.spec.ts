@@ -6,8 +6,8 @@ import { PlaceOrderCommand } from '../../src/commands/place-order';
 import { ICommand } from '../../src/interfaces/command';
 import { ICommandBusClient } from '../../src/interfaces/command-bus-client';
 import { IRepository } from '../../src/interfaces/repository';
+import { getContainer, resetContainer } from '../../src/ioc';
 import { Location } from '../../src/value-objects/location';
-import { getContainer, resetContainer } from './../../src/ioc';
 
 describe('OrdersRouter', () => {
 

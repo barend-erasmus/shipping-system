@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { BinarySearchAlgorithm } from './../../src/algorithms/binary-search';
+import { BinarySearchAlgorithm } from '../../src/algorithms/binary-search';
 
 describe('BinarySearchAlgorithm', () => {
 

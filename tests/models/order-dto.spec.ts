@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { OrderDTO } from './../../src/models/order-dto';
+import { OrderDTO } from '../../src/models/order-dto';
 
 describe('OrderDTO', () => {
 

@@ -3,8 +3,8 @@ import * as sinon from 'sinon';
 import * as supertest from 'supertest';
 import { app } from '../../src/app';
 import { IRepository } from '../../src/interfaces/repository';
+import { getContainer, resetContainer } from '../../src/ioc';
 import { Location } from '../../src/value-objects/location';
-import { getContainer, resetContainer } from './../../src/ioc';
 
 describe('LocationsRouter', () => {
 

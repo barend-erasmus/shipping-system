@@ -5,8 +5,8 @@ import { ICommand } from '../../src/interfaces/command';
 import { ICommandBusClient } from '../../src/interfaces/command-bus-client';
 import { IValidator } from '../../src/interfaces/validator';
 import { IWritableRepository } from '../../src/interfaces/writable-repository';
-import { OrdersService } from './../../src/services/orders';
-import { OrderValidator } from './../../src/validators/order';
+import { OrdersService } from '../../src/services/orders';
+import { OrderValidator } from '../../src/validators/order';
 
 describe('OrdersService', () => {
 

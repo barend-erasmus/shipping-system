@@ -125,7 +125,7 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
             ACCOUNT_NUMBER = ${this.baseRepository.valueToString(entity.account.accountNumber)},
             ACCOUNT_EMAIL_ADDRESS = ${this.baseRepository.valueToString(entity.account.emailAddress)},
             ACCOUNT_NAME = ${this.baseRepository.valueToString(entity.account.name)},
-            AGENT_ID = ${this.baseRepository.valueToString(entity.agent ? `'${entity.agent.id}'` : null)},
+            AGENT_ID = ${this.baseRepository.valueToString(entity.agent ? entity.agent.id : null)},
             APPROVED = ${this.baseRepository.valueToString(entity.approved)},
             CANCELLED = ${this.baseRepository.valueToString(entity.cancelled)},
             COLLECTION_TIMESTAMP = ${this.baseRepository.valueToString(entity.collectionTimestamp ? entity.collectionTimestamp.getTime() : null)},

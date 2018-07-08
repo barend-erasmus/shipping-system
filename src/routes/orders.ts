@@ -16,7 +16,7 @@ export class OrdersRouter {
     public static async approve(request: express.Request, response: express.Response): Promise<void> {
         const approveOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('ApproveOrderCommandBusClient');
 
-        const approveOrderCommand: ICommand = new ApproveOrderCommand(uuid.v4(), request.body.emailAddress, request.body.orderId);
+        const approveOrderCommand: ICommand = new ApproveOrderCommand(uuid.v4(), request.query.emailAddress, request.query.orderId);
 
         await approveOrderCommandBusClient.execute(approveOrderCommand);
 

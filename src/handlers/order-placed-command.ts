@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { OrderPlacedEmailBuilder } from '../builders/order-placed-email-builder';
+import { OrderPlacedEmailBuilder } from '../builders/order-placed-email';
 import { OrderPlacedCommand } from '../commands/order-placed';
 import { configuration } from '../configuration';
 import { Agent } from '../entities/agent';

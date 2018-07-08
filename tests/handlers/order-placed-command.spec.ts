@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { OrderPlacedEmailBuilder } from '../../src/builders/order-placed-email-builder';
+import { OrderPlacedEmailBuilder } from '../../src/builders/order-placed-email';
 import { OrderPlacedCommand } from '../../src/commands/order-placed';
 import { Agent } from '../../src/entities/agent';
 import { Order } from '../../src/entities/order';

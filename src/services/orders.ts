@@ -42,7 +42,10 @@ export class OrdersService implements IOrdersService {
             return null;
         }
 
-        const agent: Agent = await this.agentsRepository.find(agentEmailAddress);
+        const agents: Agent[] = await this.agentsRepository
+        .findAll();
+
+        const agent: Agent = agents.find((x: Agent) => x.emailAddress === agentEmailAddress);
 
         order.setToApproved(agent);
 

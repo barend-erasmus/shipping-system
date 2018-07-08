@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Agent } from '../../src/entities/agent';
+import { Order } from '../../src/entities/order';
 import { Dimensions } from '../../src/value-objects/dimensions';
-import { Order } from './../../src/entities/order';
 
 describe('Order', () => {
 
