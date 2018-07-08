@@ -3,15 +3,29 @@ import * as crypto from 'crypto';
 export class RequestHelper {
 
     public static signature(method: string, url: string, body: any, query: any, key: string): string {
-        const data: string = `${method}|${url}`;
+        let data: string = `${method}|${url}|`;
 
-        // TODO
+        data += RequestHelper.objToString(body);
 
-        // data += JSON.stringify(body);
+        data += '|';
 
-        // data += JSON.stringify(query);
+        data += RequestHelper.objToString(query);
+
+        console.log(data);
 
         return crypto.createHmac('sha1', key).update(data).digest('hex');
+    }
+
+    protected static objToString(obj: any): string {
+        const str: string = Object
+            .keys(obj)
+            .sort()
+            .map((key: string) => {
+                const value: any = obj[key];
+                return typeof (value) === 'object' ? RequestHelper.objToString(value) : `${key}=${value}`;
+            }).join('|');
+
+        return str;
     }
 
 }
