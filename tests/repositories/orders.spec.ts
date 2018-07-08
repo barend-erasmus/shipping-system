@@ -1,8 +1,10 @@
 import { expect } from 'chai';
 import * as uuid from 'uuid';
 import { Order } from '../../src/entities/order';
+import { IRepository } from '../../src/interfaces/repository';
 import { IWritableRepository } from '../../src/interfaces/writable-repository';
 import { BaseRepository } from '../../src/repositories/base';
+import { LocationsRepository } from '../../src/repositories/locations';
 import { OrdersRepository } from '../../src/repositories/orders';
 import { Account } from '../../src/value-objects/account';
 import { Dimensions } from '../../src/value-objects/dimensions';
@@ -15,8 +17,9 @@ describe('OrdersRepository', () => {
         it('Should return Order', async () => {
             const baseRepository: BaseRepository = new BaseRepository();
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository);
+            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
 
+            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
             const insertedOrder: Order = new Order(
                 uuid.v4(),
                 new Account('accountNumber', 'emailAddress', 'name'),
@@ -48,7 +51,9 @@ describe('OrdersRepository', () => {
         it('Should return Orders', async () => {
             const baseRepository: BaseRepository = new BaseRepository();
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository);
+            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
+
+            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
 
             const insertedOrder: Order = new Order(
                 uuid.v4(),
@@ -81,7 +86,9 @@ describe('OrdersRepository', () => {
         it('Should insert Order', async () => {
             const baseRepository: BaseRepository = new BaseRepository();
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository);
+            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
+
+            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
 
             const order: Order = new Order(
                 uuid.v4(),
@@ -110,7 +117,9 @@ describe('OrdersRepository', () => {
         it('Should update Order', async () => {
             const baseRepository: BaseRepository = new BaseRepository();
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository);
+            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
+
+            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
 
             const order: Order = new Order(
                 uuid.v4(),

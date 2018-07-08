@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Agent } from '../entities/agent';
 import { Order } from '../entities/order';
+import { IRepository } from '../interfaces/repository';
 import { IWritableRepository } from '../interfaces/writable-repository';
 import { Account } from '../value-objects/account';
 import { Dimensions } from '../value-objects/dimensions';
@@ -13,6 +14,8 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
     constructor(
         @inject('BaseRepository')
         protected baseRepository: BaseRepository,
+        @inject('LocationsRepository')
+        protected locationsRepository: IRepository<Location, number>,
     ) {
 
     }
@@ -28,7 +31,7 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
 
         const row: any = rows[0];
 
-        return new Order(
+        const order: Order = new Order(
             row.ID,
             new Account(
                 row.ACCOUNT_NUMBER,
@@ -48,12 +51,16 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
             new Location(row.SOURCE_ID, null, null, null),
             row.WEIGHT,
         );
+
+        await this.loadSourceAndDestination(order);
+
+        return order;
     }
 
     public async findAll(): Promise<Order[]> {
         const rows: any[] = await this.baseRepository.query(`SELECT * FROM ORDERS`, undefined);
 
-        return rows.map((row: any) => new Order(
+        const orders: Order[] = rows.map((row: any) => new Order(
             row.ID,
             new Account(
                 row.ACCOUNT_NUMBER,
@@ -73,6 +80,12 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
             new Location(row.SOURCE_ID, null, null, null),
             row.WEIGHT,
         ));
+
+        for (const order of orders as any) {
+            await this.loadSourceAndDestination(order);
+        }
+
+        return orders;
     }
 
     public async insert(entity: Order): Promise<Order> {
@@ -143,6 +156,14 @@ export class OrdersRepository implements IWritableRepository<Order, string> {
         `);
 
         return entity;
+    }
+
+    protected async loadSourceAndDestination(order: Order): Promise<Order> {
+        order.source = order.source ? await this.locationsRepository.find(order.source.id) : null;
+
+        order.destination = order.source ? await this.locationsRepository.find(order.destination.id) : null;
+
+        return order;
     }
 
 }

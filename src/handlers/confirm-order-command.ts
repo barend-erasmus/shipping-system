@@ -1,12 +1,12 @@
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { ApproveOrderCommand } from '../commands/approve-order';
+import { ConfirmOrderCommand } from '../commands/confirm-order';
 import { ICommand } from '../interfaces/command';
 import { ICommandHandler } from '../interfaces/command-handler';
 import { IOrdersService } from '../interfaces/orders-service';
 
 @injectable()
-export class ApproveOrderCommandHandler implements ICommandHandler {
+export class ConfirmOrderCommandHandler implements ICommandHandler {
 
     constructor(
         @inject('IOrdersService')
@@ -17,9 +17,9 @@ export class ApproveOrderCommandHandler implements ICommandHandler {
 
     // TODO: Unit Tests
     public async handle(command: ICommand): Promise<void> {
-        const approveOrderCommand: ApproveOrderCommand = command as ApproveOrderCommand;
+        const confirmOrderCommand: ConfirmOrderCommand = command as ConfirmOrderCommand;
 
-        await this.ordersService.approve(approveOrderCommand.agentId, approveOrderCommand.orderId);
+        await this.ordersService.confirm(confirmOrderCommand.orderId);
     }
 
 }

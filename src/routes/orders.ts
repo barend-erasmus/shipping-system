@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as uuid from 'uuid';
 import { ApproveOrderCommand } from '../commands/approve-order';
+import { ConfirmOrderCommand } from '../commands/confirm-order';
 import { PlaceOrderCommand } from '../commands/place-order';
 import { Order } from '../entities/order';
 import { ICommand } from '../interfaces/command';
@@ -19,6 +20,19 @@ export class OrdersRouter {
         const approveOrderCommand: ICommand = new ApproveOrderCommand(uuid.v4(), request.query.emailAddress, request.query.orderId);
 
         await approveOrderCommandBusClient.execute(approveOrderCommand);
+
+        response.json({
+            message: 'success',
+        });
+    }
+
+    // TODO: Unit Tests
+    public static async confirm(request: express.Request, response: express.Response): Promise<void> {
+        const confirmOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('ConfirmOrderCommandBusClient');
+
+        const confirmOrderCommand: ICommand = new ConfirmOrderCommand(uuid.v4(), request.query.orderId);
+
+        await confirmOrderCommandBusClient.execute(confirmOrderCommand);
 
         response.json({
             message: 'success',

@@ -1,7 +1,7 @@
 export const configuration = {
     sendGrid: {
-        encryptedAPIKey: 'dbd090268bf21567a3e2d898ba4cdcf0e49e09b66bf5b85070f559fd1c9bd8f173e7c7cfdff3f172c74319e23ea2be2a067a131b26329cd6f75d4b09a7309c877e719d2579',
-        password: 'MidericK96',
+        encryptedAPIKey: '99b0304a5a9bbafd3ddd21077fcb8f597b4c283c2e55ecd6d5f9de691559c1e0d7a8f85d2096238806fb00ed38987c2610d61a8ebacffa6281fba9bbb7eab6f5576f31a5c4',
+        password: 'Q9+n^UZ-uG=d5@ML',
     },
     signatureKey: 'uJWxuTQvuu4H3$@2',
     url: 'http://localhost:3000',

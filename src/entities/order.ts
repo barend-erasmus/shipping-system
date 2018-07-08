@@ -32,6 +32,10 @@ export class Order implements IEntity<string> {
 
     // TODO: Unit Tests
     public setToApproved(agent: Agent): void {
+        if (!agent) {
+            throw new Error('Agent required');
+        }
+
         if (this.cancelled) {
             throw new Error('Order has cancelled');
         }

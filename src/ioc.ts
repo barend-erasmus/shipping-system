@@ -9,6 +9,7 @@ import { Agent } from './entities/agent';
 import { Order } from './entities/order';
 import { SendGridEmailGateway } from './gateways/send-grid-email';
 import { ApproveOrderCommandHandler } from './handlers/approve-order-command';
+import { ConfirmOrderCommandHandler } from './handlers/confirm-order-command';
 import { OrderApprovedCommandHandler } from './handlers/order-approved-command';
 import { OrderCancelledCommandHandler } from './handlers/order-cancelled-command';
 import { OrderConfirmedCommandHandler } from './handlers/order-confirmed-command';
@@ -46,6 +47,8 @@ export function getContainer(): Container {
 
     // Command Handlers
     container.bind<ICommandHandler>('ApproveOrderCommandHandler').to(ApproveOrderCommandHandler);
+    // container.bind<ICommandHandler>('CancelOrderCommandHandler').to(CancelOrderCommandHandler);
+    container.bind<ICommandHandler>('ConfirmOrderCommandHandler').to(ConfirmOrderCommandHandler);
     container.bind<ICommandHandler>('OrderApprovedCommandHandler').to(OrderApprovedCommandHandler);
     container.bind<ICommandHandler>('OrderCancelledCommandHandler').to(OrderCancelledCommandHandler);
     container.bind<ICommandHandler>('OrderConfirmedCommandHandler').to(OrderConfirmedCommandHandler);
@@ -60,6 +63,26 @@ export function getContainer(): Container {
         const approveOrderCommandBusClient: ICommandHandler = context.container.get<ApproveOrderCommandHandler>('ApproveOrderCommandHandler');
 
         commandBusClient.register(approveOrderCommandBusClient);
+
+        return commandBusClient;
+    });
+
+    // container.bind<ICommandBusClient>('CancelOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    //     const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+    //     const cancelOrderCommandBusClient: ICommandHandler = context.container.get<CancelOrderCommandHandler>('CancelOrderCommandHandler');
+
+    //     commandBusClient.register(cancelOrderCommandBusClient);
+
+    //     return commandBusClient;
+    // });
+
+    container.bind<ICommandBusClient>('ConfirmOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const confirmOrderCommandBusClient: ICommandHandler = context.container.get<ConfirmOrderCommandHandler>('ConfirmOrderCommandHandler');
+
+        commandBusClient.register(confirmOrderCommandBusClient);
 
         return commandBusClient;
     });
@@ -134,7 +157,8 @@ export function getContainer(): Container {
     container.bind<IWritableRepository<Order, string>>('OrdersRepository').to(OrdersRepository);
 
     // Gateways
-    container.bind<IEmailGateway>('IEmailGateway').toConstantValue(new SendGridEmailGateway(new AES256CTRCipher(configuration.sendGrid.password).decrypt(configuration.sendGrid.encryptedAPIKey)));
+    const sendGridKey: string = new AES256CTRCipher(configuration.sendGrid.password).decrypt(configuration.sendGrid.encryptedAPIKey);
+    container.bind<IEmailGateway>('IEmailGateway').toConstantValue(new SendGridEmailGateway(sendGridKey));
 
     // Services
     container.bind<IOrdersService>('IOrdersService').to(OrdersService);

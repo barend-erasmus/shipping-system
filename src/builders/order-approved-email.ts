@@ -106,7 +106,7 @@ export class OrderApprovedEmailBuilder implements IBuilder<string> {
             <br />
             <label>Weight: </label>${this.order.weight} kg (${this.order.getDensity()} kg/cm&sup3;)
             <br />
-            You can <a href="${urlConfirm}">confrim</a> or <a href="${urlCancel}">cancel</a>
+            You can <a href="${urlConfirm}">confirm</a> or <a href="${urlCancel}">cancel</a>
         `;
     }
 
