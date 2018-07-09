@@ -46,11 +46,15 @@ export class OrdersService implements IOrdersService {
         }
 
         const agents: Agent[] = await this.agentsRepository
-        .findAll();
+            .findAll();
 
         const agent: Agent = agents.find((x: Agent) => x.emailAddress === agentEmailAddress);
 
-        order.setToApproved(agent);
+        try {
+            order.setToApproved(agent);
+        } catch (error) {
+            // TODO: Send Email
+        }
 
         order = await this.orderRepository.update(order);
 
@@ -67,7 +71,11 @@ export class OrdersService implements IOrdersService {
             return null;
         }
 
-        order.setToCancelled();
+        try {
+            order.setToCancelled();
+        } catch (error) {
+            // TODO: Send Email
+        }
 
         order = await this.orderRepository.update(order);
 
@@ -84,7 +92,11 @@ export class OrdersService implements IOrdersService {
             return null;
         }
 
-        order.setToConfirmed();
+        try {
+            order.setToConfirmed();
+        } catch (error) {
+            // TODO: Send Email
+        }
 
         order = await this.orderRepository.update(order);
 
@@ -94,7 +106,11 @@ export class OrdersService implements IOrdersService {
     }
 
     public async create(order: Order): Promise<Order> {
-        this.validateOrder(order);
+        try {
+            this.validateOrder(order);
+        } catch (error) {
+            // TODO: Send Email
+        }
 
         order = await this.orderRepository.insert(order);
 
@@ -111,7 +127,11 @@ export class OrdersService implements IOrdersService {
             return null;
         }
 
-        order.setToDeclined();
+        try {
+            order.setToDeclined();
+        } catch (error) {
+            // TODO: Send Email
+        }
 
         order = await this.orderRepository.update(order);
 
