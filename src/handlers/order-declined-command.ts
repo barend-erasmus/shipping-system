@@ -11,6 +11,7 @@ export class OrderDeclinedCommandHandler implements ICommandHandler {
     }
 
     public async handle(command: ICommand): Promise<void> {
+        console.log('Order Declined');
     }
 
 }

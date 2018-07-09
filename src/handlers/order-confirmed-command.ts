@@ -12,7 +12,7 @@ export class OrderConfirmedCommandHandler implements ICommandHandler {
 
     // TODO: Unit Tests
     public async handle(command: ICommand): Promise<void> {
-
+        console.log('Order Confirmed');
     }
 
 }

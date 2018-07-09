@@ -17,8 +17,14 @@ app.route('/api/locations')
 app.route('/api/orders/approve')
     .get(SignatureMiddleware.build(), OrdersRouter.approve);
 
+app.route('/api/orders/cancel')
+    .get(SignatureMiddleware.build(), OrdersRouter.cancel);
+
 app.route('/api/orders/confirm')
     .get(SignatureMiddleware.build(), OrdersRouter.confirm);
+
+app.route('/api/orders/decline')
+    .get(SignatureMiddleware.build(), OrdersRouter.decline);
 
 app.route('/api/orders/place')
     .post(OrdersRouter.place);

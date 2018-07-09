@@ -9,7 +9,9 @@ import { Agent } from './entities/agent';
 import { Order } from './entities/order';
 import { SendGridEmailGateway } from './gateways/send-grid-email';
 import { ApproveOrderCommandHandler } from './handlers/approve-order-command';
+import { CancelOrderCommandHandler } from './handlers/cancel-order-command';
 import { ConfirmOrderCommandHandler } from './handlers/confirm-order-command';
+import { DeclineOrderCommandHandler } from './handlers/decline-order-command';
 import { OrderApprovedCommandHandler } from './handlers/order-approved-command';
 import { OrderCancelledCommandHandler } from './handlers/order-cancelled-command';
 import { OrderConfirmedCommandHandler } from './handlers/order-confirmed-command';
@@ -24,6 +26,7 @@ import { IOrdersService } from './interfaces/orders-service';
 import { IRepository } from './interfaces/repository';
 import { IValidator } from './interfaces/validator';
 import { IWritableRepository } from './interfaces/writable-repository';
+import { WinstonLogger } from './loggers/winston';
 import { AgentsRepository } from './repositories/agents';
 import { BaseRepository } from './repositories/base';
 import { LocationsRepository } from './repositories/locations';
@@ -47,8 +50,9 @@ export function getContainer(): Container {
 
     // Command Handlers
     container.bind<ICommandHandler>('ApproveOrderCommandHandler').to(ApproveOrderCommandHandler);
-    // container.bind<ICommandHandler>('CancelOrderCommandHandler').to(CancelOrderCommandHandler);
+    container.bind<ICommandHandler>('CancelOrderCommandHandler').to(CancelOrderCommandHandler);
     container.bind<ICommandHandler>('ConfirmOrderCommandHandler').to(ConfirmOrderCommandHandler);
+    container.bind<ICommandHandler>('DeclineOrderCommandHandler').to(DeclineOrderCommandHandler);
     container.bind<ICommandHandler>('OrderApprovedCommandHandler').to(OrderApprovedCommandHandler);
     container.bind<ICommandHandler>('OrderCancelledCommandHandler').to(OrderCancelledCommandHandler);
     container.bind<ICommandHandler>('OrderConfirmedCommandHandler').to(OrderConfirmedCommandHandler);
@@ -67,15 +71,15 @@ export function getContainer(): Container {
         return commandBusClient;
     });
 
-    // container.bind<ICommandBusClient>('CancelOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-    //     const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+    container.bind<ICommandBusClient>('CancelOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
-    //     const cancelOrderCommandBusClient: ICommandHandler = context.container.get<CancelOrderCommandHandler>('CancelOrderCommandHandler');
+        const cancelOrderCommandBusClient: ICommandHandler = context.container.get<CancelOrderCommandHandler>('CancelOrderCommandHandler');
 
-    //     commandBusClient.register(cancelOrderCommandBusClient);
+        commandBusClient.register(cancelOrderCommandBusClient);
 
-    //     return commandBusClient;
-    // });
+        return commandBusClient;
+    });
 
     container.bind<ICommandBusClient>('ConfirmOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
         const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
@@ -83,6 +87,16 @@ export function getContainer(): Container {
         const confirmOrderCommandBusClient: ICommandHandler = context.container.get<ConfirmOrderCommandHandler>('ConfirmOrderCommandHandler');
 
         commandBusClient.register(confirmOrderCommandBusClient);
+
+        return commandBusClient;
+    });
+
+    container.bind<ICommandBusClient>('DeclineOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const declineOrderCommandBusClient: ICommandHandler = context.container.get<DeclineOrderCommandHandler>('DeclineOrderCommandHandler');
+
+        commandBusClient.register(declineOrderCommandBusClient);
 
         return commandBusClient;
     });
@@ -158,7 +172,7 @@ export function getContainer(): Container {
 
     // Gateways
     const sendGridKey: string = new AES256CTRCipher(configuration.sendGrid.password).decrypt(configuration.sendGrid.encryptedAPIKey);
-    container.bind<IEmailGateway>('IEmailGateway').toConstantValue(new SendGridEmailGateway(sendGridKey));
+    container.bind<IEmailGateway>('IEmailGateway').toConstantValue(new SendGridEmailGateway(sendGridKey, new WinstonLogger()));
 
     // Services
     container.bind<IOrdersService>('IOrdersService').to(OrdersService);

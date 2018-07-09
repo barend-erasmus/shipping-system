@@ -30,14 +30,13 @@ export class Order implements IEntity<string> {
         return NumericHelper.round(this.weight / this.dimensions.getVolume(), 3);
     }
 
-    // TODO: Unit Tests
     public setToApproved(agent: Agent): void {
         if (!agent) {
             throw new Error('Agent required');
         }
 
         if (this.cancelled) {
-            throw new Error('Order has cancelled');
+            throw new Error('Order has been cancelled');
         }
 
         if (this.confirmed) {
@@ -56,7 +55,6 @@ export class Order implements IEntity<string> {
         this.agent = agent;
     }
 
-    // TODO: Unit Tests
     public setToCancelled(): void {
         if (this.cancelled) {
             throw new Error('Order has been cancelled');
@@ -65,7 +63,6 @@ export class Order implements IEntity<string> {
         this.cancelled = true;
     }
 
-    // TODO: Unit Tests
     public setToConfirmed(): void {
         if (this.cancelled) {
             throw new Error('Order has been cancelled');
@@ -86,7 +83,6 @@ export class Order implements IEntity<string> {
         this.confirmed = true;
     }
 
-    // TODO: Unit Tests
     public setToDeclined(): void {
         if (this.cancelled) {
             throw new Error('Order has been cancelled');
@@ -104,7 +100,7 @@ export class Order implements IEntity<string> {
             throw new Error('Order has been declined');
         }
 
-        this.declined = false;
+        this.declined = true;
     }
 
 }

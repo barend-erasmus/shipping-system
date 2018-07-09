@@ -1,7 +1,9 @@
 import * as express from 'express';
 import * as uuid from 'uuid';
 import { ApproveOrderCommand } from '../commands/approve-order';
+import { CancelOrderCommand } from '../commands/cancel-order';
 import { ConfirmOrderCommand } from '../commands/confirm-order';
+import { DeclineOrderCommand } from '../commands/decline-order';
 import { PlaceOrderCommand } from '../commands/place-order';
 import { Order } from '../entities/order';
 import { ICommand } from '../interfaces/command';
@@ -27,12 +29,38 @@ export class OrdersRouter {
     }
 
     // TODO: Unit Tests
+    public static async cancel(request: express.Request, response: express.Response): Promise<void> {
+        const cancelOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('CancelOrderCommandBusClient');
+
+        const cancelOrderCommand: ICommand = new CancelOrderCommand(uuid.v4(), request.query.orderId);
+
+        await cancelOrderCommandBusClient.execute(cancelOrderCommand);
+
+        response.json({
+            message: 'success',
+        });
+    }
+
+    // TODO: Unit Tests
     public static async confirm(request: express.Request, response: express.Response): Promise<void> {
         const confirmOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('ConfirmOrderCommandBusClient');
 
         const confirmOrderCommand: ICommand = new ConfirmOrderCommand(uuid.v4(), request.query.orderId);
 
         await confirmOrderCommandBusClient.execute(confirmOrderCommand);
+
+        response.json({
+            message: 'success',
+        });
+    }
+
+    // TODO: Unit Tests
+    public static async decline(request: express.Request, response: express.Response): Promise<void> {
+        const declineOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('DeclineOrderCommandBusClient');
+
+        const declineOrderCommand: ICommand = new DeclineOrderCommand(uuid.v4(), request.query.orderId);
+
+        await declineOrderCommandBusClient.execute(declineOrderCommand);
 
         response.json({
             message: 'success',

@@ -11,12 +11,14 @@ export class RequestHelper {
 
         data += RequestHelper.objToString(query);
 
-        console.log(data);
-
         return crypto.createHmac('sha1', key).update(data).digest('hex');
     }
 
     protected static objToString(obj: any): string {
+        if (!obj) {
+            return null;
+        }
+
         const str: string = Object
             .keys(obj)
             .sort()

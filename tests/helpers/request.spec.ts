@@ -8,7 +8,7 @@ describe('RequestHelper', () => {
         it('Should return signature', async () => {
             const signature: string = RequestHelper.signature('method', 'url', 'body', 'query', 'key');
 
-            expect(signature).to.be.eq('b61a72c5ed9b36eff82f1175c708a0b664415d79');
+            expect(signature).to.be.eq('1ff0ec7a26bd154621e4ebc631ce60fcc2b61d6d');
         });
 
     });

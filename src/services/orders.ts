@@ -1,6 +1,9 @@
 import { inject, injectable } from 'inversify';
 import * as uuid from 'uuid';
 import { OrderApprovedCommand } from '../commands/order-approved';
+import { OrderCancelledCommand } from '../commands/order-cancelled';
+import { OrderConfirmedCommand } from '../commands/order-confirmed';
+import { OrderDeclinedCommand } from '../commands/order-declined';
 import { OrderPlacedCommand } from '../commands/order-placed';
 import { Agent } from '../entities/agent';
 import { Order } from '../entities/order';
@@ -68,7 +71,7 @@ export class OrdersService implements IOrdersService {
 
         order = await this.orderRepository.update(order);
 
-        await this.orderCancelledCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
+        await this.orderCancelledCommandBusClient.execute(new OrderCancelledCommand(uuid.v4(), order));
 
         return order;
     }
@@ -85,7 +88,7 @@ export class OrdersService implements IOrdersService {
 
         order = await this.orderRepository.update(order);
 
-        await this.orderConfirmedCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
+        await this.orderConfirmedCommandBusClient.execute(new OrderConfirmedCommand(uuid.v4(), order));
 
         return order;
     }
@@ -112,7 +115,7 @@ export class OrdersService implements IOrdersService {
 
         order = await this.orderRepository.update(order);
 
-        await this.orderDeclinedCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
+        await this.orderDeclinedCommandBusClient.execute(new OrderDeclinedCommand(uuid.v4(), order));
 
         return order;
     }
