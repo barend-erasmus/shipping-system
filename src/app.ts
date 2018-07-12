@@ -17,6 +17,9 @@ app.use(cors());
 app.route('/api/locations')
     .get(LocationsRouter.get);
 
+app.route('/api/orders')
+    .get(OrdersRouter.get);
+
 app.route('/api/orders/approve')
     .get(SignatureMiddleware.build(), OrdersRouter.approve);
 

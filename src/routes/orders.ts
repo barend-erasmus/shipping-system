@@ -67,6 +67,14 @@ export class OrdersRouter {
         });
     }
 
+    public static async get(request: express.Request, response: express.Response): Promise<void> {
+        const ordersRepository: IRepository<Order, string> = getContainer().get<IRepository<Order, string>>('OrdersRepository');
+
+        const orders: Order[] = await ordersRepository.findAll();
+
+        response.json(orders);
+    }
+
     public static async place(request: express.Request, response: express.Response): Promise<void> {
         const placeOrderCommandBusClient: ICommandBusClient = getContainer().get<ICommandBusClient>('PlaceOrderCommandBusClient');
 
