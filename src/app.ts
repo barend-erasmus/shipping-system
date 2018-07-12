@@ -1,4 +1,5 @@
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
 import * as express from 'express';
 import { ContentTypeMiddleware } from './middleware/content-type';
 import { SignatureMiddleware } from './middleware/signature';
@@ -10,6 +11,8 @@ const app = express();
 app.use(ContentTypeMiddleware.build(['application/json']));
 
 app.use(bodyParser.json());
+
+app.use(cors());
 
 app.route('/api/locations')
     .get(LocationsRouter.get);

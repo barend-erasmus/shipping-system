@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import * as uuid from 'uuid';
 import { OrderApprovedCommand } from '../commands/order-approved';
+import { OrderApprovedFailedCommand } from '../commands/order-approved-failed';
 import { OrderCancelledCommand } from '../commands/order-cancelled';
 import { OrderConfirmedCommand } from '../commands/order-confirmed';
 import { OrderDeclinedCommand } from '../commands/order-declined';
@@ -21,6 +22,8 @@ export class OrdersService implements IOrdersService {
         protected agentsRepository: IRepository<Agent, string>,
         @inject('OrderApprovedCommandBusClient')
         protected orderApprovedCommandBusClient: ICommandBusClient,
+        @inject('OrderApprovedFailedCommandBusClient')
+        protected orderApprovedFailedCommandBusClient: ICommandBusClient,
         @inject('OrderCancelledCommandBusClient')
         protected orderCancelledCommandBusClient: ICommandBusClient,
         @inject('OrderConfirmedCommandBusClient')
@@ -53,7 +56,9 @@ export class OrdersService implements IOrdersService {
         try {
             order.setToApproved(agent);
         } catch (error) {
-            // TODO: Send Email
+            await this.orderApprovedFailedCommandBusClient.execute(new OrderApprovedFailedCommand(uuid.v4(), agent, error.message, order));
+
+            return null;
         }
 
         order = await this.orderRepository.update(order);

@@ -1,39 +1,12 @@
-import { Container, interfaces } from 'inversify';
+import { Container } from 'inversify';
 import 'reflect-metadata';
-import { OrderApprovedEmailBuilder } from './builders/order-approved-email';
-import { OrderPlacedEmailBuilder } from './builders/order-placed-email';
-import { AES256CTRCipher } from './ciphers/aes-256-ctr';
-import { InMemoryCommandBusClient } from './clients/in-memory-command-bus';
-import { configuration } from './configuration';
-import { Agent } from './entities/agent';
-import { Order } from './entities/order';
-import { SendGridEmailGateway } from './gateways/send-grid-email';
-import { ApproveOrderCommandHandler } from './handlers/approve-order-command';
-import { CancelOrderCommandHandler } from './handlers/cancel-order-command';
-import { ConfirmOrderCommandHandler } from './handlers/confirm-order-command';
-import { DeclineOrderCommandHandler } from './handlers/decline-order-command';
-import { OrderApprovedCommandHandler } from './handlers/order-approved-command';
-import { OrderCancelledCommandHandler } from './handlers/order-cancelled-command';
-import { OrderConfirmedCommandHandler } from './handlers/order-confirmed-command';
-import { OrderDeclinedCommandHandler } from './handlers/order-declined-command';
-import { OrderPlacedCommandHandler } from './handlers/order-placed-command';
-import { PlaceOrderCommandHandler } from './handlers/place-order-command';
-import { IBuilder } from './interfaces/builder';
-import { ICommandBusClient } from './interfaces/command-bus-client';
-import { ICommandHandler } from './interfaces/command-handler';
-import { IEmailGateway } from './interfaces/email-gateway';
-import { IOrdersService } from './interfaces/orders-service';
-import { IRepository } from './interfaces/repository';
-import { IValidator } from './interfaces/validator';
-import { IWritableRepository } from './interfaces/writable-repository';
-import { WinstonLogger } from './loggers/winston';
-import { AgentsRepository } from './repositories/agents';
-import { BaseRepository } from './repositories/base';
-import { LocationsRepository } from './repositories/locations';
-import { OrdersRepository } from './repositories/orders';
-import { OrdersService } from './services/orders';
-import { OrderValidator } from './validators/order';
-import { Location } from './value-objects/location';
+import { registerBuilders } from './ioc/builders';
+import { registerClients } from './ioc/client';
+import { registerCommandHandlers } from './ioc/command-handler';
+import { registerGateways } from './ioc/gateways';
+import { registerRepositories } from './ioc/repositories';
+import { registerServices } from './ioc/services';
+import { registerValidators } from './ioc/validators';
 
 let container: Container = null;
 
@@ -45,137 +18,25 @@ export function getContainer(): Container {
     container = new Container();
 
     // Builders
-    container.bind<IBuilder<string>>('OrderApprovedEmailBuilder').to(OrderApprovedEmailBuilder);
-    container.bind<IBuilder<string>>('OrderPlacedEmailBuilder').to(OrderPlacedEmailBuilder);
+    registerBuilders(container);
 
     // Command Handlers
-    container.bind<ICommandHandler>('ApproveOrderCommandHandler').to(ApproveOrderCommandHandler);
-    container.bind<ICommandHandler>('CancelOrderCommandHandler').to(CancelOrderCommandHandler);
-    container.bind<ICommandHandler>('ConfirmOrderCommandHandler').to(ConfirmOrderCommandHandler);
-    container.bind<ICommandHandler>('DeclineOrderCommandHandler').to(DeclineOrderCommandHandler);
-    container.bind<ICommandHandler>('OrderApprovedCommandHandler').to(OrderApprovedCommandHandler);
-    container.bind<ICommandHandler>('OrderCancelledCommandHandler').to(OrderCancelledCommandHandler);
-    container.bind<ICommandHandler>('OrderConfirmedCommandHandler').to(OrderConfirmedCommandHandler);
-    container.bind<ICommandHandler>('OrderDeclinedCommandHandler').to(OrderDeclinedCommandHandler);
-    container.bind<ICommandHandler>('OrderPlacedCommandHandler').to(OrderPlacedCommandHandler);
-    container.bind<ICommandHandler>('PlaceOrderCommandHandler').to(PlaceOrderCommandHandler);
+    registerCommandHandlers(container);
 
     // Clients
-    container.bind<ICommandBusClient>('ApproveOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const approveOrderCommandBusClient: ICommandHandler = context.container.get<ApproveOrderCommandHandler>('ApproveOrderCommandHandler');
-
-        commandBusClient.register(approveOrderCommandBusClient);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('CancelOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const cancelOrderCommandBusClient: ICommandHandler = context.container.get<CancelOrderCommandHandler>('CancelOrderCommandHandler');
-
-        commandBusClient.register(cancelOrderCommandBusClient);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('ConfirmOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const confirmOrderCommandBusClient: ICommandHandler = context.container.get<ConfirmOrderCommandHandler>('ConfirmOrderCommandHandler');
-
-        commandBusClient.register(confirmOrderCommandBusClient);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('DeclineOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const declineOrderCommandBusClient: ICommandHandler = context.container.get<DeclineOrderCommandHandler>('DeclineOrderCommandHandler');
-
-        commandBusClient.register(declineOrderCommandBusClient);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderApprovedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderApprovedCommandHandler: ICommandHandler = context.container.get<OrderApprovedCommandHandler>('OrderApprovedCommandHandler');
-
-        commandBusClient.register(orderApprovedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderCancelledCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderCancelledCommandHandler: ICommandHandler = context.container.get<OrderCancelledCommandHandler>('OrderCancelledCommandHandler');
-
-        commandBusClient.register(orderCancelledCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderConfirmedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderConfirmedCommandHandler: ICommandHandler = context.container.get<OrderConfirmedCommandHandler>('OrderConfirmedCommandHandler');
-
-        commandBusClient.register(orderConfirmedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderDeclinedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderDeclinedCommandHandler: ICommandHandler = context.container.get<OrderDeclinedCommandHandler>('OrderDeclinedCommandHandler');
-
-        commandBusClient.register(orderDeclinedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderPlacedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderPlacedCommandHandler: ICommandHandler = context.container.get<OrderPlacedCommandHandler>('OrderPlacedCommandHandler');
-
-        commandBusClient.register(orderPlacedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('PlaceOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const placeOrderCommandHandler: ICommandHandler = context.container.get<PlaceOrderCommandHandler>('PlaceOrderCommandHandler');
-
-        commandBusClient.register(placeOrderCommandHandler);
-
-        return commandBusClient;
-    });
+    registerClients(container);
 
     // Validators
-    container.bind<IValidator<Order>>('OrderValidator').to(OrderValidator);
+    registerValidators(container);
 
     // Repositories
-    container.bind<BaseRepository>('BaseRepository').toConstantValue(new BaseRepository());
-    container.bind<IRepository<Agent, string>>('AgentsRepository').to(AgentsRepository);
-    container.bind<IRepository<Location, number>>('LocationsRepository').to(LocationsRepository);
-    container.bind<IWritableRepository<Order, string>>('OrdersRepository').to(OrdersRepository);
+    registerRepositories(container);
 
     // Gateways
-    const sendGridKey: string = new AES256CTRCipher(configuration.sendGrid.password).decrypt(configuration.sendGrid.encryptedAPIKey);
-    container.bind<IEmailGateway>('IEmailGateway').toConstantValue(new SendGridEmailGateway(sendGridKey, new WinstonLogger()));
+    registerGateways(container);
 
     // Services
-    container.bind<IOrdersService>('IOrdersService').to(OrdersService);
+    registerServices(container);
 
     return container;
 }

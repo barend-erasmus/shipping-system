@@ -1,9 +1,8 @@
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { OrderApprovedEmailBuilder } from '../builders/order-approved-email';
 import { OrderApprovedFailedEmailBuilder } from '../builders/order-approved-failed-email';
-import { OrderApprovedCommand } from '../commands/order-approved';
-import { configuration } from '../configuration';
+import { OrderApprovedFailedCommand } from '../commands/order-approved-failed';
+import { Agent } from '../entities/agent';
 import { Order } from '../entities/order';
 import { ICommand } from '../interfaces/command';
 import { ICommandHandler } from '../interfaces/command-handler';
@@ -23,18 +22,18 @@ export class OrderApprovedFailedCommandHandler implements ICommandHandler {
 
     // TODO: Unit Tests
     public async handle(command: ICommand): Promise<void> {
-        // const orderApprovedCommand: OrderApprovedCommand = command as OrderApprovedCommand;
+        const orderApprovedFailedCommand: OrderApprovedFailedCommand = command as OrderApprovedFailedCommand;
 
-        // await this.sendEmailToAgent(orderApprovedCommand.order);
+        await this.sendEmailToAgent(orderApprovedFailedCommand.agent, orderApprovedFailedCommand.order);
     }
 
-    // protected async sendEmailToAgent(order: Order): Promise<void> {
-    //     const bodyForClient: string = this.orderApprovedFailedEmailBuilder
-    //         .reset()
-    //         .setOrder(order)
-    //         .build();
+    protected async sendEmailToAgent(agent: Agent, order: Order): Promise<void> {
+        const bodyForClient: string = this.orderApprovedFailedEmailBuilder
+            .reset()
+            .setOrder(order)
+            .build();
 
-    //     await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Approved at Shipping System', order.agent.emailAddress);
-    // }
+        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Approval Failed at Shipping System', agent.emailAddress);
+    }
 
 }

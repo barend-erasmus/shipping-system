@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Demo UI</title>
+</head>
+
+<body>
+
+    <button onclick="placeOrder()">Place Order</button>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function placeOrder() {
+            const order = {
+                "account": {
+                    "accountNumber": "accountNumber",
+                    "emailAddress": "foo.bar@example.com",
+                    "name": "name"
+                },
+                "destinationId": 2,
+                "dimensions": "10,20,30",
+                "sourceId": 1,
+                "weight": 20
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/api/orders/place",
+                data: JSON.stringify(order),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+
+                },
+                failure: function (errMsg) {
+
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
