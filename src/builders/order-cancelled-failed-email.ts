@@ -4,13 +4,13 @@ import { Order } from '../entities/order';
 import { IBuilder } from '../interfaces/builder';
 
 @injectable()
-export class OrderApprovedFailedEmailBuilder implements IBuilder<string> {
+export class OrderCancelledFailedEmailBuilder implements IBuilder<string> {
 
     protected order: Order = null;
 
     public build(): string {
         return `
-            <h3>Order Approval Failed at Shipping System</h3>
+            <h3>Order Cancellation Failed at Shipping System</h3>
             <br />
             <label>Source: </label>${this.order.source.name}
             <br />
@@ -22,13 +22,13 @@ export class OrderApprovedFailedEmailBuilder implements IBuilder<string> {
         `;
     }
 
-    public reset(): OrderApprovedFailedEmailBuilder {
+    public reset(): OrderCancelledFailedEmailBuilder {
         this.order = null;
 
         return this;
     }
 
-    public setOrder(order: Order): OrderApprovedFailedEmailBuilder {
+    public setOrder(order: Order): OrderCancelledFailedEmailBuilder {
         this.order = order;
 
         return this;

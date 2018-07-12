@@ -7,6 +7,7 @@ import { DeclineOrderCommandHandler } from '../handlers/decline-order-command';
 import { OrderApprovedCommandHandler } from '../handlers/order-approved-command';
 import { OrderApprovedFailedCommandHandler } from '../handlers/order-approved-failed-command';
 import { OrderCancelledCommandHandler } from '../handlers/order-cancelled-command';
+import { OrderCancelledFailedCommandHandler } from '../handlers/order-cancelled-failed-command';
 import { OrderConfirmedCommandHandler } from '../handlers/order-confirmed-command';
 import { OrderDeclinedCommandHandler } from '../handlers/order-declined-command';
 import { OrderPlacedCommandHandler } from '../handlers/order-placed-command';
@@ -81,6 +82,16 @@ export function registerClients(container: Container) {
         const orderCancelledCommandHandler: ICommandHandler = context.container.get<OrderCancelledCommandHandler>('OrderCancelledCommandHandler');
 
         commandBusClient.register(orderCancelledCommandHandler);
+
+        return commandBusClient;
+    });
+
+    container.bind<ICommandBusClient>('OrderCancelledFailedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+        const orderCancelledFailedCommandHandler: ICommandHandler = context.container.get<OrderCancelledFailedCommandHandler>('OrderCancelledFailedCommandHandler');
+
+        commandBusClient.register(orderCancelledFailedCommandHandler);
 
         return commandBusClient;
     });

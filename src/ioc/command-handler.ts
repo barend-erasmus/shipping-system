@@ -6,6 +6,7 @@ import { DeclineOrderCommandHandler } from '../handlers/decline-order-command';
 import { OrderApprovedCommandHandler } from '../handlers/order-approved-command';
 import { OrderApprovedFailedCommandHandler } from '../handlers/order-approved-failed-command';
 import { OrderCancelledCommandHandler } from '../handlers/order-cancelled-command';
+import { OrderCancelledFailedCommandHandler } from '../handlers/order-cancelled-failed-command';
 import { OrderConfirmedCommandHandler } from '../handlers/order-confirmed-command';
 import { OrderDeclinedCommandHandler } from '../handlers/order-declined-command';
 import { OrderPlacedCommandHandler } from '../handlers/order-placed-command';
@@ -20,6 +21,7 @@ export function registerCommandHandlers(container: Container) {
     container.bind<ICommandHandler>('OrderApprovedCommandHandler').to(OrderApprovedCommandHandler);
     container.bind<ICommandHandler>('OrderApprovedFailedCommandHandler').to(OrderApprovedFailedCommandHandler);
     container.bind<ICommandHandler>('OrderCancelledCommandHandler').to(OrderCancelledCommandHandler);
+    container.bind<ICommandHandler>('OrderCancelledFailedCommandHandler').to(OrderCancelledFailedCommandHandler);
     container.bind<ICommandHandler>('OrderConfirmedCommandHandler').to(OrderConfirmedCommandHandler);
     container.bind<ICommandHandler>('OrderDeclinedCommandHandler').to(OrderDeclinedCommandHandler);
     container.bind<ICommandHandler>('OrderPlacedCommandHandler').to(OrderPlacedCommandHandler);

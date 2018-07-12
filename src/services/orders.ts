@@ -3,6 +3,7 @@ import * as uuid from 'uuid';
 import { OrderApprovedCommand } from '../commands/order-approved';
 import { OrderApprovedFailedCommand } from '../commands/order-approved-failed';
 import { OrderCancelledCommand } from '../commands/order-cancelled';
+import { OrderCancelledFailedCommand } from '../commands/order-cancelled-failed';
 import { OrderConfirmedCommand } from '../commands/order-confirmed';
 import { OrderDeclinedCommand } from '../commands/order-declined';
 import { OrderPlacedCommand } from '../commands/order-placed';
@@ -26,6 +27,8 @@ export class OrdersService implements IOrdersService {
         protected orderApprovedFailedCommandBusClient: ICommandBusClient,
         @inject('OrderCancelledCommandBusClient')
         protected orderCancelledCommandBusClient: ICommandBusClient,
+        @inject('OrderCancelledFailedCommandBusClient')
+        protected orderCancelledFailedCommandBusClient: ICommandBusClient,
         @inject('OrderConfirmedCommandBusClient')
         protected orderConfirmedCommandBusClient: ICommandBusClient,
         @inject('OrderDeclinedCommandBusClient')
@@ -79,7 +82,9 @@ export class OrdersService implements IOrdersService {
         try {
             order.setToCancelled();
         } catch (error) {
-            // TODO: Send Email
+            await this.orderCancelledFailedCommandBusClient.execute(new OrderCancelledFailedCommand(uuid.v4(), error.message, order));
+
+            return null;
         }
 
         order = await this.orderRepository.update(order);
