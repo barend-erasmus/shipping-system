@@ -5,6 +5,7 @@ import { CancelOrderCommandHandler } from '../handlers/cancel-order-command';
 import { ConfirmOrderCommandHandler } from '../handlers/confirm-order-command';
 import { DeclineOrderCommandHandler } from '../handlers/decline-order-command';
 import { OrderApprovedCommandHandler } from '../handlers/order-approved-command';
+import { OrderApprovedFailedCommandHandler } from '../handlers/order-approved-failed-command';
 import { OrderCancelledCommandHandler } from '../handlers/order-cancelled-command';
 import { OrderConfirmedCommandHandler } from '../handlers/order-confirmed-command';
 import { OrderDeclinedCommandHandler } from '../handlers/order-declined-command';
@@ -12,7 +13,6 @@ import { OrderPlacedCommandHandler } from '../handlers/order-placed-command';
 import { PlaceOrderCommandHandler } from '../handlers/place-order-command';
 import { ICommandBusClient } from '../interfaces/command-bus-client';
 import { ICommandHandler } from '../interfaces/command-handler';
-import { OrderApprovedFailedCommandHandler } from '../handlers/order-approved-failed-command';
 
 export function registerClients(container: Container) {
     container.bind<ICommandBusClient>('ApproveOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
