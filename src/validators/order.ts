@@ -5,6 +5,7 @@ import { IValidator } from '../interfaces/validator';
 @injectable()
 export class OrderValidator implements IValidator<Order> {
 
+    // TODO: Unit Tests
     public getMessages(obj: Order): string[] {
         const messages: string[] = [];
 
@@ -20,12 +21,20 @@ export class OrderValidator implements IValidator<Order> {
             messages.push(`Cancelled is a required field`);
         }
 
+        if (!obj.collectionTimestamp) {
+            messages.push(`Collection Timestamp is a required field`);
+        }
+
         if (obj.confirmed === null) {
             messages.push(`Confirmed is a required field`);
         }
 
         if (obj.declined === null) {
             messages.push(`Declined is a required field`);
+        }
+
+        if (!obj.deliveryTimestamp) {
+            messages.push(`Delivery Timestamp is a required field`);
         }
 
         if (!obj.destination) {
@@ -59,6 +68,7 @@ export class OrderValidator implements IValidator<Order> {
         return messages;
     }
 
+    // TODO: Unit Tests
     public validate(obj: Order): boolean {
         if (this.getMessages(obj).length) {
             return false;
