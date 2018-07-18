@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LocationsService } from '../locations.service';
 import { Location } from '../models/location';
+import { OrderDTO } from '../models/order';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,10 @@ import { Location } from '../models/location';
 export class HomeComponent implements OnInit {
 
   public locations: Location[] = [];
+
+  public orders: OrderDTO[] = [];
+
+  public displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
   constructor(
     protected locationsService: LocationsService,
@@ -22,8 +27,10 @@ export class HomeComponent implements OnInit {
   protected loadLocations(): void {
     this.locationsService.list().subscribe((locations: Location[]) => {
       this.locations = locations;
-
-      console.log(this.locations);
     });
+  }
+
+  protected loadOrders(): void {
+
   }
 }

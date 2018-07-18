@@ -3,3 +3,7 @@
 mat-grid-tile figure {
     justify-content: left !important;
 }
+
+table {
+    width: 100%;
+}

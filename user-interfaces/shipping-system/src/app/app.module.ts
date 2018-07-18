@@ -11,7 +11,8 @@ import {
   MatGridListModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatButtonModule
+  MatButtonModule,
+  MatTableModule
 } from '@angular/material';
 import { HomeComponent } from './home/home.component';
 
@@ -31,6 +32,7 @@ import { HomeComponent } from './home/home.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
+    MatTableModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
