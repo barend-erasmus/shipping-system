@@ -11,14 +11,32 @@
     <mat-grid-list cols="2" rowHeight="60px">
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput [matDatepicker]="collectionPicker" placeholder="Collection">
+          <input [(ngModel)]="order.account.accountNumber" matInput placeholder="Account - Number">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field>
+          <input [(ngModel)]="order.account.emailAddress" matInput placeholder="Account - Email Address">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field>
+          <input [(ngModel)]="order.account.name" matInput placeholder="Account - Name">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field>
+          <input [(ngModel)]="order.collectionTimestamp" matInput [matDatepicker]="collectionPicker" placeholder="Collection">
           <mat-datepicker-toggle matSuffix [for]="collectionPicker"></mat-datepicker-toggle>
           <mat-datepicker #collectionPicker></mat-datepicker>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput [matDatepicker]="deliveryPicker" placeholder="Delivery">
+          <input [(ngModel)]="order.deliveryTimestamp" matInput [matDatepicker]="deliveryPicker" placeholder="Delivery">
           <mat-datepicker-toggle matSuffix [for]="deliveryPicker"></mat-datepicker-toggle>
           <mat-datepicker #deliveryPicker></mat-datepicker>
         </mat-form-field>
@@ -43,28 +61,28 @@
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput placeholder="Dimensions - Height">
+          <input [(ngModel)]="order.dimensions.height" matInput placeholder="Dimensions - Height">
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput placeholder="Dimensions - Length">
+          <input [(ngModel)]="order.dimensions.length" matInput placeholder="Dimensions - Length">
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput placeholder="Dimensions - Width">
+          <input [(ngModel)]="order.dimensions.width" matInput placeholder="Dimensions - Width">
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput placeholder="Weight">
+          <input [(ngModel)]="order.weight" matInput placeholder="Weight">
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
       </mat-grid-tile>
       <mat-grid-tile>
-        <button mat-raised-button color="primary">PLACE ORDER</button>
+        <button (click)="onClickPlace()" mat-raised-button color="primary">PLACE ORDER</button>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-content>
@@ -78,33 +96,38 @@
     View your shipping orders here
   </mat-card-subtitle>
   <mat-card-content>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="orders" class="mat-elevation-z8">
 
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-
-      <!-- Position Column -->
-      <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      <ng-container matColumnDef="collectionTimestamp">
+        <th mat-header-cell *matHeaderCellDef> Collection Timestamp </th>
+        <td mat-cell *matCellDef="let element"> {{ element.collectionTimestamp }} </td>
       </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <ng-container matColumnDef="deliveryTimestamp">
+        <th mat-header-cell *matHeaderCellDef> Delivery Timestamp </th>
+        <td mat-cell *matCellDef="let element"> {{ element.deliveryTimestamp }} </td>
       </ng-container>
 
-      <!-- Weight Column -->
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef> Weight </th>
-        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+      <ng-container matColumnDef="source.name">
+        <th mat-header-cell *matHeaderCellDef> Source </th>
+        <td mat-cell *matCellDef="let element"> {{ element.source?.name }} </td>
       </ng-container>
 
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef> Symbol </th>
-        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      <ng-container matColumnDef="destination.name">
+        <th mat-header-cell *matHeaderCellDef> Destination </th>
+        <td mat-cell *matCellDef="let element"> {{ element.destination?.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef> State </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-list>
+            <mat-chip *ngIf="element.approved" color="primary">Approved</mat-chip>
+            <mat-chip *ngIf="element.cancelled" color="accent">Cancelled</mat-chip>
+            <mat-chip *ngIf="element.confirmed" color="primary">Confirmed</mat-chip>
+            <mat-chip *ngIf="element.declined" color="accent">Declined</mat-chip>
+          </mat-chip-list>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -12,15 +12,20 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatButtonModule,
-  MatTableModule
+  MatTableModule,
+  MatChipsModule
 } from '@angular/material';
 import { HomeComponent } from './home/home.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,
+    HttpClientModule,
+    FormsModule,
 
     // Angular Material
     BrowserAnimationsModule,
@@ -33,6 +38,7 @@ import { HomeComponent } from './home/home.component';
     MatNativeDateModule,
     MatButtonModule,
     MatTableModule,
+    MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
