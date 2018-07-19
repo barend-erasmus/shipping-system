@@ -33,16 +33,17 @@ export class HomeComponent implements OnInit {
   }
 
   public onClickPlace(): void {
-    console.log(this.order);
+    this.ordersService.place(this.order).subscribe(() => {
+      // tslint:disable-next-line:max-line-length
+      this.order = new OrderDTO(null, new AccountDTO(null, null, null), null, null, null, null, null, null, null, null, null, null, new DimensionsDTO(null, null, null, null), null, null);
 
-    // this.ordersService.place(null).subscribe(() => {
-    //   this.loadOrders();
-    // });
+      this.loadOrders();
+    });
   }
 
   protected loadLocations(): void {
     this.locationsService.list().subscribe((locations: Location[]) => {
-      this.locations = locations;
+      this.locations = locations.slice(0, 10);
     });
   }
 

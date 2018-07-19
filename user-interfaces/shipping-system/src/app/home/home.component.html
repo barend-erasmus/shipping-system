@@ -43,7 +43,7 @@
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <mat-select placeholder="Source">
+          <mat-select [(ngModel)]="order.source" placeholder="Source">
             <mat-option *ngFor="let location of locations" [value]="location">
               {{ location.name }}
             </mat-option>
@@ -52,7 +52,7 @@
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <mat-select placeholder="Destination">
+          <mat-select [(ngModel)]="order.destination" placeholder="Destination">
             <mat-option *ngFor="let location of locations" [value]="location">
               {{ location.name }}
             </mat-option>
