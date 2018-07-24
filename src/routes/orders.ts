@@ -6,6 +6,7 @@ import { ConfirmOrderCommand } from '../commands/confirm-order';
 import { DeclineOrderCommand } from '../commands/decline-order';
 import { PlaceOrderCommand } from '../commands/place-order';
 import { Order } from '../entities/order';
+import { RequestHelper } from '../helpers/request';
 import { ICommand } from '../interfaces/command';
 import { ICommandBusClient } from '../interfaces/command-bus-client';
 import { IRepository } from '../interfaces/repository';
@@ -28,7 +29,7 @@ export class OrdersRouter {
 
     await approveOrderCommandBusClient.execute(approveOrderCommand);
 
-    response.json({
+    RequestHelper.sendResponse(request, response, {
       message: 'success',
     });
   }
@@ -43,7 +44,7 @@ export class OrdersRouter {
 
     await cancelOrderCommandBusClient.execute(cancelOrderCommand);
 
-    response.json({
+    RequestHelper.sendResponse(request, response, {
       message: 'success',
     });
   }
@@ -58,7 +59,7 @@ export class OrdersRouter {
 
     await confirmOrderCommandBusClient.execute(confirmOrderCommand);
 
-    response.json({
+    RequestHelper.sendResponse(request, response, {
       message: 'success',
     });
   }
@@ -73,7 +74,7 @@ export class OrdersRouter {
 
     await declineOrderCommandBusClient.execute(declineOrderCommand);
 
-    response.json({
+    RequestHelper.sendResponse(request, response, {
       message: 'success',
     });
   }
@@ -85,7 +86,7 @@ export class OrdersRouter {
 
     const orders: Order[] = await ordersRepository.findAll();
 
-    response.json(orders);
+    RequestHelper.sendResponse(request, response, orders);
   }
 
   public static async place(request: express.Request, response: express.Response): Promise<void> {
@@ -110,6 +111,6 @@ export class OrdersRouter {
 
     const orderDTO: OrderDTO = OrderDTO.fromEntity(order);
 
-    response.json(orderDTO);
+    RequestHelper.sendResponse(request, response, orderDTO);
   }
 }

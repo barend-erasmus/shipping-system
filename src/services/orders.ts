@@ -5,7 +5,9 @@ import { OrderApprovedFailedCommand } from '../commands/order-approved-failed';
 import { OrderCancelledCommand } from '../commands/order-cancelled';
 import { OrderCancelledFailedCommand } from '../commands/order-cancelled-failed';
 import { OrderConfirmedCommand } from '../commands/order-confirmed';
+import { OrderConfirmedFailedCommand } from '../commands/order-confirmed-failed';
 import { OrderDeclinedCommand } from '../commands/order-declined';
+import { OrderDeclinedFailedCommand } from '../commands/order-declined-failed';
 import { OrderPlacedCommand } from '../commands/order-placed';
 import { OrderPlacedFailedCommand } from '../commands/order-placed-failed';
 import { Agent } from '../entities/agent';
@@ -25,7 +27,9 @@ export class OrdersService implements IOrdersService {
     @inject('OrderCancelledCommandBusClient') protected orderCancelledCommandBusClient: ICommandBusClient,
     @inject('OrderCancelledFailedCommandBusClient') protected orderCancelledFailedCommandBusClient: ICommandBusClient,
     @inject('OrderConfirmedCommandBusClient') protected orderConfirmedCommandBusClient: ICommandBusClient,
+    @inject('OrderConfirmedFailedCommandBusClient') protected orderConfirmedFailedCommandBusClient: ICommandBusClient,
     @inject('OrderDeclinedCommandBusClient') protected orderDeclinedCommandBusClient: ICommandBusClient,
+    @inject('OrderDeclinedFailedCommandBusClient') protected orderDeclinedFailedCommandBusClient: ICommandBusClient,
     @inject('OrderPlacedCommandBusClient') protected orderPlacedCommandBusClient: ICommandBusClient,
     @inject('OrderPlacedFailedCommandBusClient') protected orderPlacedFailedCommandBusClient: ICommandBusClient,
     @inject('OrdersRepository') protected orderRepository: IWritableRepository<Order, string>,
@@ -97,7 +101,9 @@ export class OrdersService implements IOrdersService {
     try {
       order.setToConfirmed();
     } catch (error) {
-      // TODO: Send Email
+      await this.orderConfirmedFailedCommandBusClient.execute(new OrderConfirmedFailedCommand(uuid.v4(), error.message, order));
+
+      return null;
     }
 
     order = await this.orderRepository.update(order);
@@ -111,8 +117,9 @@ export class OrdersService implements IOrdersService {
     try {
       this.validateOrder(order);
     } catch (error) {
-      this.orderPlacedFailedCommandBusClient.execute(new OrderPlacedFailedCommand(uuid.v4(), order));
-      return order;
+      this.orderPlacedFailedCommandBusClient.execute(new OrderPlacedFailedCommand(uuid.v4(), error.message, order));
+
+      return null;
     }
 
     order = await this.orderRepository.insert(order);
@@ -133,7 +140,9 @@ export class OrdersService implements IOrdersService {
     try {
       order.setToDeclined();
     } catch (error) {
-      // TODO: Send Email
+      await this.orderDeclinedFailedCommandBusClient.execute(new OrderDeclinedFailedCommand(uuid.v4(), error.message, order));
+
+      return null;
     }
 
     order = await this.orderRepository.update(order);
