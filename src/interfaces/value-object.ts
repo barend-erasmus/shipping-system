@@ -1,3 +1,1 @@
-export interface IValueObject {
-
-}
+export interface IValueObject {}

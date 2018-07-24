@@ -14,16 +14,16 @@ import { PlaceOrderCommandHandler } from '../handlers/place-order-command';
 import { ICommandHandler } from '../interfaces/command-handler';
 
 export function registerCommandHandlers(container: Container) {
-    container.bind<ICommandHandler>('ApproveOrderCommandHandler').to(ApproveOrderCommandHandler);
-    container.bind<ICommandHandler>('CancelOrderCommandHandler').to(CancelOrderCommandHandler);
-    container.bind<ICommandHandler>('ConfirmOrderCommandHandler').to(ConfirmOrderCommandHandler);
-    container.bind<ICommandHandler>('DeclineOrderCommandHandler').to(DeclineOrderCommandHandler);
-    container.bind<ICommandHandler>('OrderApprovedCommandHandler').to(OrderApprovedCommandHandler);
-    container.bind<ICommandHandler>('OrderApprovedFailedCommandHandler').to(OrderApprovedFailedCommandHandler);
-    container.bind<ICommandHandler>('OrderCancelledCommandHandler').to(OrderCancelledCommandHandler);
-    container.bind<ICommandHandler>('OrderCancelledFailedCommandHandler').to(OrderCancelledFailedCommandHandler);
-    container.bind<ICommandHandler>('OrderConfirmedCommandHandler').to(OrderConfirmedCommandHandler);
-    container.bind<ICommandHandler>('OrderDeclinedCommandHandler').to(OrderDeclinedCommandHandler);
-    container.bind<ICommandHandler>('OrderPlacedCommandHandler').to(OrderPlacedCommandHandler);
-    container.bind<ICommandHandler>('PlaceOrderCommandHandler').to(PlaceOrderCommandHandler);
+  container.bind<ICommandHandler>('ApproveOrderCommandHandler').to(ApproveOrderCommandHandler);
+  container.bind<ICommandHandler>('CancelOrderCommandHandler').to(CancelOrderCommandHandler);
+  container.bind<ICommandHandler>('ConfirmOrderCommandHandler').to(ConfirmOrderCommandHandler);
+  container.bind<ICommandHandler>('DeclineOrderCommandHandler').to(DeclineOrderCommandHandler);
+  container.bind<ICommandHandler>('OrderApprovedCommandHandler').to(OrderApprovedCommandHandler);
+  container.bind<ICommandHandler>('OrderApprovedFailedCommandHandler').to(OrderApprovedFailedCommandHandler);
+  container.bind<ICommandHandler>('OrderCancelledCommandHandler').to(OrderCancelledCommandHandler);
+  container.bind<ICommandHandler>('OrderCancelledFailedCommandHandler').to(OrderCancelledFailedCommandHandler);
+  container.bind<ICommandHandler>('OrderConfirmedCommandHandler').to(OrderConfirmedCommandHandler);
+  container.bind<ICommandHandler>('OrderDeclinedCommandHandler').to(OrderDeclinedCommandHandler);
+  container.bind<ICommandHandler>('OrderPlacedCommandHandler').to(OrderPlacedCommandHandler);
+  container.bind<ICommandHandler>('PlaceOrderCommandHandler').to(PlaceOrderCommandHandler);
 }

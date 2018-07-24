@@ -7,116 +7,142 @@ import { IBuilder } from '../interfaces/builder';
 
 @injectable()
 export class OrderPlacedEmailBuilder implements IBuilder<string> {
+  protected emailAddress: string = null;
 
-    protected emailAddress: string = null;
+  protected order: Order = null;
 
-    protected order: Order = null;
+  protected type: string = null;
 
-    protected type: string = null;
+  protected url: string = null;
 
-    protected url: string = null;
-
-    public build(): string {
-        switch (this.type) {
-            case 'agent':
-                return this.buildForAgent();
-            case 'client':
-                return this.buildForClient();
-            default:
-                throw new Error(`invalid type of ${this.type}`);
-        }
+  public build(): string {
+    switch (this.type) {
+      case 'agent':
+        return this.buildForAgent();
+      case 'client':
+        return this.buildForClient();
+      default:
+        throw new Error(`invalid type of ${this.type}`);
     }
+  }
 
-    public reset(): OrderPlacedEmailBuilder {
-        this.emailAddress = null;
-        this.order = null;
-        this.type = null;
-        this.url = null;
+  public reset(): OrderPlacedEmailBuilder {
+    this.emailAddress = null;
+    this.order = null;
+    this.type = null;
+    this.url = null;
 
-        return this;
-    }
+    return this;
+  }
 
-    public setEmailAddress(emailAddress: string): OrderPlacedEmailBuilder {
-        this.emailAddress = emailAddress;
+  public setEmailAddress(emailAddress: string): OrderPlacedEmailBuilder {
+    this.emailAddress = emailAddress;
 
-        return this;
-    }
+    return this;
+  }
 
-    public setOrder(order: Order): OrderPlacedEmailBuilder {
-        this.order = order;
+  public setOrder(order: Order): OrderPlacedEmailBuilder {
+    this.order = order;
 
-        return this;
-    }
+    return this;
+  }
 
-    public setToAgent(): OrderPlacedEmailBuilder {
-        this.type = 'agent';
+  public setToAgent(): OrderPlacedEmailBuilder {
+    this.type = 'agent';
 
-        return this;
-    }
+    return this;
+  }
 
-    public setToClient(): OrderPlacedEmailBuilder {
-        this.type = 'client';
+  public setToClient(): OrderPlacedEmailBuilder {
+    this.type = 'client';
 
-        return this;
-    }
+    return this;
+  }
 
-    public setURL(url: string): OrderPlacedEmailBuilder {
-        this.url = url;
+  public setURL(url: string): OrderPlacedEmailBuilder {
+    this.url = url;
 
-        return this;
-    }
+    return this;
+  }
 
-    protected buildForAgent(): string {
-        const signatureApprove: string = RequestHelper.signature('GET', '/api/orders/approve', {}, {
-            emailAddress: this.emailAddress,
-            orderId: this.order.id,
-        }, configuration.signatureKey);
+  protected buildForAgent(): string {
+    const signatureApprove: string = RequestHelper.signature(
+      'GET',
+      '/api/orders/approve',
+      {},
+      {
+        emailAddress: this.emailAddress,
+        orderId: this.order.id,
+      },
+      configuration.signatureKey,
+    );
 
-        const urlApprove: string = `${this.url}/api/orders/approve?orderId=${this.order.id}&emailAddress=${this.emailAddress}&signature=${signatureApprove}`;
+    const urlApprove: string = `${this.url}/api/orders/approve?orderId=${this.order.id}&emailAddress=${
+      this.emailAddress
+    }&signature=${signatureApprove}`;
 
-        const signatureDecline: string = RequestHelper.signature('GET', '/api/orders/decline', {}, {
-            emailAddress: this.emailAddress,
-            orderId: this.order.id,
-        }, configuration.signatureKey);
+    const signatureDecline: string = RequestHelper.signature(
+      'GET',
+      '/api/orders/decline',
+      {},
+      {
+        emailAddress: this.emailAddress,
+        orderId: this.order.id,
+      },
+      configuration.signatureKey,
+    );
 
-        const urlDecline: string = `${this.url}/api/orders/decline?orderId=${this.order.id}&emailAddress=${this.emailAddress}&signature=${signatureDecline}`;
+    const urlDecline: string = `${this.url}/api/orders/decline?orderId=${this.order.id}&emailAddress=${
+      this.emailAddress
+    }&signature=${signatureDecline}`;
 
-        return `
+    return `
             <h3>Order Placed at Shipping System</h3>
             <br />
             <label>Source: </label>${this.order.source.name}
             <br />
             <label>Destination: </label>${this.order.destination.name}
             <br />
-            <label>Dimensions: </label>${this.order.dimensions.height} cm (Height), ${this.order.dimensions.length} cm (Length), ${this.order.dimensions.width} cm (Width)
+            <label>Dimensions: </label>${this.order.dimensions.height} cm (Height), ${
+      this.order.dimensions.length
+    } cm (Length), ${this.order.dimensions.width} cm (Width)
             <br />
             <label>Weight: </label>${this.order.weight} kg (${this.order.getDensity()} kg/cm&sup3;)
             <br />
             You can <a href="${urlApprove}">approve</a> or <a href="${urlDecline}">decline</a> this order.
         `;
-    }
+  }
 
-    protected buildForClient(): string {
-        const signatureCancel: string = RequestHelper.signature('GET', '/api/orders/cancel', {}, {
-            emailAddress: this.emailAddress,
-            orderId: this.order.id,
-        }, configuration.signatureKey);
+  protected buildForClient(): string {
+    const signatureCancel: string = RequestHelper.signature(
+      'GET',
+      '/api/orders/cancel',
+      {},
+      {
+        emailAddress: this.emailAddress,
+        orderId: this.order.id,
+      },
+      configuration.signatureKey,
+    );
 
-        const urlCancel: string = `${this.url}/api/orders/cancel?orderId=${this.order.id}&emailAddress=${this.emailAddress}&signature=${signatureCancel}`;
+    const urlCancel: string = `${this.url}/api/orders/cancel?orderId=${this.order.id}&emailAddress=${
+      this.emailAddress
+    }&signature=${signatureCancel}`;
 
-        return `
+    return `
             <h3>Order Placed at Shipping System</h3>
             <br />
             <label>Source: </label>${this.order.source.name}
             <br />
             <label>Destination: </label>${this.order.destination.name}
             <br />
-            <label>Dimensions: </label>${this.order.dimensions.height} cm (Height), ${this.order.dimensions.length} cm (Length), ${this.order.dimensions.width} cm (Width)
+            <label>Dimensions: </label>${this.order.dimensions.height} cm (Height), ${
+      this.order.dimensions.length
+    } cm (Length), ${this.order.dimensions.width} cm (Width)
             <br />
             <label>Weight: </label>${this.order.weight} kg (${this.order.getDensity()} kg/cm&sup3;)
             <br />
             You can <a href="${urlCancel}">cancel</a> your order at anytime.
         `;
-    }
-
+  }
 }

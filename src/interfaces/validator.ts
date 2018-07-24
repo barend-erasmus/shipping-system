@@ -1,7 +1,5 @@
 export interface IValidator<T> {
+  getMessages(obj: T): string[];
 
-    getMessages(obj: T): string[];
-
-    validate(obj: T): boolean;
-
+  validate(obj: T): boolean;
 }

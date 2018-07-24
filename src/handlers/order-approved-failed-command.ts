@@ -10,30 +10,30 @@ import { IEmailGateway } from '../interfaces/email-gateway';
 
 @injectable()
 export class OrderApprovedFailedCommandHandler implements ICommandHandler {
+  constructor(
+    @inject('IEmailGateway') protected emailGateway: IEmailGateway,
+    @inject('OrderApprovedFailedEmailBuilder')
+    protected orderApprovedFailedEmailBuilder: OrderApprovedFailedEmailBuilder,
+  ) {}
 
-    constructor(
-        @inject('IEmailGateway')
-        protected emailGateway: IEmailGateway,
-        @inject('OrderApprovedFailedEmailBuilder')
-        protected orderApprovedFailedEmailBuilder: OrderApprovedFailedEmailBuilder,
-    ) {
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    const orderApprovedFailedCommand: OrderApprovedFailedCommand = command as OrderApprovedFailedCommand;
 
-    }
+    await this.sendEmailToAgent(orderApprovedFailedCommand.agent, orderApprovedFailedCommand.order);
+  }
 
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        const orderApprovedFailedCommand: OrderApprovedFailedCommand = command as OrderApprovedFailedCommand;
+  protected async sendEmailToAgent(agent: Agent, order: Order): Promise<void> {
+    const bodyForClient: string = this.orderApprovedFailedEmailBuilder
+      .reset()
+      .setOrder(order)
+      .build();
 
-        await this.sendEmailToAgent(orderApprovedFailedCommand.agent, orderApprovedFailedCommand.order);
-    }
-
-    protected async sendEmailToAgent(agent: Agent, order: Order): Promise<void> {
-        const bodyForClient: string = this.orderApprovedFailedEmailBuilder
-            .reset()
-            .setOrder(order)
-            .build();
-
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Failed to Approve Order at Shipping System', agent.emailAddress);
-    }
-
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Failed to Approve Order at Shipping System',
+      agent.emailAddress,
+    );
+  }
 }

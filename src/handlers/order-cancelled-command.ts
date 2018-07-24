@@ -9,43 +9,47 @@ import { IEmailGateway } from '../interfaces/email-gateway';
 
 @injectable()
 export class OrderCancelledCommandHandler implements ICommandHandler {
+  constructor(
+    @inject('IEmailGateway') protected emailGateway: IEmailGateway,
+    @inject('OrderCancelledEmailBuilder') protected orderCancelledEmailBuilder: OrderCancelledEmailBuilder,
+  ) {}
 
-    constructor(
-        @inject('IEmailGateway')
-        protected emailGateway: IEmailGateway,
-        @inject('OrderCancelledEmailBuilder')
-        protected orderCancelledEmailBuilder: OrderCancelledEmailBuilder,
-    ) {
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    const orderCancelledCommand: OrderCancelledCommand = command as OrderCancelledCommand;
 
-    }
+    await this.sendEmailToClient(orderCancelledCommand.order);
 
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        const orderCancelledCommand: OrderCancelledCommand = command as OrderCancelledCommand;
+    await this.sendEmailToAgent(orderCancelledCommand.order);
+  }
 
-        await this.sendEmailToClient(orderCancelledCommand.order);
+  protected async sendEmailToAgent(order: Order): Promise<void> {
+    const bodyForClient: string = this.orderCancelledEmailBuilder
+      .reset()
+      .setOrder(order)
+      .setToAgent()
+      .build();
 
-        await this.sendEmailToAgent(orderCancelledCommand.order);
-    }
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Order Cancelled at Shipping System',
+      order.agent.emailAddress,
+    );
+  }
 
-    protected async sendEmailToAgent(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderCancelledEmailBuilder
-            .reset()
-            .setOrder(order)
-            .setToAgent()
-            .build();
+  protected async sendEmailToClient(order: Order): Promise<void> {
+    const bodyForClient: string = this.orderCancelledEmailBuilder
+      .reset()
+      .setOrder(order)
+      .setToClient()
+      .build();
 
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Cancelled at Shipping System', order.agent.emailAddress);
-    }
-
-    protected async sendEmailToClient(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderCancelledEmailBuilder
-            .reset()
-            .setOrder(order)
-            .setToClient()
-            .build();
-
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Cancelled at Shipping System', order.account.emailAddress);
-    }
-
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Order Cancelled at Shipping System',
+      order.account.emailAddress,
+    );
+  }
 }

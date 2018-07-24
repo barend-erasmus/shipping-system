@@ -1,7 +1,5 @@
 export interface IRepository<T, K> {
+  find(id: K): Promise<T>;
 
-    find(id: K): Promise<T>;
-
-    findAll(): Promise<T[]>;
-
+  findAll(): Promise<T[]>;
 }

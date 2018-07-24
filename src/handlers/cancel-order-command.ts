@@ -7,19 +7,12 @@ import { IOrdersService } from '../interfaces/orders-service';
 
 @injectable()
 export class CancelOrderCommandHandler implements ICommandHandler {
+  constructor(@inject('IOrdersService') protected ordersService: IOrdersService) {}
 
-    constructor(
-        @inject('IOrdersService')
-        protected ordersService: IOrdersService,
-    ) {
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    const cancelOrderCommand: CancelOrderCommand = command as CancelOrderCommand;
 
-    }
-
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        const cancelOrderCommand: CancelOrderCommand = command as CancelOrderCommand;
-
-        await this.ordersService.cancel(cancelOrderCommand.orderId);
-    }
-
+    await this.ordersService.cancel(cancelOrderCommand.orderId);
+  }
 }

@@ -7,19 +7,12 @@ import { IOrdersService } from '../interfaces/orders-service';
 
 @injectable()
 export class ConfirmOrderCommandHandler implements ICommandHandler {
+  constructor(@inject('IOrdersService') protected ordersService: IOrdersService) {}
 
-    constructor(
-        @inject('IOrdersService')
-        protected ordersService: IOrdersService,
-    ) {
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    const confirmOrderCommand: ConfirmOrderCommand = command as ConfirmOrderCommand;
 
-    }
-
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        const confirmOrderCommand: ConfirmOrderCommand = command as ConfirmOrderCommand;
-
-        await this.ordersService.confirm(confirmOrderCommand.orderId);
-    }
-
+    await this.ordersService.confirm(confirmOrderCommand.orderId);
+  }
 }

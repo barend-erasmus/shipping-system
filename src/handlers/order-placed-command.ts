@@ -12,54 +12,55 @@ import { IRepository } from '../interfaces/repository';
 
 @injectable()
 export class OrderPlacedCommandHandler implements ICommandHandler {
+  constructor(
+    @inject('AgentsRepository') protected agentsRepository: IRepository<Agent, string>,
+    @inject('IEmailGateway') protected emailGateway: IEmailGateway,
+    @inject('OrderPlacedEmailBuilder') protected orderPlacedEmailBuilder: OrderPlacedEmailBuilder,
+  ) {}
 
-    constructor(
-        @inject('AgentsRepository')
-        protected agentsRepository: IRepository<Agent, string>,
-        @inject('IEmailGateway')
-        protected emailGateway: IEmailGateway,
-        @inject('OrderPlacedEmailBuilder')
-        protected orderPlacedEmailBuilder: OrderPlacedEmailBuilder,
-    ) {
+  public async handle(command: ICommand): Promise<void> {
+    const orderPlacedCommand: OrderPlacedCommand = command as OrderPlacedCommand;
 
+    await this.sendEmailToClient(orderPlacedCommand.order);
+
+    await this.sendEmailToAgents(orderPlacedCommand.order);
+  }
+
+  protected async sendEmailToAgents(order: Order): Promise<void> {
+    const agents: Agent[] = await this.agentsRepository.findAll();
+
+    this.orderPlacedEmailBuilder = this.orderPlacedEmailBuilder
+      .reset()
+      .setOrder(order)
+      .setToAgent()
+      .setURL(configuration.url);
+
+    for (const agent of agents as any) {
+      const bodyForAgent: string = this.orderPlacedEmailBuilder.setEmailAddress(agent.emailAddress).build();
+
+      await this.emailGateway.send(
+        bodyForAgent,
+        'shipping-system@example.com',
+        'Order Placed at Shipping System',
+        agent.emailAddress,
+      );
     }
+  }
 
-    public async handle(command: ICommand): Promise<void> {
-        const orderPlacedCommand: OrderPlacedCommand = command as OrderPlacedCommand;
+  protected async sendEmailToClient(order: Order): Promise<void> {
+    const bodyForClient: string = this.orderPlacedEmailBuilder
+      .reset()
+      .setEmailAddress(order.account.emailAddress)
+      .setOrder(order)
+      .setToClient()
+      .setURL(configuration.url)
+      .build();
 
-        await this.sendEmailToClient(orderPlacedCommand.order);
-
-        await this.sendEmailToAgents(orderPlacedCommand.order);
-    }
-
-    protected async sendEmailToAgents(order: Order): Promise<void> {
-        const agents: Agent[] = await this.agentsRepository.findAll();
-
-        this.orderPlacedEmailBuilder = this.orderPlacedEmailBuilder
-            .reset()
-            .setOrder(order)
-            .setToAgent()
-            .setURL(configuration.url);
-
-        for (const agent of (agents as any)) {
-            const bodyForAgent: string = this.orderPlacedEmailBuilder
-                .setEmailAddress(agent.emailAddress)
-                .build();
-
-            await this.emailGateway.send(bodyForAgent, 'shipping-system@example.com', 'Order Placed at Shipping System', agent.emailAddress);
-        }
-    }
-
-    protected async sendEmailToClient(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderPlacedEmailBuilder
-            .reset()
-            .setEmailAddress(order.account.emailAddress)
-            .setOrder(order)
-            .setToClient()
-            .setURL(configuration.url)
-            .build();
-
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Placed at Shipping System', order.account.emailAddress);
-    }
-
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Order Placed at Shipping System',
+      order.account.emailAddress,
+    );
+  }
 }

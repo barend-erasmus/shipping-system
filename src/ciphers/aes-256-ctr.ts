@@ -2,37 +2,35 @@ import * as crypto from 'crypto';
 import { ICipher } from '../interfaces/cipher';
 
 export class AES256CTRCipher implements ICipher {
+  constructor(protected password: string) {}
 
-    constructor(
-        protected password: string,
-    ) {
+  public decrypt(data: string): string {
+    const iv: Buffer = Buffer.from(this.hash(this.password).slice(16), 'utf8');
 
-    }
+    const cipher: crypto.Decipher = crypto.createDecipheriv('aes-256-ctr', this.hash(this.password), iv);
 
-    public decrypt(data: string): string {
-        const iv: Buffer = Buffer.from(this.hash(this.password).slice(16), 'utf8');
+    let decrypted: string = cipher.update(data, 'hex', 'utf8');
+    decrypted += cipher.final('utf8');
 
-        const cipher: crypto.Decipher = crypto.createDecipheriv('aes-256-ctr', this.hash(this.password), iv);
+    return decrypted;
+  }
 
-        let decrypted: string = cipher.update(data, 'hex', 'utf8');
-        decrypted += cipher.final('utf8');
+  public encrypt(data: string): string {
+    const iv: Buffer = Buffer.from(this.hash(this.password).slice(16), 'utf8');
 
-        return decrypted;
-    }
+    const cipher: crypto.Cipher = crypto.createCipheriv('aes-256-ctr', this.hash(this.password), iv);
 
-    public encrypt(data: string): string {
-        const iv: Buffer = Buffer.from(this.hash(this.password).slice(16), 'utf8');
+    let encrypted: string = cipher.update(data, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
 
-        const cipher: crypto.Cipher = crypto.createCipheriv('aes-256-ctr', this.hash(this.password), iv);
+    return encrypted;
+  }
 
-        let encrypted: string = cipher.update(data, 'utf8', 'hex');
-        encrypted += cipher.final('hex');
-
-        return encrypted;
-    }
-
-    protected hash(data: string): string {
-        return crypto.createHash('md5').update(data, 'utf8').digest('hex').toUpperCase();
-    }
-
+  protected hash(data: string): string {
+    return crypto
+      .createHash('md5')
+      .update(data, 'utf8')
+      .digest('hex')
+      .toUpperCase();
+  }
 }

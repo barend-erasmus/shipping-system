@@ -1,7 +1,5 @@
 export interface ICipher {
+  decrypt(data: string): string;
 
-    decrypt(data: string): string;
-
-    encrypt(data: string): string;
-
+  encrypt(data: string): string;
 }

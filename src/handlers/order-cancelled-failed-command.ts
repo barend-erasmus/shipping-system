@@ -9,30 +9,30 @@ import { IEmailGateway } from '../interfaces/email-gateway';
 
 @injectable()
 export class OrderCancelledFailedCommandHandler implements ICommandHandler {
+  constructor(
+    @inject('IEmailGateway') protected emailGateway: IEmailGateway,
+    @inject('OrderCancelledFailedEmailBuilder')
+    protected orderCancelledFailedEmailBuilder: OrderCancelledFailedEmailBuilder,
+  ) {}
 
-    constructor(
-        @inject('IEmailGateway')
-        protected emailGateway: IEmailGateway,
-        @inject('OrderCancelledFailedEmailBuilder')
-        protected orderCancelledFailedEmailBuilder: OrderCancelledFailedEmailBuilder,
-    ) {
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    const orderCancelledFailedCommand: OrderCancelledFailedCommand = command as OrderCancelledFailedCommand;
 
-    }
+    await this.sendEmailToClient(orderCancelledFailedCommand.order);
+  }
 
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        const orderCancelledFailedCommand: OrderCancelledFailedCommand = command as OrderCancelledFailedCommand;
+  protected async sendEmailToClient(order: Order): Promise<void> {
+    const bodyForClient: string = this.orderCancelledFailedEmailBuilder
+      .reset()
+      .setOrder(order)
+      .build();
 
-        await this.sendEmailToClient(orderCancelledFailedCommand.order);
-    }
-
-    protected async sendEmailToClient(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderCancelledFailedEmailBuilder
-            .reset()
-            .setOrder(order)
-            .build();
-
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Failed to Cancel Order at Shipping System', order.account.emailAddress);
-    }
-
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Failed to Cancel Order at Shipping System',
+      order.account.emailAddress,
+    );
+  }
 }

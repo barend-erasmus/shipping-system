@@ -1,7 +1,5 @@
 export interface IBuilder<T> {
+  build(): T;
 
-    build(): T;
-
-    reset(): IBuilder<T>;
-
+  reset(): IBuilder<T>;
 }

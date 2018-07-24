@@ -9,29 +9,28 @@ import { IEmailGateway } from '../interfaces/email-gateway';
 
 @injectable()
 export class OrderPlacedCommandHandler implements ICommandHandler {
+  constructor(
+    @inject('IEmailGateway') protected emailGateway: IEmailGateway,
+    @inject('OrderPlacedFailedEmailBuilder') protected orderPlacedFailedEmailBuilder: OrderPlacedFailedEmailBuilder,
+  ) {}
 
-    constructor(
-        @inject('IEmailGateway')
-        protected emailGateway: IEmailGateway,
-        @inject('OrderPlacedFailedEmailBuilder')
-        protected orderPlacedFailedEmailBuilder: OrderPlacedFailedEmailBuilder,
-    ) {
+  public async handle(command: ICommand): Promise<void> {
+    const orderPlacedFailedCommand: OrderPlacedFailedCommand = command as OrderPlacedFailedCommand;
 
-    }
+    await this.sendEmailToClient(orderPlacedFailedCommand.order);
+  }
 
-    public async handle(command: ICommand): Promise<void> {
-        const orderPlacedFailedCommand: OrderPlacedFailedCommand = command as OrderPlacedFailedCommand;
+  protected async sendEmailToClient(order: Order): Promise<void> {
+    const bodyForClient: string = this.orderPlacedFailedEmailBuilder
+      .reset()
+      .setOrder(order)
+      .build();
 
-        await this.sendEmailToClient(orderPlacedFailedCommand.order);
-    }
-
-    protected async sendEmailToClient(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderPlacedFailedEmailBuilder
-            .reset()
-            .setOrder(order)
-            .build();
-
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Failed to Place Order at Shipping System', order.account.emailAddress);
-    }
-
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Failed to Place Order at Shipping System',
+      order.account.emailAddress,
+    );
+  }
 }

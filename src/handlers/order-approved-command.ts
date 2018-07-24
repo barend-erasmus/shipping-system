@@ -10,47 +10,51 @@ import { IEmailGateway } from '../interfaces/email-gateway';
 
 @injectable()
 export class OrderApprovedCommandHandler implements ICommandHandler {
+  constructor(
+    @inject('IEmailGateway') protected emailGateway: IEmailGateway,
+    @inject('OrderApprovedEmailBuilder') protected orderApprovedEmailBuilder: OrderApprovedEmailBuilder,
+  ) {}
 
-    constructor(
-        @inject('IEmailGateway')
-        protected emailGateway: IEmailGateway,
-        @inject('OrderApprovedEmailBuilder')
-        protected orderApprovedEmailBuilder: OrderApprovedEmailBuilder,
-    ) {
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    const orderApprovedCommand: OrderApprovedCommand = command as OrderApprovedCommand;
 
-    }
+    await this.sendEmailToClient(orderApprovedCommand.order);
 
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        const orderApprovedCommand: OrderApprovedCommand = command as OrderApprovedCommand;
+    await this.sendEmailToAgent(orderApprovedCommand.order);
+  }
 
-        await this.sendEmailToClient(orderApprovedCommand.order);
+  protected async sendEmailToAgent(order: Order): Promise<void> {
+    const bodyForClient: string = this.orderApprovedEmailBuilder
+      .reset()
+      .setEmailAddress(order.account.emailAddress)
+      .setOrder(order)
+      .setToAgent()
+      .setURL(configuration.url)
+      .build();
 
-        await this.sendEmailToAgent(orderApprovedCommand.order);
-    }
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Order Approved at Shipping System',
+      order.agent.emailAddress,
+    );
+  }
 
-    protected async sendEmailToAgent(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderApprovedEmailBuilder
-            .reset()
-            .setEmailAddress(order.account.emailAddress)
-            .setOrder(order)
-            .setToAgent()
-            .setURL(configuration.url)
-            .build();
+  protected async sendEmailToClient(order: Order): Promise<void> {
+    const bodyForClient: string = this.orderApprovedEmailBuilder
+      .reset()
+      .setEmailAddress(order.account.emailAddress)
+      .setOrder(order)
+      .setToClient()
+      .setURL(configuration.url)
+      .build();
 
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Approved at Shipping System', order.agent.emailAddress);
-    }
-
-    protected async sendEmailToClient(order: Order): Promise<void> {
-        const bodyForClient: string = this.orderApprovedEmailBuilder
-            .reset()
-            .setEmailAddress(order.account.emailAddress)
-            .setOrder(order)
-            .setToClient()
-            .setURL(configuration.url)
-            .build();
-
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Approved at Shipping System', order.account.emailAddress);
-    }
-
+    await this.emailGateway.send(
+      bodyForClient,
+      'shipping-system@example.com',
+      'Order Approved at Shipping System',
+      order.account.emailAddress,
+    );
+  }
 }

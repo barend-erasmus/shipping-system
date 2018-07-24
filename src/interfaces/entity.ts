@@ -1,5 +1,3 @@
 export interface IEntity<T> {
-
-    id: T;
-
+  id: T;
 }

@@ -18,148 +18,136 @@ import { IWritableRepository } from '../interfaces/writable-repository';
 
 @injectable()
 export class OrdersService implements IOrdersService {
+  constructor(
+    @inject('AgentsRepository') protected agentsRepository: IRepository<Agent, string>,
+    @inject('OrderApprovedCommandBusClient') protected orderApprovedCommandBusClient: ICommandBusClient,
+    @inject('OrderApprovedFailedCommandBusClient') protected orderApprovedFailedCommandBusClient: ICommandBusClient,
+    @inject('OrderCancelledCommandBusClient') protected orderCancelledCommandBusClient: ICommandBusClient,
+    @inject('OrderCancelledFailedCommandBusClient') protected orderCancelledFailedCommandBusClient: ICommandBusClient,
+    @inject('OrderConfirmedCommandBusClient') protected orderConfirmedCommandBusClient: ICommandBusClient,
+    @inject('OrderDeclinedCommandBusClient') protected orderDeclinedCommandBusClient: ICommandBusClient,
+    @inject('OrderPlacedCommandBusClient') protected orderPlacedCommandBusClient: ICommandBusClient,
+    @inject('OrderPlacedFailedCommandBusClient') protected orderPlacedFailedCommandBusClient: ICommandBusClient,
+    @inject('OrdersRepository') protected orderRepository: IWritableRepository<Order, string>,
+    @inject('OrderValidator') protected orderValidator: IValidator<Order>,
+  ) {}
 
-    constructor(
-        @inject('AgentsRepository')
-        protected agentsRepository: IRepository<Agent, string>,
-        @inject('OrderApprovedCommandBusClient')
-        protected orderApprovedCommandBusClient: ICommandBusClient,
-        @inject('OrderApprovedFailedCommandBusClient')
-        protected orderApprovedFailedCommandBusClient: ICommandBusClient,
-        @inject('OrderCancelledCommandBusClient')
-        protected orderCancelledCommandBusClient: ICommandBusClient,
-        @inject('OrderCancelledFailedCommandBusClient')
-        protected orderCancelledFailedCommandBusClient: ICommandBusClient,
-        @inject('OrderConfirmedCommandBusClient')
-        protected orderConfirmedCommandBusClient: ICommandBusClient,
-        @inject('OrderDeclinedCommandBusClient')
-        protected orderDeclinedCommandBusClient: ICommandBusClient,
-        @inject('OrderPlacedCommandBusClient')
-        protected orderPlacedCommandBusClient: ICommandBusClient,
-        @inject('OrderPlacedFailedCommandBusClient')
-        protected orderPlacedFailedCommandBusClient: ICommandBusClient,
-        @inject('OrdersRepository')
-        protected orderRepository: IWritableRepository<Order, string>,
-        @inject('OrderValidator')
-        protected orderValidator: IValidator<Order>,
-    ) {
+  // TODO: Unit Tests
+  public async approve(agentEmailAddress: string, orderId: string): Promise<Order> {
+    let order: Order = await this.orderRepository.find(orderId);
 
+    if (!order) {
+      return null;
     }
 
-    // TODO: Unit Tests
-    public async approve(agentEmailAddress: string, orderId: string): Promise<Order> {
-        let order: Order = await this.orderRepository.find(orderId);
+    const agents: Agent[] = await this.agentsRepository.findAll();
 
-        if (!order) {
-            return null;
-        }
+    const agent: Agent = agents.find((x: Agent) => x.emailAddress === agentEmailAddress);
 
-        const agents: Agent[] = await this.agentsRepository
-            .findAll();
+    try {
+      order.setToApproved(agent);
+    } catch (error) {
+      await this.orderApprovedFailedCommandBusClient.execute(
+        new OrderApprovedFailedCommand(uuid.v4(), agent, error.message, order),
+      );
 
-        const agent: Agent = agents.find((x: Agent) => x.emailAddress === agentEmailAddress);
-
-        try {
-            order.setToApproved(agent);
-        } catch (error) {
-            await this.orderApprovedFailedCommandBusClient.execute(new OrderApprovedFailedCommand(uuid.v4(), agent, error.message, order));
-
-            return null;
-        }
-
-        order = await this.orderRepository.update(order);
-
-        await this.orderApprovedCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
-
-        return order;
+      return null;
     }
 
-    // TODO: Unit Tests
-    public async cancel(orderId: string): Promise<Order> {
-        let order: Order = await this.orderRepository.find(orderId);
+    order = await this.orderRepository.update(order);
 
-        if (!order) {
-            return null;
-        }
+    await this.orderApprovedCommandBusClient.execute(new OrderApprovedCommand(uuid.v4(), order));
 
-        try {
-            order.setToCancelled();
-        } catch (error) {
-            await this.orderCancelledFailedCommandBusClient.execute(new OrderCancelledFailedCommand(uuid.v4(), error.message, order));
+    return order;
+  }
 
-            return null;
-        }
+  // TODO: Unit Tests
+  public async cancel(orderId: string): Promise<Order> {
+    let order: Order = await this.orderRepository.find(orderId);
 
-        order = await this.orderRepository.update(order);
-
-        await this.orderCancelledCommandBusClient.execute(new OrderCancelledCommand(uuid.v4(), order));
-
-        return order;
+    if (!order) {
+      return null;
     }
 
-    // TODO: Unit Tests
-    public async confirm(orderId: string): Promise<Order> {
-        let order: Order = await this.orderRepository.find(orderId);
+    try {
+      order.setToCancelled();
+    } catch (error) {
+      await this.orderCancelledFailedCommandBusClient.execute(
+        new OrderCancelledFailedCommand(uuid.v4(), error.message, order),
+      );
 
-        if (!order) {
-            return null;
-        }
-
-        try {
-            order.setToConfirmed();
-        } catch (error) {
-            // TODO: Send Email
-        }
-
-        order = await this.orderRepository.update(order);
-
-        await this.orderConfirmedCommandBusClient.execute(new OrderConfirmedCommand(uuid.v4(), order));
-
-        return order;
+      return null;
     }
 
-    public async create(order: Order): Promise<Order> {
-        try {
-            this.validateOrder(order);
-        } catch (error) {
-            this.orderPlacedFailedCommandBusClient.execute(new OrderPlacedFailedCommand(uuid.v4(), order));
-            return order;
-        }
+    order = await this.orderRepository.update(order);
 
-        order = await this.orderRepository.insert(order);
+    await this.orderCancelledCommandBusClient.execute(new OrderCancelledCommand(uuid.v4(), order));
 
-        await this.orderPlacedCommandBusClient.execute(new OrderPlacedCommand(uuid.v4(), order));
+    return order;
+  }
 
-        return order;
+  // TODO: Unit Tests
+  public async confirm(orderId: string): Promise<Order> {
+    let order: Order = await this.orderRepository.find(orderId);
+
+    if (!order) {
+      return null;
     }
 
-    // TODO: Unit Tests
-    public async decline(orderId: string): Promise<Order> {
-        let order: Order = await this.orderRepository.find(orderId);
-
-        if (!order) {
-            return null;
-        }
-
-        try {
-            order.setToDeclined();
-        } catch (error) {
-            // TODO: Send Email
-        }
-
-        order = await this.orderRepository.update(order);
-
-        await this.orderDeclinedCommandBusClient.execute(new OrderDeclinedCommand(uuid.v4(), order));
-
-        return order;
+    try {
+      order.setToConfirmed();
+    } catch (error) {
+      // TODO: Send Email
     }
 
-    protected validateOrder(order: Order): void {
-        const messages: string[] = this.orderValidator.getMessages(order);
+    order = await this.orderRepository.update(order);
 
-        if (messages.length) {
-            throw new Error(messages.join('\r\n'));
-        }
+    await this.orderConfirmedCommandBusClient.execute(new OrderConfirmedCommand(uuid.v4(), order));
+
+    return order;
+  }
+
+  public async create(order: Order): Promise<Order> {
+    try {
+      this.validateOrder(order);
+    } catch (error) {
+      this.orderPlacedFailedCommandBusClient.execute(new OrderPlacedFailedCommand(uuid.v4(), order));
+      return order;
     }
 
+    order = await this.orderRepository.insert(order);
+
+    await this.orderPlacedCommandBusClient.execute(new OrderPlacedCommand(uuid.v4(), order));
+
+    return order;
+  }
+
+  // TODO: Unit Tests
+  public async decline(orderId: string): Promise<Order> {
+    let order: Order = await this.orderRepository.find(orderId);
+
+    if (!order) {
+      return null;
+    }
+
+    try {
+      order.setToDeclined();
+    } catch (error) {
+      // TODO: Send Email
+    }
+
+    order = await this.orderRepository.update(order);
+
+    await this.orderDeclinedCommandBusClient.execute(new OrderDeclinedCommand(uuid.v4(), order));
+
+    return order;
+  }
+
+  protected validateOrder(order: Order): void {
+    const messages: string[] = this.orderValidator.getMessages(order);
+
+    if (messages.length) {
+      throw new Error(messages.join('\r\n'));
+    }
+  }
 }

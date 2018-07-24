@@ -7,6 +7,7 @@
   },
   "scripts": {
     "coverage": "gulp build & tsc & istanbul cover node_modules/mocha/bin/_mocha --root ./dist ./dist/**/*.spec.js",
+    "format:check": "prettier --config ./prettier.config.js --list-different \"src/**/*{.ts,.js,.json,.css,.scss}\" --write",
     "format:fix": "pretty-quick --staged",
     "lint": "tslint ./src/**/*.ts --fix --exclude ./src/**/*.d.ts",
     "precommit": "run-s format:fix lint",

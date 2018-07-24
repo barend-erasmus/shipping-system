@@ -16,123 +16,151 @@ import { ICommandBusClient } from '../interfaces/command-bus-client';
 import { ICommandHandler } from '../interfaces/command-handler';
 
 export function registerClients(container: Container) {
-    container.bind<ICommandBusClient>('ApproveOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+  container.bind<ICommandBusClient>('ApproveOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
-        const approveOrderCommandBusClient: ICommandHandler = context.container.get<ApproveOrderCommandHandler>('ApproveOrderCommandHandler');
+    const approveOrderCommandBusClient: ICommandHandler = context.container.get<ApproveOrderCommandHandler>(
+      'ApproveOrderCommandHandler',
+    );
 
-        commandBusClient.register(approveOrderCommandBusClient);
+    commandBusClient.register(approveOrderCommandBusClient);
 
-        return commandBusClient;
+    return commandBusClient;
+  });
+
+  container.bind<ICommandBusClient>('CancelOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+    const cancelOrderCommandBusClient: ICommandHandler = context.container.get<CancelOrderCommandHandler>(
+      'CancelOrderCommandHandler',
+    );
+
+    commandBusClient.register(cancelOrderCommandBusClient);
+
+    return commandBusClient;
+  });
+
+  container.bind<ICommandBusClient>('ConfirmOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+    const confirmOrderCommandBusClient: ICommandHandler = context.container.get<ConfirmOrderCommandHandler>(
+      'ConfirmOrderCommandHandler',
+    );
+
+    commandBusClient.register(confirmOrderCommandBusClient);
+
+    return commandBusClient;
+  });
+
+  container.bind<ICommandBusClient>('DeclineOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+    const declineOrderCommandBusClient: ICommandHandler = context.container.get<DeclineOrderCommandHandler>(
+      'DeclineOrderCommandHandler',
+    );
+
+    commandBusClient.register(declineOrderCommandBusClient);
+
+    return commandBusClient;
+  });
+
+  container.bind<ICommandBusClient>('OrderApprovedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+    const orderApprovedCommandHandler: ICommandHandler = context.container.get<OrderApprovedCommandHandler>(
+      'OrderApprovedCommandHandler',
+    );
+
+    commandBusClient.register(orderApprovedCommandHandler);
+
+    return commandBusClient;
+  });
+
+  container
+    .bind<ICommandBusClient>('OrderApprovedFailedCommandBusClient')
+    .toDynamicValue((context: interfaces.Context) => {
+      const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+      const orderApprovedFailedCommandHandler: ICommandHandler = context.container.get<
+        OrderApprovedFailedCommandHandler
+      >('OrderApprovedFailedCommandHandler');
+
+      commandBusClient.register(orderApprovedFailedCommandHandler);
+
+      return commandBusClient;
     });
 
-    container.bind<ICommandBusClient>('CancelOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+  container.bind<ICommandBusClient>('OrderCancelledCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
-        const cancelOrderCommandBusClient: ICommandHandler = context.container.get<CancelOrderCommandHandler>('CancelOrderCommandHandler');
+    const orderCancelledCommandHandler: ICommandHandler = context.container.get<OrderCancelledCommandHandler>(
+      'OrderCancelledCommandHandler',
+    );
 
-        commandBusClient.register(cancelOrderCommandBusClient);
+    commandBusClient.register(orderCancelledCommandHandler);
 
-        return commandBusClient;
+    return commandBusClient;
+  });
+
+  container
+    .bind<ICommandBusClient>('OrderCancelledFailedCommandBusClient')
+    .toDynamicValue((context: interfaces.Context) => {
+      const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+
+      const orderCancelledFailedCommandHandler: ICommandHandler = context.container.get<
+        OrderCancelledFailedCommandHandler
+      >('OrderCancelledFailedCommandHandler');
+
+      commandBusClient.register(orderCancelledFailedCommandHandler);
+
+      return commandBusClient;
     });
 
-    container.bind<ICommandBusClient>('ConfirmOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+  container.bind<ICommandBusClient>('OrderConfirmedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
-        const confirmOrderCommandBusClient: ICommandHandler = context.container.get<ConfirmOrderCommandHandler>('ConfirmOrderCommandHandler');
+    const orderConfirmedCommandHandler: ICommandHandler = context.container.get<OrderConfirmedCommandHandler>(
+      'OrderConfirmedCommandHandler',
+    );
 
-        commandBusClient.register(confirmOrderCommandBusClient);
+    commandBusClient.register(orderConfirmedCommandHandler);
 
-        return commandBusClient;
-    });
+    return commandBusClient;
+  });
 
-    container.bind<ICommandBusClient>('DeclineOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+  container.bind<ICommandBusClient>('OrderDeclinedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
-        const declineOrderCommandBusClient: ICommandHandler = context.container.get<DeclineOrderCommandHandler>('DeclineOrderCommandHandler');
+    const orderDeclinedCommandHandler: ICommandHandler = context.container.get<OrderDeclinedCommandHandler>(
+      'OrderDeclinedCommandHandler',
+    );
 
-        commandBusClient.register(declineOrderCommandBusClient);
+    commandBusClient.register(orderDeclinedCommandHandler);
 
-        return commandBusClient;
-    });
+    return commandBusClient;
+  });
 
-    container.bind<ICommandBusClient>('OrderApprovedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+  container.bind<ICommandBusClient>('OrderPlacedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
-        const orderApprovedCommandHandler: ICommandHandler = context.container.get<OrderApprovedCommandHandler>('OrderApprovedCommandHandler');
+    const orderPlacedCommandHandler: ICommandHandler = context.container.get<OrderPlacedCommandHandler>(
+      'OrderPlacedCommandHandler',
+    );
 
-        commandBusClient.register(orderApprovedCommandHandler);
+    commandBusClient.register(orderPlacedCommandHandler);
 
-        return commandBusClient;
-    });
+    return commandBusClient;
+  });
 
-    container.bind<ICommandBusClient>('OrderApprovedFailedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
+  container.bind<ICommandBusClient>('PlaceOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
+    const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
 
-        const orderApprovedFailedCommandHandler: ICommandHandler = context.container.get<OrderApprovedFailedCommandHandler>('OrderApprovedFailedCommandHandler');
+    const placeOrderCommandHandler: ICommandHandler = context.container.get<PlaceOrderCommandHandler>(
+      'PlaceOrderCommandHandler',
+    );
 
-        commandBusClient.register(orderApprovedFailedCommandHandler);
+    commandBusClient.register(placeOrderCommandHandler);
 
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderCancelledCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderCancelledCommandHandler: ICommandHandler = context.container.get<OrderCancelledCommandHandler>('OrderCancelledCommandHandler');
-
-        commandBusClient.register(orderCancelledCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderCancelledFailedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderCancelledFailedCommandHandler: ICommandHandler = context.container.get<OrderCancelledFailedCommandHandler>('OrderCancelledFailedCommandHandler');
-
-        commandBusClient.register(orderCancelledFailedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderConfirmedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderConfirmedCommandHandler: ICommandHandler = context.container.get<OrderConfirmedCommandHandler>('OrderConfirmedCommandHandler');
-
-        commandBusClient.register(orderConfirmedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderDeclinedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderDeclinedCommandHandler: ICommandHandler = context.container.get<OrderDeclinedCommandHandler>('OrderDeclinedCommandHandler');
-
-        commandBusClient.register(orderDeclinedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('OrderPlacedCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const orderPlacedCommandHandler: ICommandHandler = context.container.get<OrderPlacedCommandHandler>('OrderPlacedCommandHandler');
-
-        commandBusClient.register(orderPlacedCommandHandler);
-
-        return commandBusClient;
-    });
-
-    container.bind<ICommandBusClient>('PlaceOrderCommandBusClient').toDynamicValue((context: interfaces.Context) => {
-        const commandBusClient: ICommandBusClient = new InMemoryCommandBusClient();
-
-        const placeOrderCommandHandler: ICommandHandler = context.container.get<PlaceOrderCommandHandler>('PlaceOrderCommandHandler');
-
-        commandBusClient.register(placeOrderCommandHandler);
-
-        return commandBusClient;
-    });
+    return commandBusClient;
+  });
 }

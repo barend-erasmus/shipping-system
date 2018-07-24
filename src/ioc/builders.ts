@@ -7,9 +7,9 @@ import { OrderPlacedEmailBuilder } from '../builders/order-placed-email';
 import { IBuilder } from '../interfaces/builder';
 
 export function registerBuilders(container: Container) {
-    container.bind<IBuilder<string>>('OrderApprovedEmailBuilder').to(OrderApprovedEmailBuilder);
-    container.bind<IBuilder<string>>('OrderApprovedFailedEmailBuilder').to(OrderApprovedFailedEmailBuilder);
-    container.bind<IBuilder<string>>('OrderCancelledEmailBuilder').to(OrderCancelledEmailBuilder);
-    container.bind<IBuilder<string>>('OrderCancelledFailedEmailBuilder').to(OrderCancelledFailedEmailBuilder);
-    container.bind<IBuilder<string>>('OrderPlacedEmailBuilder').to(OrderPlacedEmailBuilder);
+  container.bind<IBuilder<string>>('OrderApprovedEmailBuilder').to(OrderApprovedEmailBuilder);
+  container.bind<IBuilder<string>>('OrderApprovedFailedEmailBuilder').to(OrderApprovedFailedEmailBuilder);
+  container.bind<IBuilder<string>>('OrderCancelledEmailBuilder').to(OrderCancelledEmailBuilder);
+  container.bind<IBuilder<string>>('OrderCancelledFailedEmailBuilder').to(OrderCancelledFailedEmailBuilder);
+  container.bind<IBuilder<string>>('OrderPlacedEmailBuilder').to(OrderPlacedEmailBuilder);
 }

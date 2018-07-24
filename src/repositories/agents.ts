@@ -5,40 +5,25 @@ import { BaseRepository } from './base';
 
 @injectable()
 export class AgentsRepository implements IRepository<Agent, string> {
+  constructor(@inject('BaseRepository') protected baseRepository: BaseRepository) {}
 
-    constructor(
-        @inject('BaseRepository')
-        protected baseRepository: BaseRepository,
-    ) {
+  public async find(id: string): Promise<Agent> {
+    const rows: any[] = await this.baseRepository.query(`SELECT * FROM AGENTS WHERE ID = $id`, {
+      $id: id,
+    });
 
+    if (!rows.length) {
+      return null;
     }
 
-    public async find(id: string): Promise<Agent> {
-        const rows: any[] = await this.baseRepository.query(`SELECT * FROM AGENTS WHERE ID = $id`, {
-            $id: id,
-        });
+    const row: any = rows[0];
 
-        if (!rows.length) {
-            return null;
-        }
+    return new Agent(row.ID, row.EMAIL_ADDRESS, row.NAME);
+  }
 
-        const row: any = rows[0];
+  public async findAll(): Promise<Agent[]> {
+    const rows: any[] = await this.baseRepository.query(`SELECT * FROM AGENTS`, undefined);
 
-        return new Agent(
-            row.ID,
-            row.EMAIL_ADDRESS,
-            row.NAME,
-        );
-    }
-
-    public async findAll(): Promise<Agent[]> {
-        const rows: any[] = await this.baseRepository.query(`SELECT * FROM AGENTS`, undefined);
-
-        return rows.map((row: any) => new Agent(
-            row.ID,
-            row.EMAIL_ADDRESS,
-            row.NAME,
-        ));
-    }
-
+    return rows.map((row: any) => new Agent(row.ID, row.EMAIL_ADDRESS, row.NAME));
+  }
 }

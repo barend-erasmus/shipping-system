@@ -18,41 +18,36 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-app.route('/api/locations')
-    .get(LocationsRouter.get);
+app.route('/api/locations').get(LocationsRouter.get);
 
-app.route('/api/orders')
-    .get(OrdersRouter.get);
+app.route('/api/orders').get(OrdersRouter.get);
 
-app.route('/api/orders/approve')
-    .get(SignatureMiddleware.build(), OrdersRouter.approve);
+app.route('/api/orders/approve').get(SignatureMiddleware.build(), OrdersRouter.approve);
 
-app.route('/api/orders/cancel')
-    .get(SignatureMiddleware.build(), OrdersRouter.cancel);
+app.route('/api/orders/cancel').get(SignatureMiddleware.build(), OrdersRouter.cancel);
 
-app.route('/api/orders/confirm')
-    .get(SignatureMiddleware.build(), OrdersRouter.confirm);
+app.route('/api/orders/confirm').get(SignatureMiddleware.build(), OrdersRouter.confirm);
 
-app.route('/api/orders/decline')
-    .get(SignatureMiddleware.build(), OrdersRouter.decline);
+app.route('/api/orders/decline').get(SignatureMiddleware.build(), OrdersRouter.decline);
 
-app.route('/api/orders/place')
-    .post(OrdersRouter.place);
+app.route('/api/orders/place').post(OrdersRouter.place);
 
-app.use('/', swaggerUI.serve, swaggerUI.setup(yaml.safeLoad(fs.readFileSync(path.join(__dirname, '..', '..', 'swagger.yaml')))));
+app.use(
+  '/',
+  swaggerUI.serve,
+  swaggerUI.setup(yaml.safeLoad(fs.readFileSync(path.join(__dirname, '..', '..', 'swagger.yaml')))),
+);
 
 app.route('*').all((request: express.Request, response: express.Response) => {
-    response.status(404).json({
-        message: `not_found`,
-    });
+  response.status(404).json({
+    message: `not_found`,
+  });
 });
 
 if (require.main === module) {
-    app.listen(3000, () => {
-        console.log(`listening on port 3000`);
-    });
+  app.listen(3000, () => {
+    console.log(`listening on port 3000`);
+  });
 }
 
-export {
-    app,
-};
+export { app };

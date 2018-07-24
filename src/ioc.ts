@@ -11,36 +11,36 @@ import { registerValidators } from './ioc/validators';
 let container: Container = null;
 
 export function getContainer(): Container {
-    if (container) {
-        return container;
-    }
-
-    container = new Container();
-
-    // Builders
-    registerBuilders(container);
-
-    // Command Handlers
-    registerCommandHandlers(container);
-
-    // Clients
-    registerClients(container);
-
-    // Validators
-    registerValidators(container);
-
-    // Repositories
-    registerRepositories(container);
-
-    // Gateways
-    registerGateways(container);
-
-    // Services
-    registerServices(container);
-
+  if (container) {
     return container;
+  }
+
+  container = new Container();
+
+  // Builders
+  registerBuilders(container);
+
+  // Command Handlers
+  registerCommandHandlers(container);
+
+  // Clients
+  registerClients(container);
+
+  // Validators
+  registerValidators(container);
+
+  // Repositories
+  registerRepositories(container);
+
+  // Gateways
+  registerGateways(container);
+
+  // Services
+  registerServices(container);
+
+  return container;
 }
 
 export function resetContainer(): void {
-    container = null;
+  container = null;
 }

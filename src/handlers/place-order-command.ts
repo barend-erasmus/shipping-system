@@ -6,19 +6,12 @@ import { IOrdersService } from '../interfaces/orders-service';
 
 @injectable()
 export class PlaceOrderCommandHandler implements ICommandHandler {
+  constructor(@inject('IOrdersService') protected ordersService: IOrdersService) {}
 
-    constructor(
-        @inject('IOrdersService')
-        protected ordersService: IOrdersService,
-    ) {
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    const placeOrderCommnad: PlaceOrderCommand = command as PlaceOrderCommand;
 
-    }
-
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        const placeOrderCommnad: PlaceOrderCommand = command as PlaceOrderCommand;
-
-        await this.ordersService.create(placeOrderCommnad.order);
-    }
-
+    await this.ordersService.create(placeOrderCommnad.order);
+  }
 }

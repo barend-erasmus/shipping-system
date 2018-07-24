@@ -10,8 +10,8 @@ import { OrdersRepository } from '../repositories/orders';
 import { Location } from '../value-objects/location';
 
 export function registerRepositories(container: Container) {
-    container.bind<BaseRepository>('BaseRepository').toConstantValue(new BaseRepository());
-    container.bind<IRepository<Agent, string>>('AgentsRepository').to(AgentsRepository);
-    container.bind<IRepository<Location, number>>('LocationsRepository').to(LocationsRepository);
-    container.bind<IWritableRepository<Order, string>>('OrdersRepository').to(OrdersRepository);
+  container.bind<BaseRepository>('BaseRepository').toConstantValue(new BaseRepository());
+  container.bind<IRepository<Agent, string>>('AgentsRepository').to(AgentsRepository);
+  container.bind<IRepository<Location, number>>('LocationsRepository').to(LocationsRepository);
+  container.bind<IWritableRepository<Order, string>>('OrdersRepository').to(OrdersRepository);
 }

@@ -5,14 +5,10 @@ import { ICommandHandler } from '../interfaces/command-handler';
 
 @injectable()
 export class OrderConfirmedCommandHandler implements ICommandHandler {
+  constructor() {}
 
-    constructor() {
-
-    }
-
-    // TODO: Unit Tests
-    public async handle(command: ICommand): Promise<void> {
-        console.log('Order Confirmed');
-    }
-
+  // TODO: Unit Tests
+  public async handle(command: ICommand): Promise<void> {
+    console.log('Order Confirmed');
+  }
 }
