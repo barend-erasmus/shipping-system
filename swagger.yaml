@@ -1,0 +1,111 @@
+swagger: "2.0"
+info:
+  description: "This is a shipping system API"
+  version: "1.0.0"
+  title: "Shipping System"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "developersworkspace@gmail.com"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "localhost:3000"
+basePath: "/api"
+schemes:
+- "https"
+- "http"
+paths:
+  /locations:
+    get:
+      tags:
+      - "locations"
+      summary: "Retrieve all locations"
+      description: ""
+      operationId: "getLocations"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        500:
+          description: "Something went wrong"
+definitions:
+  Order:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      account:
+        type: "object"
+        $ref: "#/definitions/Account"
+      agent:
+        type: "object"
+        $ref: "#/definitions/Agent"
+      approved:
+        type: "boolean"
+      cancelled:
+        type: "boolean"
+      collectionTimestamp:
+        type: "string"
+      confirmed:
+        type: "boolean"
+      cost:
+        type: "integer"
+      declined:
+        type: "boolean"
+      deliveryTimestamp:
+        type: "string"
+      destination:
+        type: "object"
+        $ref: "#/definitions/Location"
+      dimensions:
+        type: "object"
+        $ref: "#/definitions/Dimensions"
+      source:
+        type: "object"
+        $ref: "#/definitions/Location"
+      weight:
+        type: "integer"
+  Account:
+    type: "object"
+    properties:
+      accountNumber:
+        type: "string"
+      emailAddress:
+        type: "string"
+      name:
+        type: "string"
+  Agent:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      emailAddress:
+        type: "string"
+      name:
+        type: "string"
+  Dimensions:
+    type: "object"
+    properties:
+      height:
+        type: "integer"
+      length:
+        type: "integer"
+      width:
+        type: "integer"
+  Location:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      latitude:
+        type: "integer"
+      longitude:
+        type: "integer"
+      name:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

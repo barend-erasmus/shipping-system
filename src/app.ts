@@ -1,6 +1,10 @@
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as express from 'express';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import * as path from 'path';
+import * as swaggerUI from 'swagger-ui-express';
 import { ContentTypeMiddleware } from './middleware/content-type';
 import { SignatureMiddleware } from './middleware/signature';
 import { LocationsRouter } from './routes/locations';
@@ -34,6 +38,8 @@ app.route('/api/orders/decline')
 
 app.route('/api/orders/place')
     .post(OrdersRouter.place);
+
+app.use('/', swaggerUI.serve, swaggerUI.setup(yaml.safeLoad(fs.readFileSync(path.join(__dirname, '..', '..', 'swagger.yaml')))));
 
 app.route('*').all((request: express.Request, response: express.Response) => {
     response.status(404).json({

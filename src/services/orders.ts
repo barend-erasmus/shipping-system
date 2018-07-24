@@ -7,6 +7,7 @@ import { OrderCancelledFailedCommand } from '../commands/order-cancelled-failed'
 import { OrderConfirmedCommand } from '../commands/order-confirmed';
 import { OrderDeclinedCommand } from '../commands/order-declined';
 import { OrderPlacedCommand } from '../commands/order-placed';
+import { OrderPlacedFailedCommand } from '../commands/order-placed-failed';
 import { Agent } from '../entities/agent';
 import { Order } from '../entities/order';
 import { ICommandBusClient } from '../interfaces/command-bus-client';
@@ -35,6 +36,8 @@ export class OrdersService implements IOrdersService {
         protected orderDeclinedCommandBusClient: ICommandBusClient,
         @inject('OrderPlacedCommandBusClient')
         protected orderPlacedCommandBusClient: ICommandBusClient,
+        @inject('OrderPlacedFailedCommandBusClient')
+        protected orderPlacedFailedCommandBusClient: ICommandBusClient,
         @inject('OrdersRepository')
         protected orderRepository: IWritableRepository<Order, string>,
         @inject('OrderValidator')
@@ -119,7 +122,8 @@ export class OrdersService implements IOrdersService {
         try {
             this.validateOrder(order);
         } catch (error) {
-            // TODO: Send Email
+            this.orderPlacedFailedCommandBusClient.execute(new OrderPlacedFailedCommand(uuid.v4(), order));
+            return order;
         }
 
         order = await this.orderRepository.insert(order);

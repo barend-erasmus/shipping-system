@@ -33,7 +33,7 @@ export class OrderApprovedFailedCommandHandler implements ICommandHandler {
             .setOrder(order)
             .build();
 
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Approval Failed at Shipping System', agent.emailAddress);
+        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Failed to Approve Order at Shipping System', agent.emailAddress);
     }
 
 }

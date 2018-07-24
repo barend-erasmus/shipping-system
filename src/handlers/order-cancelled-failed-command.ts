@@ -32,7 +32,7 @@ export class OrderCancelledFailedCommandHandler implements ICommandHandler {
             .setOrder(order)
             .build();
 
-        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Order Cancellation Failed at Shipping System', order.account.emailAddress);
+        await this.emailGateway.send(bodyForClient, 'shipping-system@example.com', 'Failed to Cancel Order at Shipping System', order.account.emailAddress);
     }
 
 }
