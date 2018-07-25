@@ -32,11 +32,11 @@ app.route('/api/orders/decline').get(SignatureMiddleware.build(), OrdersRouter.d
 
 app.route('/api/orders/place').post(OrdersRouter.place);
 
-app.use(
-  '/',
-  swaggerUI.serve,
-  swaggerUI.setup(yaml.safeLoad(fs.readFileSync(path.join(__dirname, '..', '..', 'swagger.yaml')))),
-);
+// app.use(
+//   '/',
+//   swaggerUI.serve,
+//   swaggerUI.setup(yaml.safeLoad(fs.readFileSync(path.join(__dirname, '..', '..', 'swagger.yaml')))),
+// );
 
 app.route('*').all((request: express.Request, response: express.Response) => {
   response.status(404).json({

@@ -13,6 +13,6 @@ export class ApproveOrderCommandHandler implements ICommandHandler {
   public async handle(command: ICommand): Promise<void> {
     const approveOrderCommand: ApproveOrderCommand = command as ApproveOrderCommand;
 
-    await this.ordersService.approve(approveOrderCommand.agentId, approveOrderCommand.orderId);
+    await this.ordersService.approve(approveOrderCommand.agentEmailAddress, approveOrderCommand.orderId);
   }
 }

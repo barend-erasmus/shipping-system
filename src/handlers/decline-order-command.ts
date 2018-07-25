@@ -13,6 +13,6 @@ export class DeclineOrderCommandHandler implements ICommandHandler {
   public async handle(command: ICommand): Promise<void> {
     const declineOrderCommand: DeclineOrderCommand = command as DeclineOrderCommand;
 
-    await this.ordersService.decline(declineOrderCommand.orderId);
+    await this.ordersService.decline(declineOrderCommand.agentEmailAddress, declineOrderCommand.orderId);
   }
 }

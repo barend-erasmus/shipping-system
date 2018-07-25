@@ -11,142 +11,144 @@ import { Dimensions } from '../../src/value-objects/dimensions';
 import { Location } from '../../src/value-objects/location';
 
 describe('OrdersRepository', () => {
+  describe('#find', () => {
+    it('Should return Order', async () => {
+      const baseRepository: BaseRepository = new BaseRepository();
 
-    describe('#find', () => {
+      const locationsRepository: IRepository<Location, number> = new LocationsRepository();
 
-        it('Should return Order', async () => {
-            const baseRepository: BaseRepository = new BaseRepository();
+      const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(
+        baseRepository,
+        locationsRepository,
+      );
+      const insertedOrder: Order = new Order(
+        uuid.v4(),
+        new Account('accountNumber', 'emailAddress', 'name'),
+        null,
+        false,
+        false,
+        null,
+        false,
+        null,
+        false,
+        null,
+        new Location(1, null, null, null),
+        new Dimensions(10, 20, 30),
+        new Location(1, null, null, null),
+        20,
+      );
 
-            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
+      await ordersRepository.insert(insertedOrder);
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
-            const insertedOrder: Order = new Order(
-                uuid.v4(),
-                new Account('accountNumber', 'emailAddress', 'name'),
-                null,
-                false,
-                false,
-                null,
-                false,
-                null,
-                false,
-                null,
-                new Location(1, null, null, null),
-                new Dimensions(10, 20, 30),
-                new Location(1, null, null, null),
-                20,
-            );
+      const order: Order = await ordersRepository.find(insertedOrder.id);
 
-            await ordersRepository.insert(insertedOrder);
-
-            const order: Order = await ordersRepository.find(insertedOrder.id);
-
-            expect(order).to.be.not.null;
-        });
-
+      expect(order).to.be.not.null;
     });
+  });
 
-    describe('#findAll', () => {
+  describe('#findAll', () => {
+    it('Should return Orders', async () => {
+      const baseRepository: BaseRepository = new BaseRepository();
 
-        it('Should return Orders', async () => {
-            const baseRepository: BaseRepository = new BaseRepository();
+      const locationsRepository: IRepository<Location, number> = new LocationsRepository();
 
-            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
+      const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(
+        baseRepository,
+        locationsRepository,
+      );
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
+      const insertedOrder: Order = new Order(
+        uuid.v4(),
+        new Account('accountNumber', 'emailAddress', 'name'),
+        null,
+        false,
+        false,
+        null,
+        false,
+        null,
+        false,
+        null,
+        new Location(1, null, null, null),
+        new Dimensions(10, 20, 30),
+        new Location(1, null, null, null),
+        20,
+      );
 
-            const insertedOrder: Order = new Order(
-                uuid.v4(),
-                new Account('accountNumber', 'emailAddress', 'name'),
-                null,
-                false,
-                false,
-                null,
-                false,
-                null,
-                false,
-                null,
-                new Location(1, null, null, null),
-                new Dimensions(10, 20, 30),
-                new Location(1, null, null, null),
-                20,
-            );
+      await ordersRepository.insert(insertedOrder);
 
-            await ordersRepository.insert(insertedOrder);
+      const orders: Order[] = await ordersRepository.findAll();
 
-            const orders: Order[] = await ordersRepository.findAll();
-
-            expect(orders.length).to.be.eq(1);
-        });
-
+      expect(orders.length).to.be.eq(1);
     });
+  });
 
-    describe('#insert', () => {
+  describe('#insert', () => {
+    it('Should insert Order', async () => {
+      const baseRepository: BaseRepository = new BaseRepository();
 
-        it('Should insert Order', async () => {
-            const baseRepository: BaseRepository = new BaseRepository();
+      const locationsRepository: IRepository<Location, number> = new LocationsRepository();
 
-            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
+      const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(
+        baseRepository,
+        locationsRepository,
+      );
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
+      const order: Order = new Order(
+        uuid.v4(),
+        new Account('accountNumber', 'emailAddress', 'name'),
+        null,
+        false,
+        false,
+        null,
+        false,
+        null,
+        false,
+        null,
+        new Location(1, null, null, null),
+        new Dimensions(10, 20, 30),
+        new Location(1, null, null, null),
+        20,
+      );
 
-            const order: Order = new Order(
-                uuid.v4(),
-                new Account('accountNumber', 'emailAddress', 'name'),
-                null,
-                false,
-                false,
-                null,
-                false,
-                null,
-                false,
-                null,
-                new Location(1, null, null, null),
-                new Dimensions(10, 20, 30),
-                new Location(1, null, null, null),
-                20,
-            );
-
-            await ordersRepository.insert(order);
-        });
-
+      await ordersRepository.insert(order);
     });
+  });
 
-    describe('#update', () => {
+  describe('#update', () => {
+    it('Should update Order', async () => {
+      const baseRepository: BaseRepository = new BaseRepository();
 
-        it('Should update Order', async () => {
-            const baseRepository: BaseRepository = new BaseRepository();
+      const locationsRepository: IRepository<Location, number> = new LocationsRepository();
 
-            const locationsRepository: IRepository<Location, number> = new LocationsRepository();
+      const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(
+        baseRepository,
+        locationsRepository,
+      );
 
-            const ordersRepository: IWritableRepository<Order, string> = new OrdersRepository(baseRepository, locationsRepository);
+      const order: Order = new Order(
+        uuid.v4(),
+        new Account('accountNumber', 'emailAddress', 'name'),
+        null,
+        false,
+        false,
+        null,
+        false,
+        null,
+        false,
+        null,
+        new Location(1, null, null, null),
+        new Dimensions(10, 20, 30),
+        new Location(1, null, null, null),
+        20,
+      );
 
-            const order: Order = new Order(
-                uuid.v4(),
-                new Account('accountNumber', 'emailAddress', 'name'),
-                null,
-                false,
-                false,
-                null,
-                false,
-                null,
-                false,
-                null,
-                new Location(1, null, null, null),
-                new Dimensions(10, 20, 30),
-                new Location(1, null, null, null),
-                20,
-            );
+      await ordersRepository.insert(order);
 
-            await ordersRepository.insert(order);
+      order.account.accountNumber = 'accountNumber-updated';
+      order.account.emailAddress = 'emailAddress-updated';
+      order.account.name = 'name-updated';
 
-            order.account.accountNumber = 'accountNumber-updated';
-            order.account.emailAddress = 'emailAddress-updated';
-            order.account.name = 'name-updated';
-
-            await ordersRepository.update(order);
-        });
-
+      await ordersRepository.update(order);
     });
-
+  });
 });

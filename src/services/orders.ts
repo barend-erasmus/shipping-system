@@ -101,7 +101,9 @@ export class OrdersService implements IOrdersService {
     try {
       order.setToConfirmed();
     } catch (error) {
-      await this.orderConfirmedFailedCommandBusClient.execute(new OrderConfirmedFailedCommand(uuid.v4(), error.message, order));
+      await this.orderConfirmedFailedCommandBusClient.execute(
+        new OrderConfirmedFailedCommand(uuid.v4(), error.message, order),
+      );
 
       return null;
     }
@@ -130,17 +132,23 @@ export class OrdersService implements IOrdersService {
   }
 
   // TODO: Unit Tests
-  public async decline(orderId: string): Promise<Order> {
+  public async decline(agentEmailAddress: string, orderId: string): Promise<Order> {
     let order: Order = await this.orderRepository.find(orderId);
 
     if (!order) {
       return null;
     }
 
+    const agents: Agent[] = await this.agentsRepository.findAll();
+
+    const agent: Agent = agents.find((x: Agent) => x.emailAddress === agentEmailAddress);
+
     try {
       order.setToDeclined();
     } catch (error) {
-      await this.orderDeclinedFailedCommandBusClient.execute(new OrderDeclinedFailedCommand(uuid.v4(), error.message, order));
+      await this.orderDeclinedFailedCommandBusClient.execute(
+        new OrderDeclinedFailedCommand(uuid.v4(), agent, error.message, order),
+      );
 
       return null;
     }

@@ -26,7 +26,7 @@ export class OrderConfirmedEmailBuilder implements IBuilder<string> {
     }
   }
 
-  public reset(): OrderPlacedEmailBuilder {
+  public reset(): OrderConfirmedEmailBuilder {
     this.emailAddress = null;
     this.order = null;
     this.type = null;
@@ -35,31 +35,31 @@ export class OrderConfirmedEmailBuilder implements IBuilder<string> {
     return this;
   }
 
-  public setEmailAddress(emailAddress: string): OrderPlacedEmailBuilder {
+  public setEmailAddress(emailAddress: string): OrderConfirmedEmailBuilder {
     this.emailAddress = emailAddress;
 
     return this;
   }
 
-  public setOrder(order: Order): OrderPlacedEmailBuilder {
+  public setOrder(order: Order): OrderConfirmedEmailBuilder {
     this.order = order;
 
     return this;
   }
 
-  public setToAgent(): OrderPlacedEmailBuilder {
+  public setToAgent(): OrderConfirmedEmailBuilder {
     this.type = 'agent';
 
     return this;
   }
 
-  public setToClient(): OrderPlacedEmailBuilder {
+  public setToClient(): OrderConfirmedEmailBuilder {
     this.type = 'client';
 
     return this;
   }
 
-  public setURL(url: string): OrderPlacedEmailBuilder {
+  public setURL(url: string): OrderConfirmedEmailBuilder {
     this.url = url;
 
     return this;

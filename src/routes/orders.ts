@@ -70,7 +70,11 @@ export class OrdersRouter {
       'DeclineOrderCommandBusClient',
     );
 
-    const declineOrderCommand: ICommand = new DeclineOrderCommand(uuid.v4(), request.query.orderId);
+    const declineOrderCommand: ICommand = new DeclineOrderCommand(
+      uuid.v4(),
+      request.query.emailAddress,
+      request.query.orderId,
+    );
 
     await declineOrderCommandBusClient.execute(declineOrderCommand);
 

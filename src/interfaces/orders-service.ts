@@ -9,5 +9,5 @@ export interface IOrdersService {
 
   create(order: Order): Promise<Order>;
 
-  decline(orderId: string): Promise<Order>;
+  decline(agentEmailAddress: string, orderId: string): Promise<Order>;
 }

@@ -1,273 +1,259 @@
 {
-	"info": {
-		"_postman_id": "66b7c826-b9e8-4222-a76e-eec0a53b36fd",
-		"name": "Shipping System",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "/api/orders/place - Valid",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "eb5eb798-bd88-4384-803f-ad0a63bdc167",
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status Code should be 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"const schema = {",
-							"  \"required\": [\"id\", \"source\", \"destination\", \"dimensions\", \"weight\", \"density\"],",
-							"  \"properties\": {",
-							"    \"id\": {",
-							"      \"type\": \"string\",",
-							"      \"minLength\": 36,",
-							"      \"maxLength\": 36",
-							"    },",
-							"    \"approved\": {",
-							"        \"type\": \"boolean\"",
-							"    },",
-							"    \"cancelled\": {",
-							"        \"type\": \"boolean\"",
-							"    },",
-							"    \"collectionTimestamp\": {",
-							"        \"type\": ['null', 'string']",
-							"    },",
-							"    \"confirmed\": {",
-							"        \"type\": \"boolean\"",
-							"    },",
-							"     \"cost\": {",
-							"        \"type\": ['null', 'number']",
-							"    },",
-							"    \"declined\": {",
-							"        \"type\": \"boolean\"",
-							"    },",
-							"    \"deliveryTimestamp\": {",
-							"        \"type\": ['null', 'string']",
-							"    },",
-							"    \"density\": {",
-							"        \"type\": \"number\"",
-							"    },",
-							"    \"destination\": {",
-							"        \"type\": \"object\",",
-							"        \"properties\": {",
-							"            \"id\": {",
-							"                \"type\": \"number\"",
-							"            },",
-							"            \"name\": {",
-							"                \"type\": \"string\"",
-							"            }",
-							"        }",
-							"    },",
-							"    \"dimensions\": {",
-							"        \"type\": \"object\",",
-							"        \"properties\": {",
-							"            \"height\": {",
-							"              \"type\": \"number\"",
-							"            },",
-							"            \"length\": {",
-							"              \"type\": \"number\"",
-							"            },",
-							"            \"width\": {",
-							"              \"type\": \"number\"",
-							"            },",
-							"            \"volume\": {",
-							"              \"type\": \"number\"",
-							"            }",
-							"        }",
-							"    },",
-							"    \"source\": {",
-							"        \"type\": \"object\",",
-							"        \"properties\": {",
-							"            \"id\": {",
-							"                \"type\": \"number\"",
-							"            },",
-							"            \"name\": {",
-							"                \"type\": \"string\"",
-							"            }",
-							"        }",
-							"    },",
-							"    \"weight\": {",
-							"        \"type\": \"number\"",
-							"    }",
-							"  }",
-							"};",
-							"",
-							"pm.test(\"Body should have correct schema\", function () { ",
-							"    const result = tv4.validateResult(JSON.parse(responseBody), schema);",
-							" ",
-							"    pm.expect(result.valid).to.be.true;",
-							"});",
-							"",
-							"pm.test(\"Body should have correct destination id\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).destination.id).to.be.eq(2);",
-							"});",
-							"",
-							"pm.test(\"Body should have correct destination name\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).destination.name).to.be.eq('Chaghcharan, Afghanistan');",
-							"});",
-							"",
-							"pm.test(\"Body should have correct dimensions height\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).dimensions.height).to.be.eq(30);",
-							"});",
-							"",
-							"pm.test(\"Body should have correct dimensions length\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).dimensions.length).to.be.eq(10);",
-							"});",
-							"",
-							"pm.test(\"Body should have correct dimensions width\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).dimensions.width).to.be.eq(20);",
-							"});",
-							"",
-							"pm.test(\"Body should have correct dimensions volume\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).dimensions.volume).to.be.eq(6000);",
-							"});",
-							"",
-							"pm.test(\"Body should have correct source id\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).source.id).to.be.eq(1);",
-							"});",
-							"",
-							"pm.test(\"Body should have correct source name\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).source.name).to.be.eq('Qal eh-ye Now, Afghanistan');",
-							"});",
-							"",
-							"pm.test(\"Body should have correct weight\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).weight).to.be.eq(20);",
-							"});",
-							"",
-							"pm.test(\"Body should have correct density\", function () { ",
-							"    pm.expect(JSON.parse(responseBody).density).to.be.eq(0.003);",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"account\": {\r\n        \"accountNumber\": \"accountNumber\",\r\n        \"emailAddress\": \"foo.bar@example.com\",\r\n        \"name\": \"name\"\r\n    },\r\n    \"destinationId\": 2,\r\n    \"dimensions\": \"10,20,30\",\r\n    \"sourceId\": 1,\r\n    \"weight\": 20\r\n}"
-				},
-				"url": {
-					"raw": "{{url}}/api/orders/place",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"api",
-						"orders",
-						"place"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/locations - Valid",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "b0121ebb-fbf5-4a00-b82f-57aa144d479d",
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status Code should be 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Body should have 7322 locations\", function () {",
-							"    pm.expect(JSON.parse(responseBody).length).to.be.eq(7322);",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "{{url}}/api/locations",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"api",
-						"locations"
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"id": "aab8fcc5-58a9-4928-951a-98f4e91d1f01",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"id": "068ed777-e815-4501-943c-3d3a60b1c3fa",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"id": "0700830d-87f4-4cc8-9438-b64d7e4f0f37",
-			"key": "url",
-			"value": "http://localhost:3000",
-			"type": "string",
-			"description": ""
-		},
-		{
-			"id": "b4a0ba27-4663-46da-b612-450b133dc2d6",
-			"key": "validDestinationId",
-			"value": "2",
-			"type": "string",
-			"description": ""
-		},
-		{
-			"id": "452a0cee-c6bb-49fd-824b-30c9ef9fc22a",
-			"key": "validSourceId",
-			"value": "1",
-			"type": "string",
-			"description": ""
-		},
-		{
-			"id": "1640696a-67d8-421c-8e5d-9d089601e76b",
-			"key": "validWeight",
-			"value": "20",
-			"type": "string",
-			"description": ""
-		},
-		{
-			"id": "efc0e0c8-e775-422b-90e2-e0962a43f20d",
-			"key": "validDimensions",
-			"value": "10,20,30",
-			"type": "string",
-			"description": ""
-		}
-	]
+  "info": {
+    "_postman_id": "66b7c826-b9e8-4222-a76e-eec0a53b36fd",
+    "name": "Shipping System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "/api/orders/place - Valid",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "eb5eb798-bd88-4384-803f-ad0a63bdc167",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status Code should be 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const schema = {",
+              "  \"required\": [\"id\", \"source\", \"destination\", \"dimensions\", \"weight\", \"density\"],",
+              "  \"properties\": {",
+              "    \"id\": {",
+              "      \"type\": \"string\",",
+              "      \"minLength\": 36,",
+              "      \"maxLength\": 36",
+              "    },",
+              "    \"approved\": {",
+              "        \"type\": \"boolean\"",
+              "    },",
+              "    \"cancelled\": {",
+              "        \"type\": \"boolean\"",
+              "    },",
+              "    \"collectionTimestamp\": {",
+              "        \"type\": ['null', 'string']",
+              "    },",
+              "    \"confirmed\": {",
+              "        \"type\": \"boolean\"",
+              "    },",
+              "     \"cost\": {",
+              "        \"type\": ['null', 'number']",
+              "    },",
+              "    \"declined\": {",
+              "        \"type\": \"boolean\"",
+              "    },",
+              "    \"deliveryTimestamp\": {",
+              "        \"type\": ['null', 'string']",
+              "    },",
+              "    \"density\": {",
+              "        \"type\": \"number\"",
+              "    },",
+              "    \"destination\": {",
+              "        \"type\": \"object\",",
+              "        \"properties\": {",
+              "            \"id\": {",
+              "                \"type\": \"number\"",
+              "            },",
+              "            \"name\": {",
+              "                \"type\": \"string\"",
+              "            }",
+              "        }",
+              "    },",
+              "    \"dimensions\": {",
+              "        \"type\": \"object\",",
+              "        \"properties\": {",
+              "            \"height\": {",
+              "              \"type\": \"number\"",
+              "            },",
+              "            \"length\": {",
+              "              \"type\": \"number\"",
+              "            },",
+              "            \"width\": {",
+              "              \"type\": \"number\"",
+              "            },",
+              "            \"volume\": {",
+              "              \"type\": \"number\"",
+              "            }",
+              "        }",
+              "    },",
+              "    \"source\": {",
+              "        \"type\": \"object\",",
+              "        \"properties\": {",
+              "            \"id\": {",
+              "                \"type\": \"number\"",
+              "            },",
+              "            \"name\": {",
+              "                \"type\": \"string\"",
+              "            }",
+              "        }",
+              "    },",
+              "    \"weight\": {",
+              "        \"type\": \"number\"",
+              "    }",
+              "  }",
+              "};",
+              "",
+              "pm.test(\"Body should have correct schema\", function () { ",
+              "    const result = tv4.validateResult(JSON.parse(responseBody), schema);",
+              " ",
+              "    pm.expect(result.valid).to.be.true;",
+              "});",
+              "",
+              "pm.test(\"Body should have correct destination id\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).destination.id).to.be.eq(2);",
+              "});",
+              "",
+              "pm.test(\"Body should have correct destination name\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).destination.name).to.be.eq('Chaghcharan, Afghanistan');",
+              "});",
+              "",
+              "pm.test(\"Body should have correct dimensions height\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).dimensions.height).to.be.eq(30);",
+              "});",
+              "",
+              "pm.test(\"Body should have correct dimensions length\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).dimensions.length).to.be.eq(10);",
+              "});",
+              "",
+              "pm.test(\"Body should have correct dimensions width\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).dimensions.width).to.be.eq(20);",
+              "});",
+              "",
+              "pm.test(\"Body should have correct dimensions volume\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).dimensions.volume).to.be.eq(6000);",
+              "});",
+              "",
+              "pm.test(\"Body should have correct source id\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).source.id).to.be.eq(1);",
+              "});",
+              "",
+              "pm.test(\"Body should have correct source name\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).source.name).to.be.eq('Qal eh-ye Now, Afghanistan');",
+              "});",
+              "",
+              "pm.test(\"Body should have correct weight\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).weight).to.be.eq(20);",
+              "});",
+              "",
+              "pm.test(\"Body should have correct density\", function () { ",
+              "    pm.expect(JSON.parse(responseBody).density).to.be.eq(0.003);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw":
+            "{\r\n    \"account\": {\r\n        \"accountNumber\": \"accountNumber\",\r\n        \"emailAddress\": \"foo.bar@example.com\",\r\n        \"name\": \"name\"\r\n    },\r\n    \"destinationId\": 2,\r\n    \"dimensions\": \"10,20,30\",\r\n    \"sourceId\": 1,\r\n    \"weight\": 20\r\n}"
+        },
+        "url": {
+          "raw": "{{url}}/api/orders/place",
+          "host": ["{{url}}"],
+          "path": ["api", "orders", "place"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/api/locations - Valid",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "b0121ebb-fbf5-4a00-b82f-57aa144d479d",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status Code should be 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Body should have 7322 locations\", function () {",
+              "    pm.expect(JSON.parse(responseBody).length).to.be.eq(7322);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "url": {
+          "raw": "{{url}}/api/locations",
+          "host": ["{{url}}"],
+          "path": ["api", "locations"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "aab8fcc5-58a9-4928-951a-98f4e91d1f01",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "068ed777-e815-4501-943c-3d3a60b1c3fa",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "0700830d-87f4-4cc8-9438-b64d7e4f0f37",
+      "key": "url",
+      "value": "http://localhost:3000",
+      "type": "string",
+      "description": ""
+    },
+    {
+      "id": "b4a0ba27-4663-46da-b612-450b133dc2d6",
+      "key": "validDestinationId",
+      "value": "2",
+      "type": "string",
+      "description": ""
+    },
+    {
+      "id": "452a0cee-c6bb-49fd-824b-30c9ef9fc22a",
+      "key": "validSourceId",
+      "value": "1",
+      "type": "string",
+      "description": ""
+    },
+    {
+      "id": "1640696a-67d8-421c-8e5d-9d089601e76b",
+      "key": "validWeight",
+      "value": "20",
+      "type": "string",
+      "description": ""
+    },
+    {
+      "id": "efc0e0c8-e775-422b-90e2-e0962a43f20d",
+      "key": "validDimensions",
+      "value": "10,20,30",
+      "type": "string",
+      "description": ""
+    }
+  ]
 }
